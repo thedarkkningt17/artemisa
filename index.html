@@ -682,6 +682,20 @@ a{color:inherit}
 <section class="view" id="view-campanas">
   <main class="container" style="padding-top:36px">
     <div class="section-head"><h2>Información de campañas</h2></div>
+    <a class="info-card" href="#campana-info-2" data-campana-info="2">
+      <div class="info-card__icon">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg>
+      </div>
+      <div class="info-card__body">
+        <div class="info-card__top">
+          <span class="info-card__tag">Nueva actualización</span>
+          <span class="info-card__date">Viernes, 9 de octubre de 2026</span>
+        </div>
+        <h3 class="info-card__title">RENOVE &amp; Comunicación Especial</h3>
+        <p class="info-card__text">Vuelve el RENOVE con campaña omnicanal del 14/10 al 01/11. Repasamos también las campañas en curso (OKTUBRE II, LG DAYS, SEMANA WEB), la comunicación especial de sorteos y la actualización de operadores.</p>
+        <span class="info-card__read">Leer información completa <span aria-hidden="true">→</span></span>
+      </div>
+    </a>
     <a class="info-card" href="#campana-info-1" data-campana-info="1">
       <div class="info-card__icon">
         <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg>
@@ -730,6 +744,34 @@ a{color:inherit}
         </div>
         <h3 class="info-card__title">HISENSE · Promoción Lavavajillas + Finish Ultimate</h3>
         <p class="info-card__text">Compra un lavavajillas Hisense adherido y recibe 6 meses de lavado gratis con Finish Ultimate Plus. Regalo directo del fabricante, envío a domicilio tras el registro online.</p>
+        <span class="info-card__read">Leer promoción completa <span aria-hidden="true">→</span></span>
+      </div>
+    </a>
+    <a class="info-card" href="#cashback-3" data-cashback="3">
+      <div class="info-card__icon">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="2.5"/><path d="M6 12h.01M18 12h.01"/></svg>
+      </div>
+      <div class="info-card__body">
+        <div class="info-card__top">
+          <span class="info-card__tag">Nueva promoción</span>
+          <span class="info-card__date">Martes, 29 de septiembre de 2026</span>
+        </div>
+        <h3 class="info-card__title">LG · Promoción OLED evo + Barra de sonido</h3>
+        <p class="info-card__text">Compra un televisor LG OLED evo adherido y recibe una barra de sonido LG S90TR de regalo. Promoción exclusiva del fabricante, sujeta a registro online.</p>
+        <span class="info-card__read">Leer promoción completa <span aria-hidden="true">→</span></span>
+      </div>
+    </a>
+    <a class="info-card" href="#cashback-4" data-cashback="4">
+      <div class="info-card__icon">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="2.5"/><path d="M6 12h.01M18 12h.01"/></svg>
+      </div>
+      <div class="info-card__body">
+        <div class="info-card__top">
+          <span class="info-card__tag">Nueva promoción</span>
+          <span class="info-card__date">Lunes, 28 de septiembre de 2026</span>
+        </div>
+        <h3 class="info-card__title">PHILIPS · Promoción Cafetera + Pack de café</h3>
+        <p class="info-card__text">Compra una cafetera superautomática Philips adherida y recibe un pack de café en grano de 1 kg. Regalo directo del fabricante tras el registro de la compra.</p>
         <span class="info-card__read">Leer promoción completa <span aria-hidden="true">→</span></span>
       </div>
     </a>
@@ -825,6 +867,106 @@ const CAMPAÑAS_INFO = [
         ]
       }
     ]
+  },
+  {
+    id: 2, fecha: '2026-10-09',
+    titulo: 'RENOVE & Comunicación Especial',
+    intro: '¡El RENOVE está de vuelta! Compartimos la información de las próximas campañas, las que están en curso, la comunicación especial vigente y las promociones miMediaMarkt para estos días.',
+    secciones: [
+      {
+        tipo: 'prox', emoji: '📢', titulo: 'Próximas campañas',
+        campanas: [
+          {
+            nombre: 'RENOVE',
+            badge: 'Omnicanal',
+            metainfo: [
+              { icono:'web', texto:'Web/APP: del 14/10 a las 9h al 01/11 a las 23:59h' },
+              { icono:'store', texto:'Tienda: del 14/10 al 01/11 según horario comercial' }
+            ],
+            descripcion: 'Campaña omnicanal con todas las categorías incluidas, con vigencia del 14/10 a las 9h hasta el 01/11 a las 23:59h.',
+            condiciones: [
+              { titulo: 'Condiciones generales', texto: 'Campaña omnicanal aplicable a todas las categorías incluidas en la promoción. Vigencia del 14/10 a las 9h hasta el 01/11 a las 23:59h. Consulta las exclusiones específicas en la información definitiva de la campaña.' }
+            ]
+          }
+        ]
+      },
+      {
+        tipo: 'curso', emoji: '🔄', titulo: 'Campañas en curso',
+        campanas: [
+          {
+            nombre: 'OKTUBRE II',
+            badge: 'Omnicanal',
+            metainfo: [{ icono:'cal', texto:'Del 07/10 al 13/10 a las 23:59h' }],
+            descripcion: 'Campaña omnicanal con vigencia del 07/10 al 13/10 a las 23:59h.'
+          },
+          {
+            nombre: 'LG DAYS',
+            badge: 'Omnicanal',
+            metainfo: [
+              { icono:'store', texto:'Tienda: del 09/10 al 12/10' },
+              { icono:'web', texto:'Web: visibilidad hasta el 13/10 a las 9h' }
+            ],
+            descripcion: 'Campaña omnicanal con vigencia en tienda del 09/10 hasta el 12/10 (en web tendrá visibilidad hasta el 13/10 a las 9h), con hasta -15% en productos seleccionados.'
+          },
+          {
+            nombre: 'SEMANA WEB',
+            badge: 'Solo online',
+            metainfo: [{ icono:'web', texto:'Del 07/10 al 13/10 a las 23:59h' }],
+            descripcion: 'Campaña exclusiva online con vigencia del 07/10 al 13/10 a las 23:59h.'
+          }
+        ]
+      },
+      {
+        tipo: 'esp', emoji: '🎁', titulo: 'Comunicación especial',
+        campanas: [
+          {
+            nombre: 'Sorteo APP Octubre · Tarjetas regalo 999 €',
+            badge: 'Sorteo',
+            metainfo: [{ icono:'cal', texto:'Del 1 al 31 de octubre' }],
+            descripcion: 'Para el mes de octubre sorteamos entre nuestros clientes 5 tarjetas regalo valoradas en 999 € cada una. El sorteo estará activo todo el mes (del 1 al 31 de octubre). La dinámica es la habitual: solo por tener la APP el usuario entra en ella, rellena el formulario para participar y automáticamente queda inscrito.'
+          },
+          {
+            nombre: 'Sorteo 6 dorsales para el Maratón Valencia',
+            badge: 'Junto a JBL',
+            metainfo: [{ icono:'cal', texto:'Del 1 al 25 de octubre' }],
+            descripcion: 'Junto a JBL, del 1 al 25 de octubre estamos sorteando entre nuestros clientes 6 dorsales para participar en el Maratón Valencia que se celebra el próximo 6 de diciembre. Para participar, el usuario debe ser miembro miMediaMarkt, realizar una compra de un producto JBL Open Sound o Endurance y subir su ticket de compra a la landing habilitada para ello.',
+            enlaces: [
+              { etiqueta:'Gana 6 tickets para el Maratón Valencia | MediaMarkt', url:'https://www.mediamarkt.es/es/campaign/gana-6-tickets-maraton-valencia' }
+            ]
+          },
+          {
+            nombre: 'Actualización Pos Operadores',
+            badge: 'Aviso operativo',
+            metainfo: [{ icono:'cal', texto:'A partir del 1 de octubre' }],
+            descripcion: 'A partir del 1 de octubre, se han producido cambios en las operadoras, dejando de trabajar con Pepephone y MásMóvil e incorporando Vodafone.'
+          }
+        ]
+      },
+      {
+        tipo: 'mmm', emoji: '💳', titulo: 'Campañas miMediaMarkt',
+        subtitulo: 'Descuentos aplicables sólo a miembros de miMediaMarkt en la web y/o App y/o Tiendas.',
+        campanas: [
+          {
+            nombre: 'Samsung Galaxy S26 | ZFlip8 | ZFold8',
+            badge: '-5% directo',
+            metainfo: [{ icono:'cal', texto:'Hasta el 19/10 a las 9h' }],
+            descripcion: '-5% en Galaxy S26 y Galaxy ZFlip8 y ZFold8. Aplicable en carrito en web y APP.'
+          },
+          {
+            nombre: 'Samsung Galaxy S26 Series',
+            badge: 'Cupón',
+            metainfo: [{ icono:'cal', texto:'Hasta el 31/10 a las 23:59h' }],
+            descripcion: 'Hasta -100 € en cupón Samsung S26 Series.'
+          },
+          {
+            nombre: 'Xiaomi Redmi Note 17',
+            badge: '-20% adicional',
+            metainfo: [{ icono:'cal', texto:'Hasta el 14/10 a las 9h' }],
+            descripcion: '-20% de descuento en una selección de Redmi Note 17. Aplicable en carrito en web y APP.'
+          }
+        ]
+      }
+    ]
   }
 ];
 
@@ -886,6 +1028,64 @@ const CASHBACKS = [
       { titulo: 'Consultas e incidencias', texto: 'Correo hola@promo-hisense.com o teléfono 911 979 162.' }
     ],
     contacto: 'hola@promo-hisense.com · 911 979 162'
+  },
+  {
+    id: 3, fecha: '2026-09-29',
+    titulo: 'LG · Promoción OLED evo + Barra de sonido',
+    marca: 'LG',
+    vigencia: 'Del 1 de octubre al 15 de noviembre de 2026',
+    descripcion: 'Regalo de una barra de sonido LG S90TR por la compra de un televisor LG OLED evo adherido. El regalo es por parte del fabricante y se envía tras el registro online de la compra.',
+    mecanica: 'El participante deberá registrarse en la web promocional de LG antes del 30 de noviembre de 2026, adjuntando la factura de compra y los datos personales completos.',
+    webPromo: 'https://promo-lg.com/oled-evo-barra-sonido',
+    enlaces: [ { etiqueta:'Bases legales', url:'https://promo-lg.com/textos/bbll' } ],
+    productos: [
+      { categoria:'TV OLED evo', modelo:'OLED55G46LA', promo:'Barra de sonido LG S90TR de regalo', ean:'8806091734567', codigo:'1689452' },
+      { categoria:'TV OLED evo', modelo:'OLED65G46LA', promo:'Barra de sonido LG S90TR de regalo', ean:'8806091734574', codigo:'1689453' },
+      { categoria:'TV OLED evo', modelo:'OLED77G46LA', promo:'Barra de sonido LG S90TR de regalo', ean:'8806091734581', codigo:'1689454' }
+    ],
+    info: [
+      { label:'Marca', value:'LG' },
+      { label:'Vigencia compra', value:'01/10/2026 → 15/11/2026' },
+      { label:'Registro online', value:'Hasta el 30/11/2026' },
+      { label:'Regalo', value:'Barra de sonido LG S90TR' },
+      { label:'Envío', value:'A cargo del fabricante' },
+      { label:'Productos', value:'3 modelos de TV OLED evo adheridos' }
+    ],
+    condiciones: [
+      { titulo: 'Mecánica de participación', texto: 'El participante deberá registrarse en la web promocional de LG antes del 30 de noviembre de 2026, adjuntando la factura de compra y los datos personales completos. El regalo será enviado por el fabricante LG a la dirección aportada.' },
+      { titulo: 'Consulta de bases legales', texto: 'Las bases legales completas de la promoción están disponibles en la web del organizador.' },
+      { titulo: 'Consultas e incidencias', texto: 'Correo soporte@promo-lg.com o teléfono 911 234 567.' }
+    ],
+    contacto: 'soporte@promo-lg.com · 911 234 567'
+  },
+  {
+    id: 4, fecha: '2026-09-28',
+    titulo: 'PHILIPS · Promoción Cafetera + Pack de café',
+    marca: 'Philips',
+    vigencia: 'Del 15 de septiembre al 31 de octubre de 2026',
+    descripcion: 'Regalo de un pack de café en grano de 1 kg por la compra de una cafetera superautomática Philips adherida. El regalo es por parte del fabricante y se envía tras el registro online.',
+    mecanica: 'El participante deberá registrarse en la web promocional de Philips antes del 15 de noviembre de 2026, adjuntando la factura de compra y los datos personales completos.',
+    webPromo: 'https://promo-philips.com/cafetera-pack-cafe',
+    enlaces: [ { etiqueta:'Bases legales', url:'https://promo-philips.com/textos/bbll' } ],
+    productos: [
+      { categoria:'Cafetera superautomática', modelo:'EP3246/70', promo:'Pack de café en grano 1 kg', ean:'8710103987654', codigo:'1678901' },
+      { categoria:'Cafetera superautomática', modelo:'EP5447/90', promo:'Pack de café en grano 1 kg', ean:'8710103987661', codigo:'1678902' },
+      { categoria:'Cafetera superautomática', modelo:'SM6580/00', promo:'Pack de café en grano 1 kg', ean:'8710103987678', codigo:'1678903' }
+    ],
+    info: [
+      { label:'Marca', value:'Philips' },
+      { label:'Vigencia compra', value:'15/09/2026 → 31/10/2026' },
+      { label:'Registro online', value:'Hasta el 15/11/2026' },
+      { label:'Regalo', value:'Pack de café en grano 1 kg' },
+      { label:'Envío', value:'A cargo del fabricante' },
+      { label:'Productos', value:'3 modelos de cafetera superautomática adheridos' }
+    ],
+    condiciones: [
+      { titulo: 'Mecánica de participación', texto: 'El participante deberá registrarse en la web promocional de Philips antes del 15 de noviembre de 2026, adjuntando la factura de compra y los datos personales completos. El regalo será enviado por el fabricante Philips a la dirección aportada.' },
+      { titulo: 'Consulta de bases legales', texto: 'Las bases legales completas de la promoción están disponibles en la web del organizador.' },
+      { titulo: 'Consultas e incidencias', texto: 'Correo info@promo-philips.com o teléfono 910 123 456.' }
+    ],
+    contacto: 'info@promo-philips.com · 910 123 456'
   }
 ];
 
@@ -984,6 +1184,73 @@ const NOTICIAS = [
     info: [
       { label:'Artículo', value:'1669338' }, { label:'Comunicación', value:'Email erróneo a clientes' },
       { label:'Fecha correcta', value:'12/11/2026' }, { label:'Fecha errónea', value:'19/11/2026' }
+    ]
+  },
+  {
+    id: 5, fecha: '2026-10-04', categoria: 'Aviso meteorológico',
+    titulo: 'Cierre preventivo tiendas zona Levante por DANA',
+    ubicacion: 'Zona Levante · 6 tiendas afectadas',
+    resumen: 'Ante la previsión de lluvias torrenciales, se ha decidido el cierre preventivo de 6 tiendas en la zona de Levante a partir de las 16:00h de hoy.',
+    cuerpo: [
+      'Ante la previsión de lluvias torrenciales y la activación de la alerta naranja por DANA, se ha decidido el cierre preventivo de las tiendas que se indican a continuación a partir de las 16:00 horas de hoy.',
+      'El cierre afecta a 6 centros de la zona de Levante. Se recomienda seguir las indicaciones de protección civil y consultar los canales internos para cualquier actualización.'
+    ],
+    destacados: [
+      'Cierre preventivo a las 16:00h por alerta naranja por DANA.',
+      'Afecta a 6 tiendas de la zona de Levante.'
+    ],
+    stores: [
+      { nombre:'Murcia', hora:'16:00h' }, { nombre:'Cartagena', hora:'16:00h' }, { nombre:'Alicante', hora:'16:00h' },
+      { nombre:'Elche', hora:'16:00h' }, { nombre:'Torrevieja', hora:'16:00h' }, { nombre:'Orihuela', hora:'16:00h' }
+    ],
+    info: [
+      { label:'Fecha', value:'04/10/2026' }, { label:'Motivo', value:'Alerta naranja por DANA' },
+      { label:'Alcance', value:'6 tiendas · Zona de Levante' }, { label:'Cierre', value:'16:00h' }
+    ]
+  },
+  {
+    id: 6, fecha: '2026-09-30', categoria: 'Producto',
+    titulo: 'Nuevo regalo en artículo 1689452 · LG OLED evo',
+    ubicacion: 'Todos los centros · Online y tienda',
+    resumen: 'A partir de hoy, el artículo 1689452 (LG OLED evo 55") incluye una barra de sonido LG S90TR de regalo. Promoción válida hasta fin de existencias.',
+    cuerpo: [
+      'Os informamos que a partir de hoy el artículo LG OLED evo 55" (código 1689452) incluye una barra de sonido LG S90TR de regalo.',
+      'La promoción es válida hasta fin de existencias y está sujeta a las condiciones del fabricante. Los clientes que ya hayan comprado el artículo con anterioridad no podrán acogerse a esta promoción.',
+      'Si algún cliente pregunta por esta promoción, podemos informarle con esta misma nota. Gracias por la colaboración.'
+    ],
+    destacados: [
+      'Nuevo regalo: barra de sonido LG S90TR con el artículo 1689452.',
+      'Promoción válida hasta fin de existencias.',
+      'No aplica a compras anteriores.'
+    ],
+    info: [
+      { label:'Artículo', value:'1689452' }, { label:'Producto', value:'LG OLED evo 55"' },
+      { label:'Regalo', value:'Barra de sonido LG S90TR' }, { label:'Vigencia', value:'Hasta fin de existencias' }
+    ],
+    enlaces: [ { etiqueta:'Ver artículo en MediaMarkt', url:'https://www.mediamarkt.es/es/product/_lg-oled55g46la-1689452.html' } ]
+  },
+  {
+    id: 7, fecha: '2026-10-09', categoria: 'Cierre de tiendas',
+    titulo: 'Festivo 12/10',
+    ubicacion: 'España',
+    resumen: 'Recordatorio del festivo nacional del lunes 12/10. La mayoría de tiendas estarán cerradas y el servicio arranca a las 10h. No habrá servicio de segundo nivel: escalar los casos por Oracle.',
+    cuerpo: [
+      'Buenas tardes, os recordamos que el lunes 12/10 es festivo nacional en España. La gran mayoría de las tiendas estarán cerradas el lunes, ya hemos pedido que actualicen sus horarios.',
+      'Al ser un festivo nacional, como sabéis arrancamos el servicio a las 10 horas.',
+      'No tendremos servicio de segundo nivel, por lo que se deberán escalar los casos por Oracle.',
+      'Cualquier duda consultadnos. Un saludo.'
+    ],
+    destacados: [
+      'Lunes 12/10: festivo nacional en España.',
+      'La gran mayoría de tiendas estarán cerradas; ya se ha pedido que actualicen sus horarios.',
+      'El servicio arranca a las 10h.',
+      'No habrá servicio de segundo nivel: escalar los casos por Oracle.'
+    ],
+    info: [
+      { label:'Fecha', value:'Lunes 12/10/2026' },
+      { label:'Tipo', value:'Festivo nacional en España' },
+      { label:'Inicio de servicio', value:'10:00h' },
+      { label:'Segundo nivel', value:'Sin servicio · Escalar por Oracle' }
     ]
   }
 ];
@@ -1153,6 +1420,61 @@ const NOVEDADES_OPERATIVA = [
           texto: 'Una vez con la información, postventa informará de los siguientes pasos: Ajustes → General → "Transferir o restablecer iPhone" → "Prepare to Ship". En <strong>Reason for Shipping</strong> elegir: <strong>Return</strong> (desistimiento), <strong>Repair</strong> (reparación) o <strong>Trade-in</strong> (recompra). Pulsar Continuar, incluir la contraseña de la cuenta Apple, decidir si se borra el iPhone, pulsar Continuar y esperar a que aparezca <strong>Ship Ready</strong> y pulsar <strong>Done</strong>. El proceso puede durar unas 2 horas.'
         }
       }
+    ]
+  },
+  {
+    id: 3,
+    fecha: '2026-10-05',
+    categoria: 'Procedimiento',
+    titulo: 'Gestión de pedidos con incidencia de pago',
+    ubicacion: 'Administración Online · Todos los centros',
+    resumen: 'Se ha detectado un aumento de pedidos con incidencia de pago (tarjeta rechazada, transferencia no recibida, PayPal retenido). Repasamos el flujo a seguir y los plazos de actuación.',
+    intro: 'Este documento recoge el procedimiento a seguir cuando un pedido queda bloqueado por una incidencia de pago. Se aplica a pedidos web, app y tienda con pago online.',
+    bloques: [
+      { tipo: 'definicion', titulo: '¿Qué es una incidencia de pago?',
+        parrafos: ['Es cualquier situación en la que el pedido no avanza porque el pago no se ha confirmado correctamente. Los casos más habituales son: <strong>tarjeta rechazada</strong>, <strong>transferencia no recibida</strong>, <strong>PayPal con fondos retenidos</strong> o <strong>financiación no aprobada</strong>.'] },
+      { tipo: 'pistas', titulo: '¿Cómo detecto una incidencia de pago?',
+        pistasOk: [
+          'El pedido aparece en estado <strong>“Pago pendiente”</strong> o <strong>“Pago en revisión”</strong> durante más de 24 horas.',
+          'El cliente recibe un email automático de <strong>“Pago no confirmado”</strong>.',
+          'En el panel de administración el pago figura como <strong>“Rechazado”</strong> o <strong>“En espera”</strong>.',
+          'La dirección de entrega y los artículos están correctos, pero el pedido no pasa a preparación.'
+        ],
+        alerta: { label:'Ojo con los plazos', texto:'Si el pago no se confirma en un plazo de <strong>48 horas</strong>, el pedido se cancelará automáticamente. En ese caso, el cliente deberá realizar una nueva compra.' } },
+      { tipo: 'noMarketplace', titulo: '¿Cómo sé que NO es una incidencia de pago?',
+        pistasNo: [
+          'El pedido está en estado <strong>“Preparando”</strong> o <strong>“Enviado”</strong> → el pago ya se confirmó.',
+          'El pedido ha sido cancelado por el cliente o por falta de stock → no es incidencia de pago.',
+          'El artículo empieza por <strong>8</strong> (Marketplace) → se gestiona por el canal de Marketplace.'
+        ] },
+      { tipo: 'flujo', titulo: 'Flujo si un cliente llama por incidencia de pago',
+        pasos: [
+          { num:1, texto:'Buscar el pedido en <strong>FOM</strong> por el correo electrónico del cliente.' },
+          { num:2, texto:'Identificar el <strong>estado del pago</strong> (rechazado, en espera, pendiente de transferencia, etc.).' },
+          { num:3, texto:'Informar al cliente del motivo concreto y de las opciones disponibles:' }
+        ],
+        ramas: [
+          { label:'TARJETA RECHAZADA', labelClass:'ci-tag--no', condicion:'El banco no autorizó el cargo',
+            acciones:[ 'Recomendar al cliente que revise el límite de su tarjeta.', 'Ofrecer la posibilidad de realizar el pago con otro método (transferencia o PayPal).', 'Si el cliente insiste, escalar a <strong>administración online</strong> para revisar el caso.' ] },
+          { label:'TRANSFERENCIA NO RECIBIDA', labelClass:'ci-tag--info', condicion:'El cliente asegura haber pagado, pero no consta el ingreso',
+            acciones:[ 'Solicitar el <strong>justificante de la transferencia</strong> por email.', 'Escalar a administración online indicando el número de pedido y el justificante.', 'Informar al cliente de que el pedido se reactivará en cuanto se confirme el pago.' ] },
+          { label:'PAYPAL RETENIDO', labelClass:'ci-tag--info', condicion:'Fondos retenidos por PayPal',
+            acciones:[ 'Indicar al cliente que revise su cuenta de PayPal.', 'Si el problema persiste, escalar a administración online con el ID de transacción de PayPal.', 'Recordar que la retención puede durar hasta 21 días según las políticas de PayPal.' ] }
+        ]
+      },
+      { tipo: 'scheduled', titulo: 'Plazos y cancelación automática',
+        parrafos: [
+          'Los pedidos con incidencia de pago no confirmada se <strong>cancelan automáticamente a las 48 horas</strong>.',
+          'Si el cliente quiere mantener el pedido, debe resolver la incidencia <strong>antes</strong> de ese plazo.',
+          'Una vez cancelado, el cliente puede volver a realizar la compra con el método de pago que prefiera.'
+        ] },
+      { tipo: 'arbol', titulo: 'Árbol de decisión rápido',
+        filas: [
+          { situacion:'Tarjeta rechazada', tipo:'Pago', tipoClass:'mp', accion:'Recomendar otro método de pago o escalar a administración online' },
+          { situacion:'Transferencia no recibida', tipo:'Pago', tipoClass:'mp', accion:'Solicitar justificante y escalar a administración online' },
+          { situacion:'PayPal retenido', tipo:'Pago', tipoClass:'mp', accion:'Escalar a administración online con ID de transacción' },
+          { situacion:'Pedido cancelado por plazo', tipo:'Cancelado', tipoClass:'no', accion:'Informar al cliente de que debe realizar una nueva compra' }
+        ] }
     ]
   }
 ];
@@ -1477,7 +1799,7 @@ function renderCashback(id){
     cashbackContentEl.innerHTML = `<div class="container" style="padding:60px 0"><div class="empty"><strong>Cashback no encontrado</strong>La promoción que buscas no existe o ha sido eliminada.</div></div>`;
     return;
   }
-  cashbackContentEl.innerHTML = (c.id === 2) ? plantillaCashbackHisense(c) : plantillaCashbackSamsung(c);
+  cashbackContentEl.innerHTML = (c.id === 2 || c.id === 3 || c.id === 4) ? plantillaCashbackHisense(c) : plantillaCashbackSamsung(c);
 }
 
 /* ==========================================================
