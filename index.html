@@ -4,6 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Portal MediaMarkt</title>
+<!-- Favicon MediaMarkt -->
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='15' fill='%23cc0000'/%3E%3Ctext x='50' y='68' font-family='Montserrat,Arial,sans-serif' font-size='52' font-weight='900' fill='white' text-anchor='middle'%3EM%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
 /* ============ BASE ============ */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -21,7 +25,7 @@
 }
 
 body{
-  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  font-family:'Montserrat',-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
   background:var(--mm-bg);color:var(--mm-ink);line-height:1.55;
   -webkit-font-smoothing:antialiased;
   min-height:100vh;display:flex;flex-direction:column;
@@ -35,17 +39,28 @@ a{color:inherit}
   background:var(--mm-red);position:sticky;top:0;z-index:100;
   box-shadow:0 2px 14px rgba(0,0,0,.16);
 }
-.site-header__inner{display:flex;align-items:center;justify-content:space-between;gap:24px;height:70px}
-.logo{color:#fff;font-size:25px;font-weight:800;letter-spacing:-.8px;text-decoration:none;flex-shrink:0;cursor:pointer}
-.main-nav{display:flex;gap:4px;flex-wrap:wrap}
+.site-header__inner{display:flex;align-items:center;justify-content:space-between;gap:16px;height:70px;width:min(1400px,96%);margin-inline:auto}
+.logo{color:#fff;font-size:25px;font-weight:800;letter-spacing:-.8px;text-decoration:none;flex-shrink:0;cursor:pointer;font-family:'Montserrat',sans-serif}
+.main-nav{display:flex;gap:3px;flex-wrap:wrap;align-items:center}
 .main-nav a{
-  color:#fff;text-decoration:none;font-size:14px;font-weight:600;
-  padding:9px 16px;border-radius:999px;white-space:nowrap;
+  color:#fff;text-decoration:none;font-size:13px;font-weight:600;
+  padding:8px 13px;border-radius:999px;white-space:nowrap;
   opacity:.82;transition:background .2s,opacity .2s,color .2s;cursor:pointer;
+  font-family:'Montserrat',sans-serif;
+  display:inline-flex;align-items:center;gap:6px;
+  letter-spacing:-.1px;
 }
 .main-nav a:hover{background:rgba(255,255,255,.16);opacity:1}
 .main-nav a.is-active{background:#fff;color:var(--mm-red);opacity:1}
 
+/* Estilo especial para el enlace externo "Datos de acceso web" */
+.main-nav a.nav-external{
+  background:rgba(255,255,255,.14);
+  border:1px solid rgba(255,255,255,.45);
+}
+.main-nav a.nav-external:hover{
+  background:#fff;color:var(--mm-red);opacity:1;
+}
 /* ============ HERO ============ */
 .hero{
   position:relative;display:flex;align-items:center;
@@ -599,14 +614,16 @@ a{color:inherit}
 <!-- ============ HEADER ============ -->
 <header class="site-header">
   <div class="container site-header__inner">
-    <a class="logo" data-nav="inicio">MediaMarkt</a>
+    <a class="logo" data-nav="inicio">
+      <i class="fas fa-play" style="font-size:.7em;margin-right:6px;transform:rotate(-15deg)"></i>MediaMarkt
+    </a>
     <nav class="main-nav" id="mainNav">
-      <a data-nav="inicio" class="is-active">Inicio</a>
-      <a data-nav="campanas">Campañas</a>
-      <a data-nav="cashbacks">Cashbacks</a>
-      <a data-nav="novedades">Novedades en operativa</a>
-      <a data-nav="noticias">Noticias</a>
-      <a class="nav-external" href="https://thedarkkningt17.github.io/artemisa/datosdeaccesoweb.html" target="_blank" rel="noopener">Datos de acceso web</a>
+      <a data-nav="inicio" class="is-active"><i class="fas fa-home"></i> Inicio</a>
+      <a data-nav="campanas"><i class="fas fa-bullhorn"></i> Campañas</a>
+      <a data-nav="cashbacks"><i class="fas fa-hand-holding-usd"></i> Cashbacks</a>
+      <a data-nav="novedades"><i class="fas fa-newspaper"></i> Novedades en operativa</a>
+      <a data-nav="noticias"><i class="fas fa-bullhorn"></i> Noticias</a>
+      <a class="nav-external" href="https://thedarkkningt17.github.io/artemisa/datosdeaccesoweb.html" target="_blank" rel="noopener"><i class="fas fa-external-link-alt"></i> Datos de acceso web</a>
     </nav>
   </div>
 </header>
