@@ -780,6 +780,7 @@
                     <button class="filter-btn" data-category="Cancelaciones"><i class="fas fa-times-circle"></i> Cancelaciones</button>
                     <button class="filter-btn" data-category="Reservas"><i class="fas fa-calendar-check"></i> Reservas</button>
                     <button class="filter-btn" data-category="Demoras"><i class="fas fa-clock"></i> Demoras</button>
+                    <button class="filter-btn" data-category="Reparaciones"><i class="fas fa-screwdriver-wrench"></i> Reparaciones</button>
                     <button class="filter-btn" data-category="Transportistas"><i class="fas fa-truck"></i> Transportistas</button>
                     <button class="filter-btn" data-category="Gestores"><i class="fas fa-user-tie"></i> Gestores</button>
                 </div>
@@ -1333,7 +1334,7 @@ null,
         "Contraseña": "MEDIAMARKT",
         "Column7": "mediamarkt"
       },
-      {
+           {
         "Canarias": "INSIDE (Alisios, Telde, Las Arenas y Lanzarote)",
         "Teléfono": "_",
         "Mail": "cduarte@islgrupo.com\namolina@islgrupo.com\neguerra@islgrupo.com\nmulticliente.lpa@islgrupo.com\nmm.canarias.online.gestoresdeventa@mediamarkt.es",
@@ -1341,8 +1342,37 @@ null,
         "Usuario": "ORACLE",
         "Contraseña": "MEDIAMARKT",
         "Column7": "mediamarkt"
+      },
+      {
+        "Canarias": "Taller Reparaciones Alisios (E233) - Gran Canaria",
+        "Mail": "borges@mediamarkt.es; riguela@mediamarkt.es; santana@mediamarkt.es"
+      },
+      {
+        "Canarias": "Taller Reparaciones Las Arenas (E508) - Gran Canaria",
+        "Mail": "mm.lasarenas.taller@mediamarkt.es; rodriguezsam@mediamarkt.es"
+      },
+      {
+        "Canarias": "Taller Reparaciones Telde (E277) - Gran Canaria",
+        "Mail": "mm.telde.devoluciones@mediamarkt.es; mmted1-taller@mediamarkt.es; margarcia@mediamarkt.es"
+      },
+      {
+        "Canarias": "Taller Reparaciones Tres de Mayo (E509) - Tenerife",
+        "Mail": "mm.online.3demayo@mediamarkt.es; rodriguezcarlos@mediamarkt.es; rojasr@mediamarkt.es"
+      },
+      {
+        "Canarias": "Taller Reparaciones Añaza (E258) - Tenerife",
+        "Mail": "mm.tenerife.taller@mediamarkt.es; alonsoace@mediamarkt.es; pinerot@mediamarkt.es"
+      },
+      {
+        "Canarias": "Taller Reparaciones Adeje (E327) - Tenerife",
+        "Mail": "jesusgonzalez@mediamarkt.es; pereraalm@mediamarkt.es; rosibe@mediamarkt.es"
+      },
+      {
+        "Canarias": "Taller Reparaciones Lanzarote (E326) - Lanzarote",
+        "Mail": "rodriguezvanessa@mediamarkt.es; mm.lanzarote.atencionalcliente@mediamarkt.es"
       }
     ]
+    </script>    ]
     </script>
 
     <!-- ============================================================ -->
@@ -1913,12 +1943,13 @@ null,
                 return s;
             }
 
-                        // Clasificar según el nombre del servicio
+                    // Clasificar según el nombre del servicio
             function clasificar(nombre) {
                 const n = nombre.toLowerCase();
                 if (n.includes("cancelación")) return "Cancelaciones";
                 if (n.includes("reserva")) return "Reservas";
                 if (n.includes("demora")) return "Demoras";
+                if (n.includes("taller") || n.includes("reparaci")) return "Reparaciones";
                 if (n.includes("seur") || n.includes("correos") || n.includes("inside")) return "Transportistas";
                 if (n.includes("gestor")) return "Gestores";
                 return "Plataformas";
@@ -1969,7 +2000,7 @@ null,
 
                 let html = '';
                 if (categoria === 'all' && !s) {
-                       ['Plataformas', 'Cancelaciones', 'Reservas', 'Demoras', 'Transportistas', 'Gestores'].forEach(cat => {
+                    ['Plataformas', 'Cancelaciones', 'Reservas', 'Demoras', 'Reparaciones', 'Transportistas', 'Gestores'].forEach(cat => {
                         const items = filtered.filter(c => c.categoria === cat);
                         if (items.length > 0) {
                             html += `<h2 class="section-title"><i class="fas fa-folder"></i> ${cat} (${items.length})</h2>`;
