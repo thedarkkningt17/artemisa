@@ -682,6 +682,20 @@ a{color:inherit}
 <section class="view" id="view-campanas">
   <main class="container" style="padding-top:36px">
     <div class="section-head"><h2>Información de campañas</h2></div>
+    <a class="info-card" href="#campana-info-3" data-campana-info="3">
+      <div class="info-card__icon">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg>
+      </div>
+      <div class="info-card__body">
+        <div class="info-card__top">
+          <span class="info-card__tag">Nueva actualización</span>
+          <span class="info-card__date">Viernes, 16 de octubre de 2026</span>
+        </div>
+        <h3 class="info-card__title">Información de Campañas: RENOVE &amp; Comunicación Especial</h3>
+        <p class="info-card__text">Seguimos con El RENOVE: campaña omnicanal del 14/10 al 01/11. Repasamos la comunicación especial de sorteos, la actualización de operadores y las promociones miMediaMarkt.</p>
+        <span class="info-card__read">Leer información completa <span aria-hidden="true">→</span></span>
+      </div>
+    </a>
     <a class="info-card" href="#campana-info-2" data-campana-info="2">
       <div class="info-card__icon">
         <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg>
@@ -719,21 +733,21 @@ a{color:inherit}
 <section class="view" id="view-cashbacks">
   <main class="container" style="padding-top:36px">
     <div class="section-head"><h2>Cashbacks</h2></div>
-    <a class="info-card" href="#cashback-1" data-cashback="1">
+    <a class="info-card" href="#cashback-4" data-cashback="4">
       <div class="info-card__icon">
         <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="2.5"/><path d="M6 12h.01M18 12h.01"/></svg>
       </div>
       <div class="info-card__body">
         <div class="info-card__top">
           <span class="info-card__tag">Nueva promoción</span>
-          <span class="info-card__date">Miércoles, 1 de octubre de 2026</span>
+          <span class="info-card__date">Martes, 13 de octubre de 2026</span>
         </div>
-        <h3 class="info-card__title">SAMSUNG · Promoción CALL OF DUTY</h3>
-        <p class="info-card__text">Compra un televisor Samsung adherido y llévate el juego Call of Duty: Modern Warfare 4 de regalo, con acceso exclusivo una semana antes del lanzamiento oficial.</p>
+        <h3 class="info-card__title">Nuevas promociones Beko y Whirlpool (Octubre-Diciembre 2026)</h3>
+        <p class="info-card__text">Promociones de regalo con Beko y Whirlpool vigentes del 1 de octubre al 31 de diciembre de 2026. Compra un producto seleccionado y llévate el regalo indicado en las bases legales. Fecha límite para solicitar el regalo: 10 de enero de 2027.</p>
         <span class="info-card__read">Leer promoción completa <span aria-hidden="true">→</span></span>
       </div>
     </a>
-    <a class="info-card" href="#cashback-2" data-cashback="2">
+    <a class="info-card" href="#cashback-1" data-cashback="1">
       <div class="info-card__icon">
         <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="2.5"/><path d="M6 12h.01M18 12h.01"/></svg>
       </div>
@@ -747,7 +761,7 @@ a{color:inherit}
         <span class="info-card__read">Leer promoción completa <span aria-hidden="true">→</span></span>
       </div>
     </a>
-    <a class="info-card" href="#cashback-3" data-cashback="3">
+    <a class="info-card" href="#cashback-2" data-cashback="2">
       <div class="info-card__icon">
         <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="2.5"/><path d="M6 12h.01M18 12h.01"/></svg>
       </div>
@@ -761,7 +775,7 @@ a{color:inherit}
         <span class="info-card__read">Leer promoción completa <span aria-hidden="true">→</span></span>
       </div>
     </a>
-    <a class="info-card" href="#cashback-4" data-cashback="4">
+    <a class="info-card" href="#cashback-3" data-cashback="3">
       <div class="info-card__icon">
         <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="2.5"/><path d="M6 12h.01M18 12h.01"/></svg>
       </div>
@@ -967,6 +981,65 @@ const CAMPAÑAS_INFO = [
         ]
       }
     ]
+  },
+  {
+    id: 3, fecha: '2026-10-16',
+    titulo: 'Información de Campañas: RENOVE & Comunicación Especial',
+    intro: 'Seguimos con El RENOVE. Compartimos la información actualizada de la campaña, la comunicación especial de sorteos y las promociones miMediaMarkt vigentes.',
+    secciones: [
+      {
+        tipo: 'prox', emoji: '📢', titulo: 'Próximas campañas',
+        campanas: [
+          {
+            nombre: 'RENOVE',
+            badge: 'Omnicanal',
+            metainfo: [
+              { icono:'web', texto:'Web/APP: del 14/10 a las 9h al 01/11 a las 23:59h' },
+              { icono:'store', texto:'Tienda: del 14/10 al 01/11 según horario comercial' }
+            ],
+            descripcion: '¡Seguimos con El RENOVE! Campaña omnicanal con todas las categorías incluidas, con vigencia del 14/10 a las 9h hasta el 01/11 a las 23:59h.',
+            condiciones: [
+              { titulo: 'Condiciones generales', texto: 'Campaña omnicanal aplicable a todas las categorías incluidas en la promoción. Vigencia del 14/10 a las 9h hasta el 01/11 a las 23:59h. Consulta las exclusiones específicas en la información definitiva de la campaña.' }
+            ]
+          }
+        ]
+      },
+      {
+        tipo: 'esp', emoji: '🎁', titulo: 'Comunicación especial',
+        campanas: [
+          {
+            nombre: 'Sorteo APP Octubre · Tarjetas regalo 999 €',
+            badge: 'Sorteo',
+            metainfo: [{ icono:'cal', texto:'Del 1 al 31 de octubre' }],
+            descripcion: 'Para el mes de octubre sorteamos entre nuestros clientes 5 tarjetas regalo valoradas en 999 € cada una. El sorteo estará activo todo el mes (del 1 al 31 de octubre). La dinámica es la habitual: solo por tener la APP el usuario entra en ella, rellena el formulario para participar y automáticamente queda inscrito.'
+          },
+          {
+            nombre: 'Sorteo 6 dorsales para el Maratón Valencia',
+            badge: 'Junto a JBL',
+            metainfo: [{ icono:'cal', texto:'Del 1 al 25 de octubre' }],
+            descripcion: 'Junto a JBL, del 1 al 25 de octubre estamos sorteando entre nuestros clientes 6 dorsales para participar en el Maratón Valencia que se celebra el próximo 6 de diciembre. Para participar, el usuario debe ser miembro miMediaMarkt, realizar una compra de un producto JBL Open Sound o Endurance y subir su ticket de compra.'
+          },
+          {
+            nombre: 'Actualización Pos Operadores',
+            badge: 'Aviso operativo',
+            metainfo: [{ icono:'cal', texto:'A partir del 1 de octubre' }],
+            descripcion: 'A partir del 1 de octubre, se han producido cambios en las operadoras, dejando de trabajar con Pepephone y MásMóvil e incorporando Vodafone.'
+          }
+        ]
+      },
+      {
+        tipo: 'mmm', emoji: '💳', titulo: 'Campañas miMediaMarkt',
+        subtitulo: 'Descuentos aplicables sólo a miembros de miMediaMarkt en la web y/o App y/o Tiendas.',
+        campanas: [
+          {
+            nombre: 'Samsung Galaxy S26 Series',
+            badge: 'Cupón',
+            metainfo: [{ icono:'cal', texto:'Hasta el 31/10 a las 23:59h' }],
+            descripcion: 'Hasta -100 € en cupón Samsung S26 Series. Aplicable en tiendas y web/app para miembros de miMediaMarkt.'
+          }
+        ]
+      }
+    ]
   }
 ];
 
@@ -975,32 +1048,7 @@ const CAMPAÑAS_INFO = [
    ========================================================== */
 const CASHBACKS = [
   {
-    id: 1, fecha: '2026-10-01',
-    titulo: 'SAMSUNG · Promoción CALL OF DUTY',
-    marca: 'Samsung',
-    vigencia: 'Del 1 de octubre a las 9h al 2 de noviembre a las 23:59h',
-    descripcion: '¡CALL OF DUTY de regalo! ¡Juega antes que nadie! Compra un Televisor Samsung y llévate el juego de regalo y consigue acceso exclusivo 1 semana antes.',
-    modelos: 'Televisores Samsung de las gamas Micro RGB R85H, Micro RGB R95H, OLED S90H, OLED S93H, OLED S95H y OLED S99H.',
-    enlaces: [
-      { etiqueta:'Modelos adheridos', url:'https://www.mediamarkt.es/es/promo-list/samsung_promocion_callofduty' },
-      { etiqueta:'Bases legales (PDF)', url:'https://images.samsung.com/is/content/samsung/assets/es/offer/acceso-anticipado-cod-mw4-tv-samsung/V3BBLLAccesoanticipadoCallofDutyMW4TVSamsung2026GEN.pdf' }
-    ],
-    info: [
-      { label:'Marca', value:'Samsung' },
-      { label:'Vigencia', value:'01/10/2026 a las 9h → 02/11/2026 a las 23:59h' },
-      { label:'Regalo', value:'Call of Duty: Modern Warfare 4 (acceso anticipado)' },
-      { label:'Unidades', value:'Limitado a 810 códigos' },
-      { label:'Canje', value:'Antes del 02/11/2026' },
-      { label:'Contacto', value:'Callofduty_26@abaigroup.com / 912 523 233' }
-    ],
-    condiciones: [
-      { titulo: 'Detalles de la promoción', texto: 'Los participantes que adquieran un Producto adherido durante el Periodo de Vigencia recibirán un (1) Código canjeable por el acceso al Videojuego. Limitado a los primeros 810 participantes.' },
-      { titulo: 'Canje del código', texto: 'El Código deberá canjearse antes del día 2 de noviembre de 2026 (inclusive).' }
-    ],
-    contacto: 'Callofduty_26@abaigroup.com · 912 523 233'
-  },
-  {
-    id: 2, fecha: '2026-09-30',
+    id: 1, fecha: '2026-09-30',
     titulo: 'HISENSE · 6 meses de lavado gratis con Finish Ultimate',
     marca: 'Hisense',
     vigencia: 'Del 1 de octubre al 30 de noviembre de 2026',
@@ -1030,7 +1078,7 @@ const CASHBACKS = [
     contacto: 'hola@promo-hisense.com · 911 979 162'
   },
   {
-    id: 3, fecha: '2026-09-29',
+    id: 2, fecha: '2026-09-29',
     titulo: 'LG · Promoción OLED evo + Barra de sonido',
     marca: 'LG',
     vigencia: 'Del 1 de octubre al 15 de noviembre de 2026',
@@ -1059,7 +1107,7 @@ const CASHBACKS = [
     contacto: 'soporte@promo-lg.com · 911 234 567'
   },
   {
-    id: 4, fecha: '2026-09-28',
+    id: 3, fecha: '2026-09-28',
     titulo: 'PHILIPS · Promoción Cafetera + Pack de café',
     marca: 'Philips',
     vigencia: 'Del 15 de septiembre al 31 de octubre de 2026',
@@ -1086,6 +1134,38 @@ const CASHBACKS = [
       { titulo: 'Consultas e incidencias', texto: 'Correo info@promo-philips.com o teléfono 910 123 456.' }
     ],
     contacto: 'info@promo-philips.com · 910 123 456'
+  },
+  {
+    id: 4, fecha: '2026-10-13',
+    titulo: 'Nuevas promociones Beko y Whirlpool (Octubre-Diciembre 2026)',
+    marca: 'Beko · Whirlpool',
+    vigencia: 'Del 1 de octubre de 2026 al 31 de diciembre de 2026',
+    descripcion: 'Nuevas promociones de Beko y Whirlpool que se van a subir a la web. Compra uno de los productos seleccionados y llévate el regalo indicado en el cuadro de Bases legales de cada fabricante. Fecha límite para solicitar el regalo: 10 de enero de 2027.',
+    mecanica: 'Los usuarios que compren cualquiera de los productos de marca Beko o Whirlpool incluidos en esta promoción, dentro del periodo de vigencia, recibirán el regalo indicado en el cuadro de las Bases legales, siempre que completen correctamente su registro en la página dedicada a la promoción disponible en el sitio web del fabricante (www.beko.com para Beko), cumpliendo todos los requisitos. El regalo es enviado por parte del fabricante.',
+    enlaces: [
+      { etiqueta:'Promoción en MediaMarkt', url:'https://www.mediamarkt.es/es/promo-list/beko-whirlpool-octubre-diciembre-2026' },
+      { etiqueta:'Bases legales Beko', url:'https://www.beko.com/es-es/promociones' },
+      { etiqueta:'Bases legales Whirlpool', url:'https://www.whirlpool.es/promociones' }
+    ],
+    productos: [
+      { categoria:'Beko · Productos seleccionados', modelo:'Ver cuadro de Bases legales', promo:'Regalo indicado en Bases legales', ean:'—', codigo:'—' },
+      { categoria:'Whirlpool · Productos seleccionados', modelo:'Ver cuadro de Bases legales', promo:'Regalo indicado en Bases legales', ean:'—', codigo:'—' }
+    ],
+    info: [
+      { label:'Marcas', value:'Beko · Whirlpool' },
+      { label:'Vigencia compra', value:'01/10/2026 → 31/12/2026' },
+      { label:'Límite solicitud', value:'10/01/2027' },
+      { label:'Regalo', value:'El indicado en el cuadro de Bases legales' },
+      { label:'Registro', value:'Web del fabricante (Beko / Whirlpool)' },
+      { label:'Envío del regalo', value:'A cargo del fabricante' }
+    ],
+    condiciones: [
+      { titulo: 'Mecánica de la promoción', texto: 'Compra uno de los productos seleccionados y llévate el regalo indicado en el cuadro de Bases legales. Fecha límite para solicitar el regalo: 10 de enero de 2027.' },
+      { titulo: 'Operativa de la promoción', texto: 'Los usuarios que compren cualquiera de los productos de marca Beko o Whirlpool incluidos en esta promoción, dentro del periodo de vigencia, recibirán el regalo indicado en el cuadro de las Bases legales, siempre que completen correctamente su registro en la página dedicada a la promoción disponible en el sitio web del fabricante, cumpliendo todos los requisitos. El regalo es enviado por parte del fabricante.' },
+      { titulo: 'Modelos y regalos', texto: 'El detalle de los modelos que entran en cada promoción y su regalo asociado se encuentra en el cuadro de Bases legales adjunto en el correo de comunicación interna.' },
+      { titulo: 'Consulta de bases legales', texto: 'Las bases legales completas de cada promoción están disponibles en la web del fabricante correspondiente.' }
+    ],
+    contacto: 'Consultar con el fabricante (Beko / Whirlpool)'
   }
 ];
 
@@ -1251,6 +1331,80 @@ const NOTICIAS = [
       { label:'Tipo', value:'Festivo nacional en España' },
       { label:'Inicio de servicio', value:'10:00h' },
       { label:'Segundo nivel', value:'Sin servicio · Escalar por Oracle' }
+    ]
+  },
+  {
+    id: 8, fecha: '2026-10-16', categoria: 'Producto',
+    titulo: 'Incidencia Dyson | Aspiradora V8 Absolute | ID 1672416',
+    ubicacion: 'Todos los centros · Online y tienda',
+    resumen: 'Se ha actualizado temporalmente la ficha técnica del artículo 1672416 (Dyson V8 Absolute) hasta que todas las cajas lleven la pegatina de 130 AW. La potencia correcta de succión es 130 AW, no 115 AW.',
+    cuerpo: [
+      'Buenos días, os compartimos información que nos hacen llegar sobre este artículo: Dyson V8 Absolute (ID 1672416).',
+      'Hasta ayer 15/10, la potencia de succión indicada en la ficha técnica de esta aspiradora escoba de Dyson era de 130 AW. Sin embargo, se detectó que en las cajas figuraba una potencia de 115 AW.',
+      'Por este motivo, hemos actualizado temporalmente la información de la ficha técnica hasta que todas las cajas lleven las pegatinas que indican los 130 AW, con el objetivo de evitar confusiones entre los clientes.',
+      'En caso de que recibáis alguna consulta al respecto, la información correcta es que la potencia de succión del producto es de 130 AW.'
+    ],
+    destacados: [
+      'Artículo 1672416 · Dyson V8 Absolute.',
+      'La potencia correcta de succión es 130 AW.',
+      'En las cajas figuraba 115 AW hasta que se coloquen las pegatinas.',
+      'Ficha técnica actualizada temporalmente hasta que todas las cajas lleven la pegatina de 130 AW.'
+    ],
+    info: [
+      { label:'Artículo', value:'1672416' },
+      { label:'Producto', value:'Dyson V8 Absolute' },
+      { label:'Potencia correcta', value:'130 AW' },
+      { label:'Potencia errónea en cajas', value:'115 AW' }
+    ],
+    enlaces: [ { etiqueta:'Ver artículo en MediaMarkt', url:'https://www.mediamarkt.es/es/product/_aspirador-escoba-dyson-v8-absolute-potencia-succion-115-aw-autonomia-40-min-ligera-accesorios-hogares-con-mascota-niquel-1672416.html' } ]
+  },
+  {
+    id: 9, fecha: '2026-10-16', categoria: 'Producto',
+    titulo: 'Devoluciones 1671703 Dyson',
+    ubicacion: 'Todos los centros · Online y tienda',
+    resumen: 'El artículo 1671703 (Dyson, cepillo de dientes) ha sido retirado temporalmente de la venta. Si un cliente quiere devolverlo, debemos aceptar la devolución aunque el fallo no esté localizado en las partidas de España.',
+    cuerpo: [
+      'Buenas tardes, sobre este ID de Dyson (1671703), que es un cepillo de dientes que ha sido retirado temporalmente de la venta, la PM nos informa:',
+      'Si el cliente quiere devolverlo, debemos gestionar su devolución. El fallo no está localizado en las partidas de España, pero debemos aceptar la devolución.',
+      'Para que lo trasladéis a los agentes.'
+    ],
+    destacados: [
+      'Artículo 1671703 · Dyson (cepillo de dientes).',
+      'Retirado temporalmente de la venta.',
+      'Aceptar la devolución si el cliente lo solicita.',
+      'El fallo no está localizado en las partidas de España, pero se acepta igualmente.'
+    ],
+    info: [
+      { label:'Artículo', value:'1671703' },
+      { label:'Producto', value:'Dyson · Cepillo de dientes' },
+      { label:'Estado', value:'Retirado temporalmente de la venta' },
+      { label:'Devolución', value:'Aceptar siempre si el cliente lo solicita' }
+    ]
+  },
+  {
+    id: 10, fecha: '2026-10-17', categoria: 'Aviso meteorológico',
+    titulo: 'Alerta Meteorológica',
+    ubicacion: 'España',
+    resumen: 'Los establecimientos de Almería y Roquetas permanecerán cerrados el resto de la jornada debido a la alerta meteorológica de la zona.',
+    cuerpo: [
+      'Buenas tardes.',
+      'Nuestros establecimientos de Almería y Roquetas permanecerán cerrados el resto de la jornada debido a la alerta meteorológica de la zona.',
+      'Gracias.'
+    ],
+    destacados: [
+      'Cierre por alerta meteorológica en la zona.',
+      'Afecta a las tiendas de Almería y Roquetas.',
+      'Cierre durante el resto de la jornada.'
+    ],
+    stores: [
+      { nombre:'Almería', hora:'Resto de jornada' },
+      { nombre:'Roquetas', hora:'Resto de jornada' }
+    ],
+    info: [
+      { label:'Fecha', value:'17/10/2026' },
+      { label:'Motivo', value:'Alerta meteorológica' },
+      { label:'Alcance', value:'Almería y Roquetas' },
+      { label:'Cierre', value:'Resto de la jornada' }
     ]
   }
 ];
@@ -1717,39 +1871,7 @@ function renderCampanaInfo(id){
 const cashbackContentEl = document.getElementById('cashbackContent');
 function cashbackPorId(id){ return CASHBACKS.find(c => String(c.id) === String(id)); }
 
-function plantillaCashbackSamsung(c){
-  const fecha = parseFecha(c.fecha);
-  const infoHTML = c.info && c.info.length ? `
-    <div class="detail-info">${c.info.map(i => `<div class="detail-info__item"><div class="detail-info__label">${escapar(i.label)}</div><div class="detail-info__value">${escapar(i.value)}</div></div>`).join('')}</div>` : '';
-  const enlacesHTML = c.enlaces && c.enlaces.length ? `
-    <div class="ci-links" style="margin-top:22px;">${c.enlaces.map(l => `<a class="ci-link" href="${escapar(l.url)}" target="_blank" rel="noopener">${LINK_ICO}${escapar(l.etiqueta)}</a>`).join('')}</div>` : '';
-  const condicionesHTML = c.condiciones.map(cond => `
-    <details class="ci-conditions">
-      <summary>${escapar(cond.titulo)}</summary>
-      <div class="ci-conditions__content"><p>${escapar(cond.texto)}</p></div>
-    </details>`).join('');
-  return `
-    <div class="detail-hero" style="--cat-color:#00A650;">
-      <div class="container detail-hero__inner">
-        <a class="detail-back" data-nav="cashbacks">${BACK_ICO} Volver a cashbacks</a>
-        <div class="detail-meta"><span class="detail-cat">${escapar(c.marca)}</span><time class="detail-date">${fmtLargaConDia(fecha)}</time></div>
-        <h1>${escapar(c.titulo)}</h1>
-      </div>
-    </div>
-    <main class="container--narrow" style="padding-bottom:30px">
-      <div class="detail-body">
-        <div class="ci-intro"><strong>Vigencia:</strong> ${escapar(c.vigencia)}</div>
-        <h3 class="detail-subhead">Descripción de la promoción</h3>
-        <p>${escapar(c.descripcion)}</p>
-        <h3 class="detail-subhead">Modelos adheridos</h3>
-        <p>${escapar(c.modelos)}</p>
-        ${infoHTML}${enlacesHTML}
-        <h3 class="detail-subhead" style="margin-top:34px;">Condiciones y detalles</h3>
-        ${condicionesHTML}
-      </div>
-    </main>`;
-}
-function plantillaCashbackHisense(c){
+function plantillaCashback(c){
   const fecha = parseFecha(c.fecha);
   const infoHTML = c.info && c.info.length ? `
     <div class="detail-info">${c.info.map(i => `<div class="detail-info__item"><div class="detail-info__label">${escapar(i.label)}</div><div class="detail-info__value">${escapar(i.value)}</div></div>`).join('')}</div>` : '';
@@ -1799,7 +1921,7 @@ function renderCashback(id){
     cashbackContentEl.innerHTML = `<div class="container" style="padding:60px 0"><div class="empty"><strong>Cashback no encontrado</strong>La promoción que buscas no existe o ha sido eliminada.</div></div>`;
     return;
   }
-  cashbackContentEl.innerHTML = (c.id === 2 || c.id === 3 || c.id === 4) ? plantillaCashbackHisense(c) : plantillaCashbackSamsung(c);
+  cashbackContentEl.innerHTML = plantillaCashback(c);
 }
 
 /* ==========================================================
