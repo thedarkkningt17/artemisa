@@ -733,6 +733,20 @@ a{color:inherit}
 <section class="view" id="view-cashbacks">
   <main class="container" style="padding-top:36px">
     <div class="section-head"><h2>Cashbacks</h2></div>
+    <a class="info-card" href="#cashback-5" data-cashback="5">
+      <div class="info-card__icon">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="2.5"/><path d="M6 12h.01M18 12h.01"/></svg>
+      </div>
+      <div class="info-card__body">
+        <div class="info-card__top">
+          <span class="info-card__tag">Nueva promoción</span>
+          <span class="info-card__date">Martes, 20 de octubre de 2026</span>
+        </div>
+        <h3 class="info-card__title">CASHBACK LG · PROMO LIFE'S GOOD DAYS NAVIDAD 2026 - MM</h3>
+        <p class="info-card__text">Nueva promo cashback de Navidad para TV y AV LG, vigente del 23/10/2026 al 06/01/2027. Hasta 5.000 € de regalo o 10 años de Garantía Total en OLED Serie C y superiores, y hasta 300 € de regalo en barras de sonido LG.</p>
+        <span class="info-card__read">Leer promoción completa <span aria-hidden="true">→</span></span>
+      </div>
+    </a>
     <a class="info-card" href="#cashback-4" data-cashback="4">
       <div class="info-card__icon">
         <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="2.5"/><path d="M6 12h.01M18 12h.01"/></svg>
@@ -1166,6 +1180,37 @@ const CASHBACKS = [
       { titulo: 'Consulta de bases legales', texto: 'Las bases legales completas de cada promoción están disponibles en la web del fabricante correspondiente.' }
     ],
     contacto: 'Consultar con el fabricante (Beko / Whirlpool)'
+  },
+  {
+    id: 5, fecha: '2026-10-20',
+    titulo: "CASHBACK LG · PROMO LIFE'S GOOD DAYS NAVIDAD 2026 - MM",
+    marca: 'LG',
+    vigencia: 'Del 23 de octubre de 2026 al 6 de enero de 2027',
+    descripcion: 'Nueva promo cashback de Navidad para TV y AV de LG, dentro de la acción RENOVE. Compra un TV LG y llévate hasta 5.000 € de regalo o 10 años de Garantía Total en OLED Serie C y superiores. Compra una barra de sonido LG y llévate hasta 300 € de regalo.',
+    mecanica: 'El cliente debe registrarse en la web promocional habilitada para la promoción antes del 21 de enero de 2027, adjuntando la factura de compra y los datos personales completos. Fecha máxima de registro: 21/01/2027.',
+    webPromo: 'https://www.labuenavida.es/lifesgooddaysnavidad',
+    enlaces: [
+      { etiqueta:'Registro en la promoción', url:'https://www.labuenavida.es/lifesgooddaysnavidad' }
+    ],
+    productos: [
+      { categoria:'TV LG · OLED Serie C y superiores', modelo:'Ver Bases legales / Presentación MM', promo:'Hasta 5.000 € de regalo o 10 años de Garantía Total', ean:'—', codigo:'—' },
+      { categoria:'AV · Barras de sonido LG', modelo:'Ver Bases legales / Presentación MM', promo:'Hasta 300 € de regalo', ean:'—', codigo:'—' }
+    ],
+    info: [
+      { label:'Marca', value:'LG' },
+      { label:'Vigencia compra', value:'23/10/2026 → 06/01/2027' },
+      { label:'Registro online', value:'Hasta el 21/01/2027' },
+      { label:'Regalo TV', value:'Hasta 5.000 € o 10 años de Garantía Total (OLED Serie C y superiores)' },
+      { label:'Regalo AV', value:'Hasta 300 € en barras de sonido LG' },
+      { label:'Materiales', value:'A4 tiendas (en curso), banners web (listos), sellos folletos (adjuntos)' }
+    ],
+    condiciones: [
+      { titulo: 'Mecánica de la promoción', texto: 'TV: compra un TV LG y llévate hasta 5.000 € de regalo o 10 años de Garantía Total en OLED Serie C y superiores. AV: compra una barra de sonido LG y llévate hasta 300 € de regalo. Periodo promocional MM: 23/10/2026 - 06/01/2027.' },
+      { titulo: 'Registro', texto: 'El cliente deberá registrarse en la URL indicada para la promoción (www.labuenavida.es/lifesgooddaysnavidad). Fecha máxima de registro: 21 de enero de 2027.' },
+      { titulo: 'Materiales de comunicación', texto: 'A4 para tiendas: en curso. Banners para web por cliente: hechos y listos para adaptaciones según peticiones a Newno. Sellos para folletos: adjuntos. Información promocional (BBLL, presentación para MM): adjunta en el correo de comunicación interna.' },
+      { titulo: 'Consulta de bases legales', texto: 'Las bases legales completas de la promoción están adjuntas en el correo de comunicación interna.' }
+    ],
+    contacto: 'Consultar con el fabricante (LG)'
   }
 ];
 
