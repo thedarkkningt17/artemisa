@@ -682,6 +682,20 @@ a{color:inherit}
 <section class="view" id="view-campanas">
   <main class="container" style="padding-top:36px">
     <div class="section-head"><h2>Información de campañas</h2></div>
+    <a class="info-card" href="#campana-info-4" data-campana-info="4">
+      <div class="info-card__icon">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg>
+      </div>
+      <div class="info-card__body">
+        <div class="info-card__top">
+          <span class="info-card__tag">Nueva actualización</span>
+          <span class="info-card__date">Viernes, 23 de octubre de 2026</span>
+        </div>
+        <h3 class="info-card__title">Información de Campañas: RENOVE &amp; Comunicación Especial</h3>
+        <p class="info-card__text">Seguimos con El RENOVE. Repasamos la comunicación especial de sorteos (APP Octubre y Maratón Valencia) y las promociones miMediaMarkt: cupón Samsung Galaxy S26 Series y -5% directo en Google Pixel 11.</p>
+        <span class="info-card__read">Leer información completa <span aria-hidden="true">→</span></span>
+      </div>
+    </a>
     <a class="info-card" href="#campana-info-3" data-campana-info="3">
       <div class="info-card__icon">
         <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg>
@@ -1050,6 +1064,68 @@ const CAMPAÑAS_INFO = [
             badge: 'Cupón',
             metainfo: [{ icono:'cal', texto:'Hasta el 31/10 a las 23:59h' }],
             descripcion: 'Hasta -100 € en cupón Samsung S26 Series. Aplicable en tiendas y web/app para miembros de miMediaMarkt.'
+          }
+        ]
+      }
+    ]
+  },
+  {
+    id: 4, fecha: '2026-10-23',
+    titulo: 'Información de Campañas: RENOVE & Comunicación Especial',
+    intro: '¡Feliz viernes! Seguimos con El RENOVE. Compartimos la información actualizada de la campaña, la comunicación especial de sorteos y las promociones miMediaMarkt vigentes.',
+    secciones: [
+      {
+        tipo: 'prox', emoji: '📢', titulo: 'Próximas campañas',
+        campanas: [
+          {
+            nombre: 'RENOVE',
+            badge: 'Omnicanal',
+            metainfo: [
+              { icono:'web', texto:'Web/APP: del 14/10 a las 9h al 01/11 a las 23:59h' },
+              { icono:'store', texto:'Tienda: del 14/10 al 01/11 según horario comercial' }
+            ],
+            descripcion: '¡Seguimos con El RENOVE! Campaña omnicanal con todas las categorías incluidas, con vigencia del 14/10 a las 9h hasta el 01/11 a las 23:59h.',
+            condiciones: [
+              { titulo: 'Condiciones generales', texto: 'Campaña omnicanal aplicable a todas las categorías incluidas en la promoción. Vigencia del 14/10 a las 9h hasta el 01/11 a las 23:59h. Consulta las exclusiones específicas en la información definitiva de la campaña.' }
+            ]
+          }
+        ]
+      },
+      {
+        tipo: 'esp', emoji: '🎁', titulo: 'Comunicación especial',
+        campanas: [
+          {
+            nombre: 'Sorteo APP Octubre · Tarjetas regalo 999 €',
+            badge: 'Sorteo',
+            metainfo: [{ icono:'cal', texto:'Del 1 al 31 de octubre' }],
+            descripcion: 'Para el mes de octubre sorteamos entre nuestros clientes 5 tarjetas regalo valoradas en 999 € cada una. El sorteo estará activo todo el mes (del 1 al 31 de octubre). La dinámica es la habitual: solo por tener la APP el usuario entra en ella, rellena el formulario para participar y automáticamente queda inscrito.'
+          },
+          {
+            nombre: 'Sorteo 6 dorsales para el Maratón Valencia',
+            badge: 'Junto a JBL',
+            metainfo: [{ icono:'cal', texto:'Del 1 al 25 de octubre' }],
+            descripcion: 'Junto a JBL, del 1 al 25 de octubre estamos sorteando entre nuestros clientes 6 dorsales para participar en el Maratón Valencia que se celebra el próximo 6 de diciembre. Para participar, el usuario debe ser miembro miMediaMarkt, realizar una compra de un producto JBL Open Sound o Endurance y subir su ticket de compra a la landing habilitada para ello.',
+            enlaces: [
+              { etiqueta:'Gana 6 tickets para el Maratón Valencia | MediaMarkt', url:'https://www.mediamarkt.es/es/campaign/gana-6-tickets-maraton-valencia' }
+            ]
+          }
+        ]
+      },
+      {
+        tipo: 'mmm', emoji: '💳', titulo: 'Campañas miMediaMarkt',
+        subtitulo: 'Descuentos aplicables sólo a miembros de miMediaMarkt en la web y/o App y/o Tiendas.',
+        campanas: [
+          {
+            nombre: 'Samsung Galaxy S26 Series',
+            badge: 'Cupón',
+            metainfo: [{ icono:'cal', texto:'Hasta el 31/10 a las 23:59h' }],
+            descripcion: 'Hasta -100 € en cupón Samsung S26 Series. Aplicable en tiendas y web/app para miembros de miMediaMarkt.'
+          },
+          {
+            nombre: 'Google Pixel 11',
+            badge: '-5% directo',
+            metainfo: [{ icono:'cal', texto:'Hasta el 06/11 a las 9h' }],
+            descripcion: '-5% de descuento directo en Google Pixel 11. Aplicable en tiendas y web/app para miembros de miMediaMarkt.'
           }
         ]
       }
