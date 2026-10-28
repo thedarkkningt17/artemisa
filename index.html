@@ -747,6 +747,20 @@ a{color:inherit}
 <section class="view" id="view-cashbacks">
   <main class="container" style="padding-top:36px">
     <div class="section-head"><h2>Cashbacks</h2></div>
+    <a class="info-card" href="#cashback-6" data-cashback="6">
+      <div class="info-card__icon">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="2.5"/><path d="M6 12h.01M18 12h.01"/></svg>
+      </div>
+      <div class="info-card__body">
+        <div class="info-card__top">
+          <span class="info-card__tag">Nueva promoción</span>
+          <span class="info-card__date">Jueves, 22 de octubre de 2026</span>
+        </div>
+        <h3 class="info-card__title">SAMSUNG · Promoción Galaxy Watch + Correa de regalo</h3>
+        <p class="info-card__text">Compra un smartwatch Samsung Galaxy Watch adherido y recibe una correa adicional de regalo. Promoción del fabricante vigente del 22/10/2026 al 15/12/2026. Registro online hasta el 10/01/2027.</p>
+        <span class="info-card__read">Leer promoción completa <span aria-hidden="true">→</span></span>
+      </div>
+    </a>
     <a class="info-card" href="#cashback-5" data-cashback="5">
       <div class="info-card__icon">
         <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="2.5"/><path d="M6 12h.01M18 12h.01"/></svg>
@@ -1292,13 +1306,13 @@ const CASHBACKS = [
 
 /* ==========================================================
    3) DATOS · NOTICIAS
-   (Se ha eliminado el campo "contacto" de todas las noticias)
    ========================================================== */
 const CATEGORIAS_NOTICIAS = {
-  'Cierre de tiendas':   { color:'#DF0000', bg:'#FFF0F0', icono:'lock'  },
-  'Aviso meteorológico': { color:'#0066CC', bg:'#E6F1FB', icono:'cloud' },
-  'Producto':            { color:'#1A1A1A', bg:'#F1F1F1', icono:'box'   },
-  'Incidencia':          { color:'#E08700', bg:'#FFF6E5', icono:'alert' }
+  'Cierre de tiendas':      { color:'#DF0000', bg:'#FFF0F0', icono:'lock'  },
+  'Aviso meteorológico':    { color:'#0066CC', bg:'#E6F1FB', icono:'cloud' },
+  'Producto':               { color:'#1A1A1A', bg:'#F1F1F1', icono:'box'   },
+  'Incidencia':             { color:'#E08700', bg:'#FFF6E5', icono:'alert' },
+  'Comunicado CaixaBank':   { color:'#004B99', bg:'#E6F1FB', icono:'doc'   }
 };
 
 const NOTICIAS = [
@@ -1656,6 +1670,57 @@ const NOTICIAS = [
       { label:'Alcance', value:'Todos los centros · 3 tiendas afectadas' },
       { label:'Estado', value:'Cierre temporal' }
     ]
+  },
+  {
+    id: 16, fecha: '2026-10-28', categoria: 'Comunicado CaixaBank',
+    titulo: 'Comunicación CaixaBank: Cancelación de tarjeta VISA MediaMarkt a clientes inactivos',
+    ubicacion: 'Omnicanal',
+    resumen: 'CaixaBank inicia la migración de sus sistemas: las tarjetas VISA MediaMarkt cambiarán de numeración (nuevo BIN) en abril de 2027. Como primer paso, los clientes con más de 24 meses sin usar la tarjeta recibirán un aviso de cancelación efectiva a partir de enero de 2027.',
+    cuerpo: [
+      'Buenos días. En abril de 2027, CaixaBank llevará a cabo una migración completa de sus sistemas. Las tarjetas físicas actuales serán substituidas por otras con una numeración distinta (código BIN). Seguirá siendo la MediaMarkt VISA y con el mismo diseño, pero se modificará la numeración.',
+      'Como primer paso, CaixaBank ya está informando a un primer grupo de clientes inactivos, con más de 24 meses sin utilizar la tarjeta, de que su tarjeta actual dejará de estar operativa a partir de enero de 2027 (documento adjunto). Concretamente se les comunica que: su tarjeta dejará de estar operativa a partir de enero de 2027; no podrá realizar nuevas operaciones con esa tarjeta; si tiene una deuda pendiente, esta continuará gestionándose con normalidad; y no debe realizar ninguna gestión para que la cancelación sea efectiva.',
+      'Os informamos para que estéis al corriente en caso de recibir consultas en tienda. Si algún cliente necesita más información, deberá ser derivado a Atención al Cliente de CaixaBank.'
+    ],
+    destacados: [
+      'Migración completa de los sistemas de CaixaBank en abril de 2027.',
+      'Las tarjetas VISA MediaMarkt cambiarán de numeración (nuevo BIN), manteniendo diseño y marca.',
+      'A partir de enero de 2027, los clientes con más de 24 meses sin usar la tarjeta recibirán aviso de cancelación.',
+      'La deuda pendiente, si existe, se sigue gestionando con normalidad.',
+      'El cliente no debe realizar ninguna gestión para que la cancelación sea efectiva.',
+      'Derivar a Atención al Cliente de CaixaBank cualquier consulta que requiera más información.'
+    ],
+    info: [
+      { label:'Fecha', value:'28/10/2026' },
+      { label:'Emisor', value:'CaixaBank' },
+      { label:'Producto', value:'VISA MediaMarkt' },
+      { label:'Migración de sistemas', value:'Abril de 2027' },
+      { label:'Cambio de numeración', value:'Nuevo código BIN' },
+      { label:'Aviso a inactivos', value:'Más de 24 meses sin uso · Efectivo desde enero de 2027' },
+      { label:'Alcance', value:'Omnicanal' }
+    ]
+  },
+  {
+    id: 17, fecha: '2026-10-28', categoria: 'Producto',
+    titulo: 'Pantalla iPhone Duo - NO DESPEGAR',
+    ubicacion: 'Omnicanal',
+    resumen: 'El iPhone Duo no incluye protector de pantalla. Lo que parece un protector es en realidad la capa de cobertura con nanotextura de la pantalla: no debe despegarse. Informar a los clientes que no intenten retirarla.',
+    cuerpo: [
+      'Buenos días. El iPhone Duo NO viene con protector de pantalla.',
+      'Hay que informar a los clientes de que no intenten despegarlo: lo que parece ser un protector es realmente la capa de cobertura con nanotextura de la pantalla.'
+    ],
+    destacados: [
+      'El iPhone Duo no incluye protector de pantalla.',
+      'Lo que parece un protector es la capa de cobertura con nanotextura de la pantalla.',
+      'No se debe despegar bajo ningún concepto.',
+      'Informar a los clientes que pregunten por este punto.'
+    ],
+    info: [
+      { label:'Fecha', value:'28/10/2026' },
+      { label:'Producto', value:'iPhone Duo' },
+      { label:'Categoría', value:'Producto' },
+      { label:'Alcance', value:'Omnicanal' },
+      { label:'Acción', value:'Informar: no despegar la capa de la pantalla' }
+    ]
   }
 ];
 
@@ -1879,6 +1944,86 @@ const NOVEDADES_OPERATIVA = [
           { situacion:'PayPal retenido', tipo:'Pago', tipoClass:'mp', accion:'Escalar a administración online con ID de transacción' },
           { situacion:'Pedido cancelado por plazo', tipo:'Cancelado', tipoClass:'no', accion:'Informar al cliente de que debe realizar una nueva compra' }
         ] }
+    ]
+  },
+  {
+    id: 4,
+    fecha: '2026-10-28',
+    categoria: 'Procedimiento',
+    titulo: 'Servicio cambio de puertas en pedidos Urban Hub',
+    ubicacion: 'Todos los centros',
+    resumen: 'El servicio de cambio de puertas de los Urban Hub pasa del instalador Arion a los propios Hub. Madrid y Barcelona ya cuentan con equipo de Service propio; el resto se irá ampliando en las próximas semanas.',
+    intro: 'Nos han informado de un cambio en la gestión del servicio de cambio de puertas de los pedidos Urban Hub: el instalador Arion deja de realizarlo en el momento de la entrega y pasa a gestionarse desde los propios Hub.',
+    bloques: [
+      {
+        tipo: 'definicion',
+        titulo: '¿En qué consiste el cambio?',
+        parrafos: [
+          'El servicio de cambio de puertas de los <strong>Urban Hub</strong>, que hasta ahora realizaba el instalador <strong>Arion</strong> en el mismo momento de la entrega, ha empezado a pasar a los propios Hub.',
+          'Esto significa que el cambio de sentido de puertas se realiza <strong>antes del envío</strong>, en almacén, y no en el domicilio del cliente.'
+        ]
+      },
+      {
+        tipo: 'pistas',
+        titulo: 'Situación actual por Hub',
+        pistasOk: [
+          '<strong>Urban Madrid</strong>: ya cuenta con un equipo de Service propio que realiza el cambio de puertas antes del envío, igual que se hace en los envíos de HD desde Pinto.',
+          '<strong>Urban Barcelona</strong>: también dispone ya de equipo de Service propio para realizar el cambio antes del envío.',
+          '<strong>Resto de Urban</strong>: de momento, el cambio de puertas lo sigue realizando Arion como hasta ahora.'
+        ],
+        alerta: {
+          label: 'Evolución prevista',
+          texto: 'A lo largo de las próximas semanas se irá ampliando a otros Urban. Finalmente, <strong>todos los Urban con cambio de sentido de puertas deberían salir ya "hechos" desde almacén</strong>.'
+        }
+      },
+      {
+        tipo: 'flujo',
+        titulo: '¿Cómo actuar según el Hub?',
+        pasos: [
+          { num:1, texto:'Identificar el Urban Hub del pedido (Madrid, Barcelona u otro).' },
+          { num:2, texto:'Comprobar si el pedido requiere cambio de sentido de puertas.' },
+          { num:3, texto:'Aplicar el flujo correspondiente según el Hub:' }
+        ],
+        ramas: [
+          {
+            label: 'MADRID / BARCELONA',
+            labelClass: 'ci-tag--ok',
+            condicion: 'El Urban ya tiene equipo de Service propio',
+            acciones: [
+              'El cambio de puertas se realiza <strong>antes del envío</strong> desde el propio Hub.',
+              'No se requiere intervención de Arion en la entrega.',
+              'El pedido sale del almacén con el cambio de sentido de puertas ya hecho.'
+            ]
+          },
+          {
+            label: 'RESTO DE URBAN',
+            labelClass: 'ci-tag--info',
+            condicion: 'El Urban aún no dispone de equipo de Service propio',
+            acciones: [
+              'El cambio de puertas lo sigue realizando <strong>Arion</strong> en el momento de la entrega, como hasta ahora.',
+              'No cambiar la operativa actual para estos pedidos.'
+            ]
+          }
+        ]
+      },
+      {
+        tipo: 'arbol',
+        titulo: 'Árbol de decisión rápido',
+        filas: [
+          { situacion:'Pedido Urban Madrid con cambio de puertas', tipo:'Sale hecho', tipoClass:'no', accion:'El Hub realiza el cambio antes del envío. Sin Arion en entrega.' },
+          { situacion:'Pedido Urban Barcelona con cambio de puertas', tipo:'Sale hecho', tipoClass:'no', accion:'El Hub realiza el cambio antes del envío. Sin Arion en entrega.' },
+          { situacion:'Pedido de otro Urban con cambio de puertas', tipo:'Arion', tipoClass:'sc', accion:'Arion realiza el cambio en el momento de la entrega, como hasta ahora.' },
+          { situacion:'Pedido sin cambio de puertas', tipo:'Sin acción', tipoClass:'mp', accion:'No se aplica ningún cambio en la operativa.' }
+        ]
+      },
+      {
+        tipo: 'scheduled',
+        titulo: 'Próximos pasos',
+        parrafos: [
+          'A lo largo de las próximas semanas el servicio se irá ampliando a otros Urban Hub. El objetivo final es que <strong>todos los Urban con cambio de sentido de puertas salgan ya "hechos" desde almacén</strong>.',
+          'Cualquier duda que surja al respecto, indicádnosla para poder trasladarla al equipo correspondiente.'
+        ]
+      }
     ]
   }
 ];
@@ -2181,7 +2326,9 @@ const newsFeaturedEl = document.getElementById('newsFeatured');
 const newsGridEl     = document.getElementById('newsGrid');
 
 function plantillaNoticiaFeatured(n){
-  const cat=CATEGORIAS_NOTICIAS[n.categoria], ico=ICONOS_NOTICIAS[cat.icono], fecha=parseFecha(n.fecha);
+  const cat=CATEGORIAS_NOTICIAS[n.categoria] || { color:'#DF0000', bg:'#FFF0F0', icono:'doc' };
+  const ico=ICONOS_NOTICIAS[cat.icono];
+  const fecha=parseFecha(n.fecha);
   return `
     <a class="news-featured" href="#noticia-${n.id}" data-noticia="${n.id}" style="--cat-color:${cat.color};--cat-bg:${cat.bg};">
       <div class="news-featured__media"><div class="news-featured__icon">${ico}</div></div>
@@ -2198,7 +2345,8 @@ function plantillaNoticiaFeatured(n){
     </a>`;
 }
 function plantillaNoticia(n){
-  const cat=CATEGORIAS_NOTICIAS[n.categoria], fecha=parseFecha(n.fecha);
+  const cat=CATEGORIAS_NOTICIAS[n.categoria] || { color:'#DF0000', bg:'#FFF0F0' };
+  const fecha=parseFecha(n.fecha);
   return `
     <a class="news-card" href="#noticia-${n.id}" data-noticia="${n.id}" style="--cat-color:${cat.color};--cat-bg:${cat.bg};">
       <div class="news-card__top">
@@ -2225,13 +2373,12 @@ function renderNoticias(){
 
 /* ==========================================================
    9) RENDER · DETALLE DE NOTICIA
-   (Ya no se renderiza el bloque "Contacto para dudas")
    ========================================================== */
 const noticiaContentEl = document.getElementById('noticiaContent');
 function noticiaPorId(id){ return NOTICIAS.find(n => String(n.id) === String(id)); }
 
 function plantillaDetalleNoticia(n){
-  const cat = CATEGORIAS_NOTICIAS[n.categoria];
+  const cat = CATEGORIAS_NOTICIAS[n.categoria] || { color:'#DF0000' };
   const fecha = parseFecha(n.fecha);
   const relacionados = NOTICIAS.filter(o => o.id !== n.id).map(o => ({ ...o, _fecha:parseFecha(o.fecha) }))
     .sort((a,b) => { const aPri = a.categoria === n.categoria ? 0 : 1; const bPri = b.categoria === n.categoria ? 0 : 1; return aPri - bPri || b._fecha - a._fecha; }).slice(0, 3);
