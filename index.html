@@ -1312,7 +1312,8 @@ const CATEGORIAS_NOTICIAS = {
   'Aviso meteorológico':    { color:'#0066CC', bg:'#E6F1FB', icono:'cloud' },
   'Producto':               { color:'#1A1A1A', bg:'#F1F1F1', icono:'box'   },
   'Incidencia':             { color:'#E08700', bg:'#FFF6E5', icono:'alert' },
-  'Comunicado CaixaBank':   { color:'#004B99', bg:'#E6F1FB', icono:'doc'   }
+  'Comunicado CaixaBank':   { color:'#004B99', bg:'#E6F1FB', icono:'doc'   },
+  'festivo':                { color:'#6B4EFF', bg:'#F0ECFF', icono:'bell'  }
 };
 
 const NOTICIAS = [
@@ -1720,6 +1721,29 @@ const NOTICIAS = [
       { label:'Categoría', value:'Producto' },
       { label:'Alcance', value:'Omnicanal' },
       { label:'Acción', value:'Informar: no despegar la capa de la pantalla' }
+    ]
+  },
+  {
+    id: 18, fecha: '2026-10-29', categoria: 'festivo',
+    titulo: 'Servicio Segundo Nivel Lunes 02/11',
+    ubicacion: 'Comunidad de Madrid',
+    resumen: 'El lunes 02/11 es festivo en Madrid, por lo que el equipo de segundo nivel no prestará servicio. Aplicad el procedimiento de fuera de horario.',
+    cuerpo: [
+      'Buenas tardes,',
+      'Os informamos que el lunes 02/11 es festivo en Madrid, por lo que el equipo de segundo nivel no prestará servicio.',
+      'Aplicad el procedimiento de fuera de horario.',
+      'Un saludo.'
+    ],
+    destacados: [
+      'Festivo en la Comunidad de Madrid el lunes 02/11.',
+      'Segundo nivel sin servicio ese día.',
+      'Aplicar el procedimiento de fuera de horario.'
+    ],
+    info: [
+      { label:'Fecha', value:'Lunes 02/11/2026' },
+      { label:'Alcance', value:'Comunidad de Madrid' },
+      { label:'Servicio afectado', value:'Segundo nivel' },
+      { label:'Acción', value:'Aplicar procedimiento de fuera de horario' }
     ]
   }
 ];
