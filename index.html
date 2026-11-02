@@ -682,6 +682,20 @@ a{color:inherit}
 <section class="view" id="view-campanas">
   <main class="container" style="padding-top:36px">
     <div class="section-head"><h2>Información de campañas</h2></div>
+    <a class="info-card" href="#campana-info-5" data-campana-info="5">
+      <div class="info-card__icon">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg>
+      </div>
+      <div class="info-card__body">
+        <div class="info-card__top">
+          <span class="info-card__tag">Nueva actualización</span>
+          <span class="info-card__date">Lunes, 2 de noviembre de 2026</span>
+        </div>
+        <h3 class="info-card__title">Información de Campañas: SEMANAS BLACK I &amp; Comunicación Especial</h3>
+        <p class="info-card__text">Llega el mes de Black Friday y con él las Semanas Black. Repasamos la campaña internacional OFERTAS MAXXING (3 fases), el RENOVE, el sorteo APP Noviembre (PS5 Digital + GTA VI) y las promociones miMediaMarkt.</p>
+        <span class="info-card__read">Leer información completa <span aria-hidden="true">→</span></span>
+      </div>
+    </a>
     <a class="info-card" href="#campana-info-4" data-campana-info="4">
       <div class="info-card__icon">
         <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg>
@@ -1140,6 +1154,89 @@ const CAMPAÑAS_INFO = [
             badge: '-5% directo',
             metainfo: [{ icono:'cal', texto:'Hasta el 06/11 a las 9h' }],
             descripcion: '-5% de descuento directo en Google Pixel 11. Aplicable en tiendas y web/app para miembros de miMediaMarkt.'
+          }
+        ]
+      }
+    ]
+  },
+  {
+    id: 5, fecha: '2026-11-02',
+    titulo: 'Información de Campañas: SEMANAS BLACK I & Comunicación Especial',
+    intro: 'Llega el mes de Black Friday y con él las Semanas Black. Compartimos la información de las próximas campañas, la comunicación especial de sorteos y las promociones miMediaMarkt vigentes.',
+    secciones: [
+      {
+        tipo: 'prox', emoji: '📢', titulo: 'Próximas campañas',
+        campanas: [
+          {
+            nombre: 'OFERTAS MAXXING · SEMANAS BLACK',
+            badge: '3 fases',
+            metainfo: [
+              { icono:'web', texto:'Fase 1: del 02/11 al 09/11 en tiendas (al 10/11 a las 9h online)' },
+              { icono:'cal', texto:'Fase 2: del 10/11 al 18/11 · Fase 3: pendiente confirmar vigencia' }
+            ],
+            descripcion: 'Campaña internacional OFERTAS MAXXING: llevamos al máximo la tecnología, las ofertas y nuestros servicios. La campaña consta de 3 fases y será la misma desde el inicio hasta la fecha fin. Fase 1: del 02/11 al 09/11 en tiendas (al 10/11 a las 9h online). Fase 2: del 10/11 al 18/11. Fase 3: pendiente confirmar vigencia.',
+            condiciones: [
+              { titulo: 'Condiciones generales', texto: 'Campaña internacional OFERTAS MAXXING con 3 fases. Fase 1: del 02/11 al 09/11 en tiendas (al 10/11 a las 9h online). Fase 2: del 10/11 al 18/11. Fase 3: pendiente confirmar vigencia. La campaña será la misma desde el inicio hasta la fecha fin.' }
+            ]
+          },
+          {
+            nombre: 'RENOVE',
+            badge: 'Omnicanal',
+            metainfo: [
+              { icono:'web', texto:'Web/APP: del 14/10 a las 9h al 01/11 a las 23:59h' },
+              { icono:'store', texto:'Tienda: del 14/10 al 01/11 según horario comercial' }
+            ],
+            descripcion: 'Campaña omnicanal con todas las categorías incluidas, con vigencia del 14/10 a las 9h hasta el 01/11 a las 23:59h.',
+            condiciones: [
+              { titulo: 'Condiciones generales', texto: 'Campaña omnicanal aplicable a todas las categorías incluidas en la promoción. Vigencia del 14/10 a las 9h hasta el 01/11 a las 23:59h. Consulta las exclusiones específicas en la información definitiva de la campaña.' }
+            ]
+          }
+        ]
+      },
+      {
+        tipo: 'esp', emoji: '🎁', titulo: 'Comunicación especial',
+        campanas: [
+          {
+            nombre: 'Sorteo APP Noviembre · PS5 Digital + GTA VI',
+            badge: 'Sorteo',
+            metainfo: [{ icono:'cal', texto:'Del 2 al 30 de noviembre' }],
+            descripcion: 'Para este pedazo de mes sorteamos entre nuestros clientes 10 PS5 edición digital + el nuevo Grand Theft Auto 6. El sorteo estará activo todo el mes (del 2 al 30 de noviembre). La dinámica es la habitual: solo por tener la APP el usuario entra en ella, rellena el formulario para participar y automáticamente queda inscrito.'
+          }
+        ]
+      },
+      {
+        tipo: 'mmm', emoji: '💳', titulo: 'Campañas miMediaMarkt',
+        subtitulo: 'Descuentos aplicables sólo a miembros de miMediaMarkt en la web y/o App y/o Tiendas. OMNICHANNEL (Tiendas y web/app).',
+        campanas: [
+          {
+            nombre: 'Dispositivos informática · Tablets | Impresoras | Monitores',
+            badge: '-15% directo',
+            metainfo: [{ icono:'cal', texto:'Hasta el 01/11 a las 9h' }],
+            descripcion: '-15% de descuento en dispositivos de informática: Tablets | Impresoras | Monitores. Excepto Apple.'
+          },
+          {
+            nombre: 'Samsung Galaxy S26 | ZFlip8 | ZFold8',
+            badge: 'Cupón',
+            metainfo: [{ icono:'cal', texto:'Hasta el 02/11 a las 9h' }],
+            descripcion: 'Hasta -150 € en cupón en smartphones Samsung Galaxy S26 | ZFlip8 | ZFold8.'
+          },
+          {
+            nombre: 'Samsung Smartwatch | Portátiles | Tablets | Auriculares',
+            badge: '-5% directo',
+            metainfo: [{ icono:'cal', texto:'Hasta el 02/11 a las 9h' }],
+            descripcion: '-5% de descuento en Samsung Smartwatch | Portátiles | Tablets | Auriculares.'
+          },
+          {
+            nombre: 'Google Pixel 11',
+            badge: '-5% directo',
+            metainfo: [{ icono:'cal', texto:'Hasta el 06/11 a las 9h' }],
+            descripcion: '-5% de descuento directo en Google Pixel 11.'
+          },
+          {
+            nombre: 'Sony · Auriculares Gaming',
+            badge: 'Cupón',
+            metainfo: [{ icono:'cal', texto:'Hasta el 18/11 a las 23:59h' }],
+            descripcion: '-20 € en cupón en Auriculares Gaming Sony.'
           }
         ]
       }
