@@ -1688,7 +1688,7 @@
             let seccion = "Transporte";
             rawData.forEach(item => {
                 if (!item) return;
-                const n = limpiar(item["transporte "]);
+                const n = limpiar(item["transporte "] || item["transporte"]);
                 if (n) {
                     const nl = n.toLowerCase();
                     if (nl === "herramientas") { seccion = "Herramientas"; return; }
