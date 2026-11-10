@@ -682,6 +682,20 @@ a{color:inherit}
 <section class="view" id="view-campanas">
   <main class="container" style="padding-top:36px">
     <div class="section-head"><h2>Información de campañas</h2></div>
+    <a class="info-card" href="#campana-info-7" data-campana-info="7">
+      <div class="info-card__icon">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg>
+      </div>
+      <div class="info-card__body">
+        <div class="info-card__top">
+          <span class="info-card__tag">Nueva actualización</span>
+          <span class="info-card__date">Martes, 10 de noviembre de 2026</span>
+        </div>
+        <h3 class="info-card__title">Información de Campañas: SINGLES DAYS &amp; Comunicación Especial</h3>
+        <p class="info-card__text">Llega el SINGLE'S DAY con un -22% exclusivo online: del 10/11 a las 20h al 12/11 a las 9h, con acceso anticipado para usuarios de la APP desde las 15h. En Canarias la campaña empieza el 10/11 a las 15h y se amplían las promesas de entrega.</p>
+        <span class="info-card__read">Leer información completa <span aria-hidden="true">→</span></span>
+      </div>
+    </a>
     <a class="info-card" href="#campana-info-6" data-campana-info="6">
       <div class="info-card__icon">
         <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg>
@@ -1306,6 +1320,35 @@ const CAMPAÑAS_INFO = [
             badge: '-5% directo',
             metainfo: [{ icono:'cal', texto:'Hasta el 30/11 a las 9h' }],
             descripcion: '-5% de descuento en Samsung Smartwatch | Auriculares | Portátiles.'
+          }
+        ]
+      }
+    ]
+  },
+  {
+    id: 7, fecha: '2026-11-10',
+    titulo: 'Información de Campañas: SINGLES DAYS & Comunicación Especial',
+    intro: 'Compartimos la información actualizada del SINGLE\'S DAY: campaña exclusiva online con acceso anticipado para usuarios de la APP, condiciones legales para Península y Canarias, y ampliación de las promesas de entrega en Canarias.',
+    secciones: [
+      {
+        tipo: 'prox', emoji: '📢', titulo: 'Próximas campañas',
+        campanas: [
+          {
+            nombre: "SINGLE'S DAY",
+            badge: 'Solo online',
+            metainfo: [
+              { icono:'web', texto:'Web/APP: del 10/11 a las 20h al 12/11 a las 9h' },
+              { icono:'cal', texto:'Acceso anticipado APP: 10/11 desde las 15h' },
+              { icono:'web', texto:'Canarias: del 10/11 a las 15h al 12/11 a las 9h (solo web)' }
+            ],
+            descripcion: 'Campaña exclusiva online con vigencia del 10/11 a las 20h al 12/11 a las 9h. Los usuarios de la APP tendrán acceso anticipado el 10/11 a las 15h. En Canarias, al no haber APP, la campaña empezará el 10/11 a las 15h.',
+            excepciones: 'En Canarias la campaña comienza el 10/11 a las 15h (no hay APP). Para Canarias, debido al impacto de la campaña, se amplían las promesas de entrega: Pedidos Express de 30 min a 2h y Envíos de 2 a 4 días laborables a 4 a 6 días laborables.',
+            noValido: ['Apple','Beats','Consolas','DJI','Siemens','Gafas VR','Gafas IA','Libros','Tarjetas prepago','Lanzamientos','Servicios','Garantías','Productos en formato digital','Selección de productos en oferta de Semanas Black II'],
+            condiciones: [
+              { titulo: 'Legal PEN · Península y Baleares', texto: 'Descuento del -22% de campaña Single\'s Days válido en Península y Baleares del 10/11 a las 20h hasta el 12/11 a las 9h exclusivo en web y APP (aplicado en carrito). La promoción del -22% tiene un acceso anticipado exclusivo para usuarios de la APP desde el 10/11 a las 15h que finaliza el mismo 10/11 a las 20h. Excluidos una selección de productos en oferta de la campaña Semanas Black II. Todos los precios incluyen IVA / IPSI, RAEE y Canon compensatorio por copia privada. Promoción no válida para Apple, Beats, consolas, DJI, Siemens, Gafas VR, Gafas IA, libros, tarjetas prepago, lanzamientos, servicios, garantías y productos en formato digital. Promoción aplicable a consumidores finales, no acumulable con promociones vigentes y válida para productos vendidos y enviados por MediaMarkt. Consulta condiciones.' },
+              { titulo: 'Legal CAN · Canarias', texto: 'Descuento del -22% de campaña Single\'s Days válido en Canarias del 10/11 a las 15h hasta el 12/11 a las 9h exclusivo en web (aplicado en carrito). Excluidos una selección de productos en oferta de la campaña Semanas Black II. Todos los precios incluyen IVA / IPSI / IGIC, RAEE y Canon compensatorio por copia privada. Promoción no válida para Apple, Beats, consolas, DJI, Siemens, Gafas VR, Gafas IA, libros, tarjetas prepago, lanzamientos, servicios, garantías y productos en formato digital. Promoción aplicable a consumidores finales, no acumulable con promociones vigentes y válida para productos vendidos y enviados por MediaMarkt. Consulta condiciones.' },
+              { titulo: 'Canarias · Ampliación de promesas de entrega', texto: 'Debido al impacto de la campaña se amplían las promesas de entrega: Pedidos Express de 30 min a 2h. Envíos de 2 a 4 días laborables a 4 a 6 días laborables.' }
+            ]
           }
         ]
       }
