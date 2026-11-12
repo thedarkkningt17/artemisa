@@ -458,7 +458,9 @@ textarea[readonly]{background:var(--surface-2)}
 .estado-card .titulo{font-size:14.5px; font-weight:700; color:var(--mm-black); display:flex; align-items:center; gap:8px; flex-wrap:wrap}
 .estado-card .meta{font-size:12.5px; color:var(--text-muted); line-height:1.4}
 .estado-card .meta strong{color:var(--mm-black)}
+.estado-card .meta.cancelar strong{color:var(--danger)}
 .estado-card .accion{color:var(--mm-red); font-weight:700; align-self:flex-end; font-size:16px}
+.estado-card .badge-grupo{font-size:10px; padding:2px 6px}
 
 .filtros-plazo{display:flex; gap:8px; flex-wrap:wrap; margin:12px 0}
 .filtro-pill{
@@ -470,6 +472,60 @@ textarea[readonly]{background:var(--surface-2)}
 }
 .filtro-pill:hover{border-color:var(--mm-red); color:var(--mm-red)}
 .filtro-pill.active{background:var(--mm-red); color:var(--mm-white); border-color:var(--mm-red)}
+
+.aviso-cancelar{
+  background:#FFF7ED; border-left:4px solid var(--warning);
+  padding:12px 16px; border-radius:var(--radius-sm);
+  margin:12px 0; font-size:13.5px; color:var(--mm-gray-700);
+}
+.aviso-cancelar strong{color:var(--mm-black)}
+
+/* NUEVO: Tarjeta unificada según el modo */
+.accion-unica {
+  background: var(--mm-white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(0,0,0,.04);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 20px 0;
+}
+.accion-unica.avanzar { border-left: 6px solid var(--success); }
+.accion-unica.cancelar { border-left: 6px solid var(--danger); }
+
+.accion-unica-header {
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--mm-black);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.accion-unica-body {
+  font-size: 15px;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+.accion-unica-body strong {
+  color: var(--mm-black);
+  display: block;
+  margin-bottom: 4px;
+}
+.accion-unica-plazo {
+  background: var(--mm-gray-50);
+  border: 1px solid var(--border);
+  padding: 12px 16px;
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  color: var(--mm-gray-700);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+}
+.accion-unica-plazo strong { color: var(--warning); }
 
 ::-webkit-scrollbar{width:8px}
 ::-webkit-scrollbar-thumb{background:var(--mm-red); border-radius:10px}
@@ -750,7 +806,7 @@ const satMarcas = {
 };
 
 /* =====================================================================
-   data/estadoPedido.js  (NUEVO)
+   data/estadoPedido.js
    ===================================================================== */
 const gruposEstadoPedido = {
   avanzar: {
@@ -762,7 +818,7 @@ const gruposEstadoPedido = {
   cancelar: {
     icono:'❌',
     label:'Cancelar pedido',
-    desc:'Consulta la acción de cancelación asociada a cada estado.',
+    desc:'Listado cruzado: estados del pedido con acción de cancelación accionable.',
     color:'badge-red'
   },
   incidencia: {
@@ -779,7 +835,6 @@ const gruposEstadoPedido = {
   }
 };
 
-/* helper: plazoKey = '24h' | 'fuera' | 'na' */
 const estadosPedido = [
   /* ============ AVANZAR ============ */
   {
@@ -787,7 +842,7 @@ const estadosPedido = [
     estado:'Order Created',
     derivarA:'Abrir caso Cherwell',
     plazo:'—', plazoKey:'na',
-    cancelar:'FOM (1er Nivel resuelto)',
+    cancelar:'FOM (1er Nivel resuelto)', cancelable:true,
     notas:'Pedido recién creado. Si hay que avanzarlo, se abre caso en Cherwell.'
   },
   {
@@ -795,7 +850,7 @@ const estadosPedido = [
     estado:'Scheduled con financiación',
     derivarA:'Buzón administración online',
     plazo:'Pasadas 24 horas', plazoKey:'24h',
-    cancelar:'FOM (1er Nivel resuelto)',
+    cancelar:'FOM (1er Nivel resuelto)', cancelable:true,
     notas:'Pedido programado con financiación. Esperar 24h antes de escalar.'
   },
   {
@@ -803,7 +858,7 @@ const estadosPedido = [
     estado:'Scheduled con otros métodos de pago',
     derivarA:'Abrir caso Cherwell',
     plazo:'Pasadas 24 horas', plazoKey:'24h',
-    cancelar:'FOM (1er Nivel resuelto)',
+    cancelar:'FOM (1er Nivel resuelto)', cancelable:true,
     notas:'Pedido programado con pago distinto a financiación.'
   },
   {
@@ -811,7 +866,7 @@ const estadosPedido = [
     estado:'Awaiting Stock',
     derivarA:'PM (revisar si se trata de un lanzamiento)',
     plazo:'Pasada fecha de promesa de entrega', plazoKey:'fuera',
-    cancelar:'FOM (1er Nivel resuelto)',
+    cancelar:'FOM (1er Nivel resuelto)', cancelable:true,
     notas:'Si es un lanzamiento, revisar con PM antes de avanzar.'
   },
   {
@@ -819,7 +874,7 @@ const estadosPedido = [
     estado:'Backordered (verificado sin stock)',
     derivarA:'HD y PU → Gestión de Pedidos Online (Transferencia: Opción 3) · SDPU y Ship From Store → MM Store en estado Pendiente',
     plazo:'—', plazoKey:'na',
-    cancelar:'FOM (1er Nivel resuelto)',
+    cancelar:'FOM (1er Nivel resuelto)', cancelable:true,
     notas:'Confirmar primero que realmente no hay stock.'
   },
   {
@@ -827,7 +882,7 @@ const estadosPedido = [
     estado:'Awaiting Fullfilment',
     derivarA:'PM (Gama)',
     plazo:'Pasada fecha de promesa de entrega', plazoKey:'fuera',
-    cancelar:'FOM (1er Nivel resuelto)',
+    cancelar:'FOM (1er Nivel resuelto)', cancelable:true,
     notas:'Pedido pendiente de preparación por gama.'
   },
   {
@@ -835,7 +890,7 @@ const estadosPedido = [
     estado:'Released con financiación',
     derivarA:'Buzón administración online',
     plazo:'Pasadas 24 horas', plazoKey:'24h',
-    cancelar:'FOM (1er Nivel resuelto)',
+    cancelar:'FOM (1er Nivel resuelto)', cancelable:true,
     notas:'Pedido liberado con financiación.'
   },
   {
@@ -843,7 +898,7 @@ const estadosPedido = [
     estado:'Released con otros métodos de pago',
     derivarA:'Abrir caso Cherwell',
     plazo:'Pasadas 24 horas', plazoKey:'24h',
-    cancelar:'FOM (1er Nivel resuelto)',
+    cancelar:'FOM (1er Nivel resuelto)', cancelable:true,
     notas:'Pedido liberado con pago no financiado.'
   },
   {
@@ -851,7 +906,7 @@ const estadosPedido = [
     estado:'Fullfilment Initiated (Pedidos HD)',
     derivarA:'Ver flujo completo en la ficha',
     plazo:'Pasada fecha de promesa de entrega', plazoKey:'fuera',
-    cancelar:'Ver flujo completo en la ficha',
+    cancelar:'Ver flujo completo en la ficha', cancelable:true,
     notas:'Requiere verificación con el cliente y con Caixa si es financiado.',
     flujoAvanzar: `
       <ol class="steps-list">
@@ -888,7 +943,7 @@ Tu equipo MediaMarkt.`
     estado:'Shipped (1887)',
     derivarA:'1. preparacion_pintomm@id-logistics.com · 2. (Si persiste tras 24h) Omnicanal',
     plazo:'Pasadas 24 horas', plazoKey:'24h',
-    cancelar:'cancelacionpedidos@id-logistics.com y preparacion_pintomm@id-logistics.com',
+    cancelar:'cancelacionpedidos@id-logistics.com y preparacion_pintomm@id-logistics.com', cancelable:true,
     notas:'Pedido ya enviado. Escalar a Omnicanal sólo si persiste tras 24h.'
   },
   {
@@ -896,7 +951,7 @@ Tu equipo MediaMarkt.`
     estado:'Order Completed',
     derivarA:'Estado final',
     plazo:'—', plazoKey:'na',
-    cancelar:'Carrier → orden de rechazo*',
+    cancelar:'Carrier → orden de rechazo*', cancelable:true,
     notas:'Estado final del pedido. No se puede avanzar.'
   },
 
@@ -906,7 +961,7 @@ Tu equipo MediaMarkt.`
     estado:'Procurement Transfer Order Created (recogidas en tienda)',
     derivarA:'Escalar a MM Store para que lo gestione',
     plazo:'—', plazoKey:'na',
-    cancelar:'Escalar MM Store / Pendiente',
+    cancelar:'Escalar MM Store / Pendiente', cancelable:true,
     notas:'Pedido de recogida creado, pendiente de tienda.'
   },
   {
@@ -914,7 +969,7 @@ Tu equipo MediaMarkt.`
     estado:'Being Picked',
     derivarA:'Tienda debe revisar lo ocurrido y pasar pantallazo por Cherwell (si son errores técnicos)',
     plazo:'—', plazoKey:'na',
-    cancelar:'Escalar MM Store / Pendiente',
+    cancelar:'Escalar MM Store / Pendiente', cancelable:true,
     notas:'Pedido en preparación por parte de la tienda.'
   },
   {
@@ -922,7 +977,7 @@ Tu equipo MediaMarkt.`
     estado:'Procurement Transfer Order Shipped (recogidas en tienda)',
     derivarA:'Buzón Oracle ES MM Store + etiqueta de la tienda de recogida',
     plazo:'—', plazoKey:'na',
-    cancelar:'Escalar MM Store / Pendiente',
+    cancelar:'Escalar MM Store / Pendiente', cancelable:true,
     notas:'Pedido de recogida ya enviado a tienda.'
   },
   {
@@ -930,7 +985,7 @@ Tu equipo MediaMarkt.`
     estado:'Ready for Pick Up',
     derivarA:'Tienda debe revisar lo ocurrido y pasar pantallazo al CAU (si son errores técnicos)',
     plazo:'—', plazoKey:'na',
-    cancelar:'Escalar MM Store / Pendiente',
+    cancelar:'Escalar MM Store / Pendiente', cancelable:true,
     notas:'Pedido listo para recoger en tienda.'
   },
   {
@@ -938,7 +993,7 @@ Tu equipo MediaMarkt.`
     estado:'Pick up',
     derivarA:'Estado final',
     plazo:'—', plazoKey:'na',
-    cancelar:'Escalar MM Store / Pendiente',
+    cancelar:'Escalar MM Store / Pendiente', cancelable:true,
     notas:'Pedido recogido por el cliente.'
   },
   {
@@ -946,7 +1001,7 @@ Tu equipo MediaMarkt.`
     estado:'Ready for carrier (Ship From Store)',
     derivarA:'Tienda debe revisar lo ocurrido y pasar pantallazo por Cherwell (si son errores técnicos)',
     plazo:'—', plazoKey:'na',
-    cancelar:'Escalar MM Store / Pendiente',
+    cancelar:'Escalar MM Store / Pendiente', cancelable:true,
     notas:'Pedido SFS listo para transportista.'
   },
   {
@@ -955,7 +1010,7 @@ Tu equipo MediaMarkt.`
     derivarA:'Transferencia: Opción 2 + escalar a MM Store / Pendiente',
     plazo:'Si no localizamos el pedido en la web del Carrier, escalamos a la tienda que ha realizado el envío y dejamos el ticket en Pendiente.',
     plazoKey:'fuera',
-    cancelar:'Escalar MM Store / Pendiente. Si el pedido está en manos de Ader, se puede cancelar el envío desde su web.',
+    cancelar:'Escalar MM Store / Pendiente. Si el pedido está en manos de Ader, se puede cancelar el envío desde su web.', cancelable:true,
     notas:'Sólo dentro del horario de atención.'
   },
   {
@@ -963,7 +1018,7 @@ Tu equipo MediaMarkt.`
     estado:'Demoras SFS (fuera de horario, chat y mail) en manos del transportista',
     derivarA:'Enviar Fwd al carrier (Tipsa o Ader) + escalar MM Store / Resuelto',
     plazo:'—', plazoKey:'na',
-    cancelar:'—',
+    cancelar:'—', cancelable:false,
     notas:'Sólo fuera de horario, chat y mail.'
   },
 
@@ -973,7 +1028,7 @@ Tu equipo MediaMarkt.`
     estado:'PEDIDO 0 – Pago tarjeta',
     derivarA:'Abrir caso Cherwell',
     plazo:'—', plazoKey:'na',
-    cancelar:'CAU (Cherwell)',
+    cancelar:'CAU (Cherwell)', cancelable:true,
     notas:'Pedido 0 con pago por tarjeta.'
   },
   {
@@ -981,7 +1036,7 @@ Tu equipo MediaMarkt.`
     estado:'PEDIDO 0 – PayPal',
     derivarA:'Pedidos online',
     plazo:'—', plazoKey:'na',
-    cancelar:'Pedidos online',
+    cancelar:'Pedidos online', cancelable:true,
     notas:'Pedido 0 con pago por PayPal.'
   },
   {
@@ -989,7 +1044,7 @@ Tu equipo MediaMarkt.`
     estado:'PEDIDO LIMBO',
     derivarA:'No se puede avanzar. Se gestiona como Limbo y se abonará al cliente.',
     plazo:'—', plazoKey:'na',
-    cancelar:'Administración Online',
+    cancelar:'Administración Online', cancelable:true,
     notas:'No se puede avanzar. Se abona al cliente.'
   },
   {
@@ -997,7 +1052,7 @@ Tu equipo MediaMarkt.`
     estado:'Rechazo cliente',
     derivarA:'Reclamamos al carrier si el cliente dice que no es un rechazo.',
     plazo:'—', plazoKey:'na',
-    cancelar:'Pedido se devolverá al almacén y se abonará automáticamente. Si hay demora en el abono, escalar a MM Transporte Cliente.',
+    cancelar:'Pedido se devolverá al almacén y se abonará automáticamente. Si hay demora en el abono, escalar a MM Transporte Cliente.', cancelable:true,
     notas:'Distinguir entre rechazo real y reclamación del cliente.'
   }
 ];
@@ -1011,6 +1066,13 @@ function getEstadoPorSlug(slug){
 function filtrarEstadosPorPlazo(lista, filtro){
   if(filtro === 'todos') return lista;
   return lista.filter(e => e.plazoKey === filtro);
+}
+function getEstadosConCancelacion(){
+  return estadosPedido.filter(e => e.cancelable === true);
+}
+function getListaPorGrupo(grupoSlug){
+  if(grupoSlug === 'cancelar') return getEstadosConCancelacion();
+  return getEstadosPorGrupo(grupoSlug);
 }
 
 /* =====================================================================
@@ -3206,11 +3268,12 @@ function viewMarketplaceForm(tipoSlug){
 }
 
 /* =====================================================================
-   ESTADO DE PEDIDO — VISTAS (NUEVO)
+   ESTADO DE PEDIDO — VISTAS
    ===================================================================== */
 function viewEstadoPedidoHub(){
   const cards = Object.entries(gruposEstadoPedido).map(([slug, g]) => {
-    const count = getEstadosPorGrupo(slug).length;
+    const lista = getListaPorGrupo(slug);
+    const count = lista.length;
     return `
       <a class="fin-card" href="#/estado-pedido/${slug}">
         <span class="fin-card-icon">${g.icono}</span>
@@ -3250,6 +3313,7 @@ function viewEstadoPedidoHub(){
           <li><strong>Cancelar:</strong> aplica la columna «Derivamos a» de cancelación.</li>
           <li>Si hay flujo especial (Fullfilment Initiated), sigue los pasos detallados.</li>
         </ul>
+        <p style="margin-top:8px"><strong>Cancelar pedido</strong> es un <em>listado cruzado</em>: muestra todos los estados que tienen acción de cancelación accionable, sin importar su categoría original.</p>
       </div>
 
       <a class="btn btn-ghost" href="#/">⬅ Volver</a>
@@ -3261,42 +3325,69 @@ function viewEstadoPedidoLista(grupoSlug){
   const grupo = gruposEstadoPedido[grupoSlug];
   if(!grupo) return viewNotFound();
 
-  const filtro = state.filtroPlazo || 'todos';
-  const estados = filtrarEstadosPorPlazo(getEstadosPorGrupo(grupoSlug), filtro);
+  const esGrupoCancelar = grupoSlug === 'cancelar';
+
+  // Lista base según grupo (cancelar → getEstadosConCancelacion)
+  const listaBase = getListaPorGrupo(grupoSlug);
+  const listaFiltrada = filtrarEstadosPorPlazo(listaBase, state.filtroPlazo || 'todos');
 
   const pills = `
     <div class="filtros-plazo">
-      <a class="filtro-pill ${filtro==='todos'?'active':''}"
+      <a class="filtro-pill ${state.filtroPlazo==='todos'?'active':''}"
          href="#/estado-pedido/${grupoSlug}" data-filtro-plazo="todos">
-        🗂️ Todos (${getEstadosPorGrupo(grupoSlug).length})
+        🗂️ Todos (${listaBase.length})
       </a>
-      <a class="filtro-pill ${filtro==='24h'?'active':''}"
+      <a class="filtro-pill ${state.filtroPlazo==='24h'?'active':''}"
          href="#/estado-pedido/${grupoSlug}" data-filtro-plazo="24h">
         ⏱️ Plazo 24h
       </a>
-      <a class="filtro-pill ${filtro==='fuera'?'active':''}"
+      <a class="filtro-pill ${state.filtroPlazo==='fuera'?'active':''}"
          href="#/estado-pedido/${grupoSlug}" data-filtro-plazo="fuera">
         📅 Fuera de plazo
       </a>
-      <a class="filtro-pill ${filtro==='na'?'active':''}"
+      <a class="filtro-pill ${state.filtroPlazo==='na'?'active':''}"
          href="#/estado-pedido/${grupoSlug}" data-filtro-plazo="na">
         — Sin plazo
       </a>
     </div>
   `;
 
-  const tarjetas = estados.length
-    ? estados.map(e => `
-      <a class="estado-card" href="#/estado-pedido/ficha/${e.slug}">
-        <div class="titulo">
-          <span style="font-size:20px">${esc(e.icono)}</span>
-          <span>${esc(e.estado)}</span>
-        </div>
-        <div class="meta"><strong>Avanzar:</strong> ${esc(e.derivarA.length>90?e.derivarA.slice(0,90)+'…':e.derivarA)}</div>
-        <div class="meta"><strong>Plazo:</strong> ${esc(e.plazo)}</div>
-        <span class="accion">→</span>
-      </a>
-    `).join('')
+  const avisoCancelar = esGrupoCancelar
+    ? `<div class="aviso-cancelar">
+         <strong>Listado cruzado.</strong> Este grupo muestra <em>todos</em> los estados con acción de cancelación accionable
+         (${getEstadosConCancelacion().length} de ${estadosPedido.length} estados).
+       </div>`
+    : '';
+
+  const tarjetas = listaFiltrada.length
+    ? listaFiltrada.map(e => {
+        const grupoOriginal = gruposEstadoPedido[e.grupo];
+        const badgeGrupo = esGrupoCancelar
+          ? `<span class="badge ${grupoOriginal.color} badge-grupo">${esc(grupoOriginal.label)}</span>`
+          : '';
+        
+        // MODIFICACIÓN: En la lista mostramos el modo en la URL de destino para que la ficha sepa qué mostrar.
+        const modo = esGrupoCancelar ? 'cancelar' : 'avanzar';
+        const href = `#/estado-pedido/ficha/${e.slug}?modo=${modo}`;
+
+        // Si estamos en cancelar, mostramos la info de cancelar; si no, la de avanzar.
+        const infoPrincipal = esGrupoCancelar 
+          ? `<div class="meta cancelar"><strong>Cancelar:</strong> ${esc(e.cancelar.length>90?e.cancelar.slice(0,90)+'…':e.cancelar)}</div>`
+          : `<div class="meta"><strong>Avanzar:</strong> ${esc(e.derivarA.length>90?e.derivarA.slice(0,90)+'…':e.derivarA)}</div>`;
+
+        return `
+          <a class="estado-card" href="${href}">
+            <div class="titulo">
+              <span style="font-size:20px">${esc(e.icono)}</span>
+              <span>${esc(e.estado)}</span>
+              ${badgeGrupo}
+            </div>
+            ${infoPrincipal}
+            <div class="meta"><strong>Plazo:</strong> ${esc(e.plazo)}</div>
+            <span class="accion">→</span>
+          </a>
+        `;
+      }).join('')
     : '<div class="alert alert-warning">No hay estados para este filtro.</div>';
 
   return `
@@ -3307,6 +3398,7 @@ function viewEstadoPedidoLista(grupoSlug){
       <h2>${grupo.icono} ${esc(grupo.label)}</h2>
       <p style="color:var(--text-muted);margin-bottom:16px">${esc(grupo.desc)}</p>
 
+      ${avisoCancelar}
       ${pills}
 
       <div class="grid-motivos">${tarjetas}</div>
@@ -3318,35 +3410,56 @@ function viewEstadoPedidoLista(grupoSlug){
   `;
 }
 
-function viewEstadoPedidoFicha(slug){
+function viewEstadoPedidoFicha(slug, modo = 'avanzar'){
   const e = getEstadoPorSlug(slug);
   if(!e) return viewNotFound();
 
   const grupo = gruposEstadoPedido[e.grupo];
+  const esCancelar = modo === 'cancelar';
 
-  const bloquePlantilla = e.plantillaAvanzar ? `
-    <h3>📧 Plantilla email al cliente</h3>
+  const bloquePlantilla = e.plantillaAvanzar && !esCancelar ? `
+    <h3 style="margin-top:24px">📧 Plantilla email al cliente</h3>
     <textarea id="preview" readonly>${esc(e.plantillaAvanzar)}</textarea>
     <div style="margin-top:10px">
       <button class="btn btn-success" data-copiar>📋 Copiar plantilla</button>
     </div>
   ` : '';
 
-  const bloqueAvanzar = e.flujoAvanzar ? `
-    <h3>⏩ Cómo avanzar (flujo detallado)</h3>
+  const bloqueAvanzar = e.flujoAvanzar && !esCancelar ? `
+    <h3 style="margin-top:24px">⏩ Pasos detallados para avanzar</h3>
     ${e.flujoAvanzar}
   ` : '';
 
-  const bloqueCancelar = e.flujoCancelar ? `
-    <h3>❌ Cómo cancelar (flujo detallado)</h3>
+  const bloqueCancelar = e.flujoCancelar && esCancelar ? `
+    <h3 style="margin-top:24px">❌ Pasos detallados para cancelar</h3>
     ${e.flujoCancelar}
   ` : '';
+
+  // Tarjeta única según el modo
+  const tarjetaAccion = esCancelar ? `
+    <div class="accion-unica cancelar">
+      <div class="accion-unica-header">❌ Cancelar pedido</div>
+      <div class="accion-unica-body">
+        <strong>Derivamos a:</strong><br>
+        ${esc(e.cancelar)}
+      </div>
+    </div>
+  ` : `
+    <div class="accion-unica avanzar">
+      <div class="accion-unica-header">⏩ Avanzar pedido</div>
+      <div class="accion-unica-body">
+        <strong>Derivamos a:</strong><br>
+        ${esc(e.derivarA)}
+      </div>
+      ${e.plazo !== '—' ? `<div class="accion-unica-plazo"><strong>Plazo:</strong> ${esc(e.plazo)}</div>` : ''}
+    </div>
+  `;
 
   return `
     <div class="card">
       <div class="breadcrumb">
         Inicio &gt; <a href="#/estado-pedido">Estado de Pedido</a>
-        &gt; <a href="#/estado-pedido/${e.grupo}">${esc(grupo.label)}</a>
+        &gt; <a href="#/estado-pedido/${esCancelar ? 'cancelar' : e.grupo}">${esCancelar ? 'Cancelar pedido' : esc(grupo.label)}</a>
         &gt; ${esc(e.estado)}
       </div>
       <h2><span style="margin-right:8px">${esc(e.icono)}</span>${esc(e.estado)}</h2>
@@ -3355,29 +3468,14 @@ function viewEstadoPedidoFicha(slug){
         <p>${esc(e.notas || '')}</p>
       </div>
 
-      <table class="info-table">
-        <thead>
-          <tr><th>Acción</th><th>Derivamos a</th><th>Plazo</th></tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td><strong>⏩ Avanzar pedido</strong></td>
-            <td>${esc(e.derivarA)}</td>
-            <td>${esc(e.plazo)}</td>
-          </tr>
-          <tr>
-            <td><strong>❌ Cancelar pedido</strong></td>
-            <td colspan="2">${esc(e.cancelar)}</td>
-          </tr>
-        </tbody>
-      </table>
+      ${tarjetaAccion}
 
       ${bloqueAvanzar}
       ${bloqueCancelar}
       ${bloquePlantilla}
 
-      <div style="margin-top:16px">
-        <a class="btn btn-ghost" href="#/estado-pedido/${e.grupo}">⬅ Volver</a>
+      <div style="margin-top:24px">
+        <a class="btn btn-ghost" href="#/estado-pedido/${esCancelar ? 'cancelar' : e.grupo}">⬅ Volver</a>
       </div>
     </div>
   `;
@@ -3454,9 +3552,11 @@ function resolveRoute(route){
   const mEstGrupo = route.match(/^estado-pedido\/(avanzar|cancelar|incidencia|tienda)$/);
   if(mEstGrupo) return () => viewEstadoPedidoLista(mEstGrupo[1]);
 
-  const mEstFicha = route.match(/^estado-pedido\/ficha\/([\w-]+)$/);
+  // MODIFICACIÓN: Leer el parámetro ?modo= de la URL
+  const mEstFicha = route.match(/^estado-pedido\/ficha\/([\w-]+)(?:\?modo=([a-z]+))?$/);
   if(mEstFicha && getEstadoPorSlug(mEstFicha[1])) {
-    return () => viewEstadoPedidoFicha(mEstFicha[1]);
+    const modo = mEstFicha[2] || 'avanzar';
+    return () => viewEstadoPedidoFicha(mEstFicha[1], modo);
   }
 
   const mRec = route.match(/^reclamacion\/(paqueteria|gran-carga)\/([\w-]+)$/);
@@ -3654,8 +3754,9 @@ function buscarEstadoPedido(){
     return;
   }
 
+  // Al buscar, asumimos modo "avanzar" por defecto
   out.innerHTML = matches.slice(0, 8).map(e => `
-    <a class="btn btn-secondary" href="#/estado-pedido/ficha/${e.slug}"
+    <a class="btn btn-secondary" href="#/estado-pedido/ficha/${e.slug}?modo=avanzar"
        style="width:100%;justify-content:flex-start;text-align:left;margin:4px 0;gap:10px">
       <span style="font-size:18px">${esc(e.icono)}</span>
       <span style="flex:1">
