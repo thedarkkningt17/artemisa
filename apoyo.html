@@ -4,526 +4,535 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>MediaMarkt · Panel de Operaciones</title>
-
-<!-- FAVICON SVG (Fondo rojo, letras MA blancas) -->
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23E2001A'/><text x='50' y='50' font-family='Arial,sans-serif' font-weight='bold' font-size='50' fill='%23FFFFFF' text-anchor='middle' dominant-baseline='central'>MA</text></svg>">
-
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='18' fill='%23DF0000'/%3E%3Ctext x='50' y='66' font-family='Montserrat,Arial,sans-serif' font-size='38' font-weight='900' fill='white' text-anchor='middle' letter-spacing='-2'%3EMA%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
 :root{
-  --mm-red:#E2001A; --mm-red-dark:#B8001A; --mm-red-hover:#C40017; 
-  --mm-red-soft:#FEF2F2; --mm-red-soft-2:#FDE4E6;
-  --mm-white:#FFFFFF; --mm-black:#1A1A1A;
-  --mm-gray-900:#2B2B2B; --mm-gray-700:#4B5563; --mm-gray-500:#6B7280;
-  --mm-gray-300:#D1D5DB; --mm-gray-100:#F3F4F6; --mm-gray-50:#F9FAFB;
-  --mm-purple:#7C3AED;
-
-  --mm-bg-image: url('https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1920&q=80');
-  --mm-bg-opacity: 0.05;
-
-  --bg:var(--mm-gray-100); --surface:var(--mm-white); --surface-2:var(--mm-gray-50);
-  --border:#E5E7EB; --text:var(--mm-black); --text-muted:var(--mm-gray-700);
+  --mm-red:#DF0000; --mm-red-dark:#B00000; --mm-red-hover:#C40017;
+  --mm-red-soft:#FFF0F0; --mm-red-soft-2:#FDE4E6;
+  --mm-ink:#1A1A1A; --mm-ink-soft:#3A3A3A;
+  --mm-gray:#6B6B6B; --mm-gray-light:#9A9A9A;
+  --mm-line:#E6E8EC; --mm-bg:#F7F8FA;
+  --radius:12px; --radius-lg:16px;
+  --sidebar-w:260px; --sidebar-w-collapsed:76px;
+  --shadow-sm:0 1px 2px rgba(16,24,40,.05);
+  --shadow-md:0 4px 12px rgba(16,24,40,.08);
+  --shadow-lg:0 12px 32px rgba(16,24,40,.12);
+  --transition:.22s cubic-bezier(.4,0,.2,1);
   --success:#16A34A; --danger:#DC2626; --warning:#D97706;
-  
-  --radius:16px; --radius-sm:10px;
-  --shadow:0 4px 6px -1px rgb(0 0 0 / 0.05), 0 2px 4px -1px rgb(0 0 0 / 0.03);
-  --shadow-lg:0 10px 25px -3px rgb(0 0 0 / 0.1), 0 4px 6px -2px rgb(0 0 0 / 0.05);
-  
-  --sidebar-w: 260px;
-  --sidebar-collapsed-w: 80px;
+  --mm-purple:#7C3AED;
+  --mm-green:#1e7e34; --mm-green-bg:#e6f4ea;
+  --mm-blue:#0066cc; --mm-blue-bg:#e6f0fa;
 }
 
-*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
 body{
-  font-family:'Segoe UI',system-ui,-apple-system,sans-serif;
-  background:var(--bg); color:var(--text);
-  height:100vh; overflow:hidden;
+  font-family:'Montserrat',-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  background:var(--mm-bg); color:var(--mm-ink); line-height:1.55;
+  -webkit-font-smoothing:antialiased; min-height:100vh;
 }
+a{color:inherit}
+button{font-family:inherit}
 
-/* ================= LAYOUT ================= */
-.layout{display:flex; height:100vh; width:100vw; overflow:hidden}
+/* ============ LAYOUT ============ */
+.app{display:flex;min-height:100vh;}
 
-/* ================= SIDEBAR ================= */
+/* ============ SIDEBAR ============ */
 .sidebar{
-  width:var(--sidebar-w); flex-shrink:0;
-  background:var(--surface);
-  border-right:1px solid var(--border);
-  display:flex; flex-direction:column;
-  transition:width .3s cubic-bezier(0.4, 0, 0.2, 1);
-  position:relative; z-index:20;
+  position:fixed;top:0;left:0;bottom:0;
+  width:var(--sidebar-w);background:#fff;
+  border-right:1px solid var(--mm-line);
+  display:flex;flex-direction:column;z-index:200;
+  transition:width var(--transition),transform var(--transition);
+  overflow:hidden;
 }
-.sidebar.collapsed{ width:var(--sidebar-collapsed-w); }
+.sidebar__brand{
+  display:flex;align-items:center;gap:12px;
+  padding:20px 20px 18px;border-bottom:1px solid var(--mm-line);flex-shrink:0;
+}
+.sidebar__logo{
+  width:38px;height:38px;border-radius:10px;background:var(--mm-red);color:#fff;
+  display:flex;align-items:center;justify-content:center;
+  font-weight:900;font-size:16px;letter-spacing:-1px;flex-shrink:0;
+  box-shadow:0 4px 12px rgba(223,0,0,.28);
+}
+.sidebar__title{display:flex;flex-direction:column;min-width:0;transition:opacity var(--transition);}
+.sidebar__title strong{font-size:15px;font-weight:800;letter-spacing:-.3px;color:var(--mm-ink);white-space:nowrap;}
+.sidebar__title span{font-size:10.5px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:var(--mm-gray-light);white-space:nowrap;}
+.sidebar__nav{flex:1;padding:14px 12px;display:flex;flex-direction:column;gap:4px;overflow-y:auto;}
+.sidebar__label{
+  font-size:10px;font-weight:800;letter-spacing:1.4px;
+  text-transform:uppercase;color:var(--mm-gray-light);
+  padding:12px 12px 6px;white-space:nowrap;transition:opacity var(--transition);
+}
+.sidebar__link{
+  display:flex;align-items:center;gap:12px;
+  padding:11px 12px;border-radius:10px;font-size:13.5px;font-weight:600;
+  color:var(--mm-ink-soft);cursor:pointer;text-decoration:none;
+  transition:background var(--transition),color var(--transition);
+  white-space:nowrap;position:relative;border:none;background:transparent;
+  text-align:left;width:100%;
+}
+.sidebar__link:hover{background:#F2F3F5;color:var(--mm-ink)}
+.sidebar__link.is-active{background:var(--mm-red-soft);color:var(--mm-red);font-weight:800;}
+.sidebar__link.is-active::before{
+  content:"";position:absolute;left:-12px;top:50%;transform:translateY(-50%);
+  width:4px;height:22px;border-radius:0 3px 3px 0;background:var(--mm-red);
+}
+.sidebar__icon{width:20px;height:20px;flex-shrink:0;display:flex;align-items:center;justify-content:center;}
+.sidebar__icon svg{width:18px;height:18px;fill:currentColor}
+.sidebar__text{flex:1;overflow:hidden;text-overflow:ellipsis;transition:opacity var(--transition);}
+.sidebar__badge{
+  font-size:10px;font-weight:800;letter-spacing:.4px;
+  padding:2px 7px;border-radius:999px;background:var(--mm-red);color:#fff;flex-shrink:0;
+}
+.sidebar__footer{
+  padding:14px 16px;border-top:1px solid var(--mm-line);
+  font-size:11px;font-weight:600;color:var(--mm-gray-light);
+  white-space:nowrap;transition:opacity var(--transition);flex-shrink:0;
+}
+.sidebar__footer strong{color:var(--mm-ink);font-weight:800;display:block;font-size:11.5px}
+.sidebar__collapse{
+  position:absolute;top:74px;right:-13px;
+  width:26px;height:26px;border-radius:50%;
+  background:#fff;border:1px solid var(--mm-line);color:var(--mm-gray);
+  display:flex;align-items:center;justify-content:center;cursor:pointer;
+  box-shadow:var(--shadow-sm);
+  transition:background var(--transition),color var(--transition);z-index:2;
+}
+.sidebar__collapse:hover{background:var(--mm-red);color:#fff;border-color:var(--mm-red)}
+.sidebar__collapse svg{width:12px;height:12px;transition:transform var(--transition)}
 
-.sidebar-header{
-  height:72px; display:flex; align-items:center; padding:0 20px;
-  border-bottom:1px solid var(--border);
-  gap:12px; text-decoration:none; color:var(--mm-black);
-  overflow:hidden; white-space:nowrap;
-}
-.sidebar-header svg{ flex-shrink:0; width:32px; height:32px; }
-.sidebar-header .logo-text{
-  display:flex; flex-direction:column; transition:opacity .2s;
-}
-.sidebar.collapsed .logo-text{ opacity:0; pointer-events:none; }
-.sidebar-header .brand-name{ font-size:16px; font-weight:800; line-height:1.1; color:var(--mm-red); }
-.sidebar-header .brand-sub{ font-size:10px; font-weight:600; color:var(--mm-gray-500); letter-spacing:1px; text-transform:uppercase; }
+.app.is-collapsed .sidebar{width:var(--sidebar-w-collapsed)}
+.app.is-collapsed .sidebar__title,
+.app.is-collapsed .sidebar__label,
+.app.is-collapsed .sidebar__text,
+.app.is-collapsed .sidebar__badge,
+.app.is-collapsed .sidebar__footer{opacity:0;pointer-events:none;width:0;overflow:hidden}
+.app.is-collapsed .sidebar__link{justify-content:center;padding:12px}
+.app.is-collapsed .sidebar__link.is-active::before{left:-8px}
+.app.is-collapsed .sidebar__collapse svg{transform:rotate(180deg)}
+.app.is-collapsed .main{margin-left:var(--sidebar-w-collapsed)}
 
-.sidebar nav{
-  flex:1; padding:16px 12px; display:flex; flex-direction:column; gap:4px;
-  overflow-y:auto; overflow-x:hidden;
+/* ============ MAIN ============ */
+.main{
+  flex:1;margin-left:var(--sidebar-w);min-height:100vh;
+  display:flex;flex-direction:column;
+  transition:margin-left var(--transition);min-width:0;
 }
 
-.menu-item{
-  display:flex; align-items:center; gap:12px;
-  padding:12px 14px; border-radius:var(--radius-sm);
-  color:var(--mm-gray-700); text-decoration:none;
-  font-size:14px; font-weight:500; white-space:nowrap;
+/* ============ TOPBAR ============ */
+.topbar{
+  position:sticky;top:0;z-index:100;
+  background:rgba(255,255,255,.88);backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--mm-line);
+  display:flex;align-items:center;justify-content:space-between;
+  gap:16px;padding:14px 28px;min-height:66px;
+}
+.topbar__left{display:flex;align-items:center;gap:14px;min-width:0}
+.topbar__hamburger{
+  display:none;width:38px;height:38px;border-radius:10px;
+  border:1px solid var(--mm-line);background:#fff;color:var(--mm-ink);
+  align-items:center;justify-content:center;cursor:pointer;
+  transition:background var(--transition),color var(--transition);
+}
+.topbar__hamburger:hover{background:var(--mm-red-soft);color:var(--mm-red);border-color:var(--mm-red)}
+.topbar__title{font-size:16px;font-weight:800;letter-spacing:-.3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.topbar__title span{color:var(--mm-red)}
+.topbar__right{display:flex;align-items:center;gap:14px;flex-shrink:0}
+.topbar__date{font-size:12px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:var(--mm-gray);white-space:nowrap;}
+.topbar__avatar{
+  width:36px;height:36px;border-radius:50%;
+  background:linear-gradient(135deg,var(--mm-red),#8E0000);
+  color:#fff;display:flex;align-items:center;justify-content:center;
+  font-size:12.5px;font-weight:800;letter-spacing:-.3px;
+  box-shadow:0 4px 12px rgba(223,0,0,.25);
+}
+
+/* ============ CONTENT ============ */
+.content{flex:1;padding:28px;width:100%;}
+
+/* ============ DASHBOARD ============ */
+.dash{display:flex;flex-direction:column;gap:24px;max-width:1180px;margin-inline:auto;}
+.dash__hero{
+  background:linear-gradient(120deg,#1A1A1A 0%,#2E0B0B 100%);
+  border-radius:var(--radius-lg);padding:34px 38px;color:#fff;
+  position:relative;overflow:hidden;box-shadow:var(--shadow-lg);
+}
+.dash__hero::before{
+  content:"";position:absolute;top:-80px;right:-60px;width:340px;height:340px;border-radius:50%;
+  background:radial-gradient(circle,rgba(223,0,0,.55) 0%,transparent 68%);pointer-events:none;
+}
+.dash__hero::after{
+  content:"";position:absolute;bottom:-100px;left:20%;width:280px;height:280px;border-radius:50%;
+  background:radial-gradient(circle,rgba(255,255,255,.05) 0%,transparent 70%);pointer-events:none;
+}
+.dash__hero-inner{position:relative;z-index:1;display:flex;flex-wrap:wrap;gap:28px;justify-content:space-between;align-items:flex-end}
+.dash__eyebrow{
+  display:inline-flex;align-items:center;gap:8px;
+  font-size:11px;font-weight:800;letter-spacing:1.8px;text-transform:uppercase;
+  color:#FF8A8A;margin-bottom:14px;
+}
+.dash__eyebrow::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--mm-red);box-shadow:0 0 0 4px rgba(223,0,0,.25);}
+.dash__greeting{font-size:clamp(24px,3.2vw,34px);font-weight:800;letter-spacing:-1px;line-height:1.15;margin-bottom:10px;}
+.dash__greeting .accent{color:#FF5252}
+.dash__sub{font-size:14.5px;color:rgba(255,255,255,.72);font-weight:500;max-width:60ch;line-height:1.6;}
+.dash__clock{display:flex;flex-direction:column;align-items:flex-end;gap:4px;text-align:right;flex-shrink:0;}
+.dash__clock-time{font-size:clamp(28px,4vw,40px);font-weight:800;letter-spacing:-1.2px;line-height:1;font-variant-numeric:tabular-nums;color:#fff;}
+.dash__clock-date{font-size:12px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:rgba(255,255,255,.55);}
+
+.dash__grid{display:grid;grid-template-columns:1.55fr 1fr;gap:22px;}
+.dash__panel{background:#fff;border:1px solid var(--mm-line);border-radius:var(--radius-lg);box-shadow:var(--shadow-sm);overflow:hidden;}
+.dash__panel-head{
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+  padding:18px 22px;border-bottom:1px solid var(--mm-line);
+}
+.dash__panel-head h2{
+  font-size:14px;font-weight:800;letter-spacing:.4px;text-transform:uppercase;color:var(--mm-ink);
+  display:flex;align-items:center;gap:9px;
+}
+.dash__panel-head h2::before{content:"";width:4px;height:16px;border-radius:2px;background:var(--mm-red);}
+.dash__panel-head span{font-size:11.5px;font-weight:700;color:var(--mm-gray-light);letter-spacing:.4px;text-transform:uppercase;}
+
+.dash__list{list-style:none;padding:8px;}
+.dash__item{
+  display:flex;align-items:center;gap:16px;padding:14px;
+  border-radius:10px;text-decoration:none;color:inherit;cursor:pointer;
+  transition:background var(--transition);
+  border:none;background:transparent;width:100%;text-align:left;
+}
+.dash__item:hover{background:#F7F8FA}
+.dash__item:hover .dash__item-arrow{transform:translateX(4px);color:var(--mm-red)}
+.dash__item-icon{
+  width:42px;height:42px;border-radius:11px;
+  background:var(--mm-red-soft);color:var(--mm-red);
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+  transition:background var(--transition),color var(--transition);
+}
+.dash__item-icon svg{width:20px;height:20px;fill:currentColor}
+.dash__item:hover .dash__item-icon{background:var(--mm-red);color:#fff}
+.dash__item-body{flex:1;min-width:0}
+.dash__item-title{font-size:14px;font-weight:800;letter-spacing:-.2px;color:var(--mm-ink);margin-bottom:2px;display:block;}
+.dash__item-desc{font-size:12px;color:var(--mm-gray);line-height:1.45;display:block;}
+.dash__item-arrow{color:var(--mm-gray-light);flex-shrink:0;transition:transform var(--transition),color var(--transition);}
+
+.dash__stats{display:grid;grid-template-columns:1fr;gap:14px;padding:18px 22px 22px;}
+.dash__stat{display:flex;align-items:center;gap:14px;padding:14px 16px;background:#F7F8FA;border-radius:10px;border-left:3px solid var(--mm-red);}
+.dash__stat-icon{
+  width:34px;height:34px;border-radius:9px;background:#fff;color:var(--mm-red);
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:var(--shadow-sm);
+}
+.dash__stat-icon svg{width:17px;height:17px;fill:currentColor}
+.dash__stat-body{flex:1;min-width:0}
+.dash__stat-label{font-size:10.5px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:var(--mm-gray-light);margin-bottom:2px;}
+.dash__stat-value{font-size:15px;font-weight:800;color:var(--mm-ink);letter-spacing:-.3px;}
+
+/* ============ CARDS & FORMS ============ */
+.card{
+  background:#fff;padding:32px;border-radius:var(--radius-lg);
+  border:1px solid var(--mm-line);box-shadow:var(--shadow-sm);
+  margin-bottom:24px;max-width:1100px;margin-inline:auto;
+}
+.card h2{margin-bottom:20px;font-size:22px;font-weight:800;color:var(--mm-ink);letter-spacing:-.4px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.card h3{margin:22px 0 12px;font-size:17px;font-weight:800;color:var(--mm-ink);letter-spacing:-.3px}
+.breadcrumb{font-size:12px;font-weight:600;color:var(--mm-gray-light);margin-bottom:12px;}
+.breadcrumb a{color:var(--mm-gray-light);text-decoration:none;transition:color var(--transition);}
+.breadcrumb a:hover{color:var(--mm-red);}
+
+.btn{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:10px 20px;border:none;border-radius:10px;
+  cursor:pointer;font:inherit;font-size:13.5px;font-weight:700;
+  text-decoration:none;margin:4px 8px 4px 0;
   transition:all .15s ease;
 }
-.menu-item:hover{
-  background:var(--mm-red-soft); color:var(--mm-red);
-}
-.menu-item.active{
-  background:var(--mm-red); color:var(--mm-white);
-  font-weight:600; box-shadow:0 4px 12px rgba(226,0,26,.25);
-}
-.menu-item svg{
-  flex-shrink:0; width:20px; height:20px; fill:currentColor;
-}
-.menu-item span{
-  transition:opacity .2s;
-}
-.sidebar.collapsed .menu-item span{ opacity:0; pointer-events:none; }
-.sidebar.collapsed .menu-item{ justify-content:center; padding:12px 0; }
+.btn:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,.1)}
+.btn-primary{background:var(--mm-red);color:#fff}
+.btn-primary:hover{background:var(--mm-red-hover);color:#fff}
+.btn-success{background:var(--success);color:#fff}
+.btn-success:hover{color:#fff}
+.btn-danger{background:var(--danger);color:#fff}
+.btn-danger:hover{color:#fff}
+.btn-purple{background:var(--mm-purple);color:#fff}
+.btn-purple:hover{color:#fff}
+.btn-secondary{background:#F7F8FA;color:var(--mm-ink);border:1px solid var(--mm-line);}
+.btn-secondary:hover{color:var(--mm-red);border-color:var(--mm-red);background:var(--mm-red-soft)}
+.btn-ghost{background:transparent;color:var(--mm-gray);border:1px solid var(--mm-line);text-decoration:none;}
+.btn-ghost:hover{color:var(--mm-red);border-color:var(--mm-red);background:var(--mm-red-soft)}
 
-.sidebar-footer{
-  padding:16px; border-top:1px solid var(--border);
-  display:flex; align-items:center; justify-content:center;
+label{display:block;font-size:11.5px;font-weight:800;letter-spacing:.6px;
+  color:var(--mm-gray);margin:16px 0 6px;text-transform:uppercase;}
+input,select,textarea{
+  width:100%;padding:11px 15px;
+  border:1px solid var(--mm-line);border-radius:10px;
+  background:#fff;color:var(--mm-ink);font:inherit;font-size:13.5px;
+  transition:border-color .15s, box-shadow .15s;
 }
-.btn-collapse{
-  background:var(--mm-gray-50); border:1px solid var(--border);
-  color:var(--mm-gray-500); border-radius:8px;
-  width:36px; height:36px; display:flex; align-items:center; justify-content:center;
-  cursor:pointer; transition:all .15s;
-}
-.btn-collapse:hover{ background:var(--mm-red-soft); color:var(--mm-red); border-color:var(--mm-red-soft-2); }
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--mm-red);box-shadow:0 0 0 4px rgba(223,0,0,.1);}
+textarea{resize:vertical;min-height:170px;line-height:1.55;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:12.5px}
+textarea[readonly]{background:#F7F8FA;border-color:transparent}
 
-/* ================= MAIN CONTENT ================= */
-.main-wrapper{
-  flex:1; display:flex; flex-direction:column;
-  overflow:hidden; position:relative;
-}
-.main{
-  flex:1; padding:32px 40px; overflow-y:auto;
-  position:relative; z-index:1;
-}
-.main::before{
-  content:''; position:absolute; inset:0;
-  background-image:var(--mm-bg-image);
-  background-size:cover; background-position:center;
-  opacity:var(--mm-bg-opacity); pointer-events:none; z-index:-1;
-}
+.alert{padding:16px 20px;border-radius:10px;border-left:4px solid;margin:16px 0;font-size:13.5px;line-height:1.55;}
+.alert h3{margin-top:0;font-size:15px;margin-bottom:8px;color:var(--mm-ink);}
+.alert p{margin-bottom:6px}
+.alert p:last-child{margin-bottom:0}
+.alert ul, .alert ol{margin:8px 0 0 20px}
+.alert ul li, .alert ol li{margin-bottom:4px}
+.alert-info{background:var(--mm-red-soft);border-color:var(--mm-red)}
+.alert-warning{background:#FFFBEB;border-color:#F59E0B}
+.alert-success{background:#F0FDF4;border-color:var(--success)}
+.alert-danger{background:#FEF2F2;border-color:var(--danger)}
 
-/* ================= DASHBOARD HOME ================= */
-.dashboard-header{ margin-bottom:32px; }
-.dashboard-header h1{
-  font-size:32px; font-weight:800; color:var(--mm-black); letter-spacing:-.5px; margin-bottom:8px;
-}
-.dashboard-header p{ font-size:16px; color:var(--text-muted); }
-.dash-grid{
-  display:grid; grid-template-columns:2fr 1fr; gap:24px; margin-bottom:32px;
-}
-@media (max-width: 1024px) { .dash-grid{ grid-template-columns:1fr; } }
-.dash-card{
-  background:var(--surface); border-radius:var(--radius);
-  border:1px solid var(--border); box-shadow:var(--shadow);
-  padding:24px; display:flex; flex-direction:column;
-}
-.dash-card h3{
-  font-size:18px; font-weight:700; color:var(--mm-black);
-  margin-bottom:16px; display:flex; align-items:center; gap:8px;
-}
-.dash-list{ display:flex; flex-direction:column; gap:8px; }
-.dash-item{
-  display:flex; align-items:center; justify-content:space-between;
-  padding:16px; border-radius:var(--radius-sm);
-  background:var(--mm-gray-50); border:1px solid transparent;
-  text-decoration:none; color:var(--mm-black); transition:all .15s;
-}
-.dash-item:hover{
-  background:var(--surface); border-color:var(--border);
-  box-shadow:var(--shadow); transform:translateY(-2px);
-}
-.dash-item-left{ display:flex; align-items:center; gap:16px; }
-.dash-item-icon{
-  width:40px; height:40px; border-radius:10px;
-  background:var(--mm-red-soft); color:var(--mm-red);
-  display:flex; align-items:center; justify-content:center;
-}
-.dash-item-icon svg{ width:22px; height:22px; fill:currentColor; }
-.dash-item-text strong{ display:block; font-size:15px; font-weight:600; }
-.dash-item-text span{ font-size:13px; color:var(--text-muted); }
-.dash-item-arrow{ color:var(--mm-red); font-weight:700; }
-
-.clock-widget{
-  display:flex; flex-direction:column; align-items:center; justify-content:center;
-  text-align:center; height:100%; min-height:200px;
-  background:linear-gradient(135deg, var(--mm-red) 0%, var(--mm-red-dark) 100%);
-  color:var(--mm-white); border-radius:var(--radius);
-  padding:32px; box-shadow:0 10px 25px rgba(226,0,26,.2);
-}
-.clock-time{ font-size:48px; font-weight:800; letter-spacing:-1px; line-height:1; margin-bottom:8px;}
-.clock-date{ font-size:15px; font-weight:500; opacity:0.9; }
-.clock-sep{ width:40px; height:3px; background:rgba(255,255,255,.3); margin:20px 0; border-radius:2px;}
-.clock-user{ font-size:14px; font-weight:600; letter-spacing:1px; text-transform:uppercase; opacity:0.8;}
-
-/* ================= CARDS & FORMS ================= */
-.card{
-  background:var(--surface);
-  padding:32px; border-radius:var(--radius);
-  border:1px solid var(--border); box-shadow:var(--shadow-lg);
-  margin-bottom:32px;
-}
-.card h2{ margin-bottom:24px; font-size:24px; font-weight:800; color:var(--mm-black); letter-spacing:-.3px;}
-.card h3{ margin:24px 0 12px; font-size:18px; font-weight:700; color:var(--mm-black)}
-.breadcrumb{ font-size:13px; font-weight:500; color:var(--text-muted); margin-bottom:12px; }
-.breadcrumb a{ color:var(--text-muted); text-decoration:none; transition:color .15s; }
-.breadcrumb a:hover{ color:var(--mm-red); }
-
-.btn{display:inline-flex; align-items:center; gap:8px;
-  padding:10px 20px; border:none; border-radius:var(--radius-sm);
-  cursor:pointer; font:inherit; font-size:14px; font-weight:600;
-  text-decoration:none; margin:4px 8px 4px 0;
-  transition:all .15s ease;}
-.btn:hover{transform:translateY(-2px); box-shadow:0 4px 12px rgba(0,0,0,.1)}
-.btn-primary{background:var(--mm-red); color:var(--mm-white)}
-.btn-primary:hover{background:var(--mm-red-hover)}
-.btn-success{background:var(--success); color:var(--mm-white)}
-.btn-danger{background:var(--danger); color:var(--mm-white)}
-.btn-purple{background:var(--mm-purple); color:var(--mm-white)}
-.btn-secondary{background:var(--surface-2); color:var(--text); border:1px solid var(--border);}
-.btn-ghost{background:transparent; color:var(--text-muted); border:1px solid var(--border); text-decoration:none;}
-.btn-ghost:hover{color:var(--mm-red); border-color:var(--mm-red); background:var(--mm-red-soft)}
-
-label{display:block; font-size:13px; font-weight:600;
-  color:var(--text-muted); margin:16px 0 6px;}
-input,select,textarea{width:100%; padding:12px 16px;
-  border:1px solid var(--border); border-radius:var(--radius-sm);
-  background:var(--surface); color:var(--text); font:inherit; font-size:14px;
-  transition:border-color .15s, box-shadow .15s;}
-input:focus,select:focus,textarea:focus{outline:none; border-color:var(--mm-red);
-  box-shadow:0 0 0 4px rgba(226,0,26,.1);}
-textarea{resize:vertical; min-height:180px; line-height:1.5}
-textarea[readonly]{background:var(--surface-2); border-color:transparent;}
-
-/* Alertas y cajas */
-.alert{padding:16px 20px; border-radius:var(--radius-sm);
-  border-left:4px solid; margin:16px 0; font-size:14px; line-height:1.5;}
-.alert h3{margin-top:0; font-size:16px; margin-bottom:8px}
-.alert-info{background:var(--mm-red-soft); border-color:var(--mm-red)}
-.alert-warning{background:#FFFBEB; border-color:#F59E0B}
-.alert-success{background:#F0FDF4; border-color:var(--success)}
-.alert-danger{background:#FEF2F2; border-color:var(--danger)}
-
-.oracle{background:var(--mm-gray-50); border-left:4px solid var(--mm-gray-300);
-  padding:16px 20px; border-radius:var(--radius-sm);
-  margin:16px 0; font-size:14px; color:var(--mm-gray-700);}
-.oracle h3{margin-top:0; font-size:15px; color:var(--mm-gray-900); margin-bottom:8px;}
+.oracle{background:#F7F8FA;border-left:4px solid var(--mm-line);
+  padding:16px 20px;border-radius:10px;margin:16px 0;font-size:13.5px;color:var(--mm-ink-soft);}
+.oracle h3{margin-top:0;font-size:14px;color:var(--mm-ink);margin-bottom:8px;font-weight:800;}
 .oracle p{margin:4px 0}
 
-/* Tablas */
-.info-table{width:100%; border-collapse:collapse; margin:16px 0; font-size:14px;}
-.info-table th{background:var(--mm-gray-50); color:var(--mm-gray-700); text-align:left;
-  padding:14px 16px; font-weight:600; border-bottom:2px solid var(--border);}
-.info-table td{padding:14px 16px; border-bottom:1px solid var(--border);
-  color:var(--text-muted); vertical-align:top;}
+.info-table{width:100%;border-collapse:separate;border-spacing:0;margin:16px 0;font-size:13.5px;border:1px solid var(--mm-line);border-radius:10px;overflow:hidden;}
+.info-table th{background:#1A1A1A;color:#fff;text-align:left;padding:12px 16px;font-weight:800;font-size:12px;letter-spacing:.5px;text-transform:uppercase;}
+.info-table td{padding:12px 16px;border-top:1px solid var(--mm-line);color:var(--mm-ink-soft);vertical-align:top;}
 .info-table tr:last-child td{border-bottom:none}
-.info-table strong{color:var(--mm-black)}
+.info-table strong{color:var(--mm-ink)}
 
-/* Listas */
-.steps-list{list-style:none; counter-reset:step; margin:16px 0; padding:0;}
-.steps-list li{position:relative; padding:16px 16px 16px 56px;
-  background:var(--mm-gray-50); border-radius:var(--radius-sm);
-  margin-bottom:8px; font-size:14px; color:var(--text-muted); line-height:1.5;}
+.steps-list{list-style:none;counter-reset:step;margin:16px 0;padding:0;}
+.steps-list li{position:relative;padding:14px 16px 14px 52px;
+  background:#F7F8FA;border-radius:10px;margin-bottom:8px;
+  font-size:13.5px;color:var(--mm-ink-soft);line-height:1.55;}
 .steps-list li::before{
-  counter-increment:step; content:counter(step);
-  position:absolute; left:16px; top:16px;
-  width:24px; height:24px;
-  background:var(--mm-red); color:var(--mm-white);
-  border-radius:50%; display:flex; align-items:center;
-  justify-content:center; font-weight:700; font-size:12px;
+  counter-increment:step;content:counter(step);
+  position:absolute;left:16px;top:14px;
+  width:24px;height:24px;background:var(--mm-red);color:#fff;
+  border-radius:50%;display:flex;align-items:center;
+  justify-content:center;font-weight:800;font-size:12px;
 }
-.steps-list li strong{color:var(--mm-black)}
+.steps-list li strong{color:var(--mm-ink)}
 
-.check-list{list-style:none; margin:12px 0; padding:0}
-.check-list li{position:relative; padding:8px 8px 8px 32px;
-  font-size:14px; color:var(--text-muted); line-height:1.5;}
-.check-list li::before{content:'✓'; position:absolute; left:4px; top:8px;
-  color:var(--success); font-weight:900; font-size:16px;}
+.check-list{list-style:none;margin:12px 0;padding:0}
+.check-list li{position:relative;padding:6px 8px 6px 30px;font-size:13.5px;color:var(--mm-ink-soft);line-height:1.55;}
+.check-list li::before{content:'✓';position:absolute;left:4px;top:6px;color:var(--success);font-weight:900;font-size:15px;}
 
-/* ================= TARJETAS (FIX) ================= */
-.fin-grid{ 
-  display:grid; 
-  grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); 
-  gap:16px; 
-  margin-top:20px; 
+/* ============ TARJETAS ============ */
+.fin-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin-top:20px;}
+.fin-card{
+  display:flex;flex-direction:column;gap:10px;
+  background:#fff;border:1px solid var(--mm-line);
+  border-radius:var(--radius);padding:20px;
+  text-decoration:none;color:var(--mm-ink);
+  box-shadow:var(--shadow-sm);
+  transition:all .2s ease;position:relative;overflow:hidden;
 }
-.fin-card {
-  display: flex; 
-  flex-direction: column; 
-  gap: 10px;
-  background: var(--surface); 
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm); 
-  padding: 20px;
-  text-decoration: none; 
-  color: var(--text);
-  box-shadow: 0 2px 4px rgba(0,0,0,.02);
-  transition: all .2s ease;
-  position: relative; 
-  overflow: hidden;
+.fin-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:4px;
+  background:var(--mm-red);transform:scaleX(0);transform-origin:left;
+  transition:transform .25s ease;
 }
-.fin-card::before {
-  content: ''; 
-  position: absolute; 
-  top: 0; left: 0; right: 0; 
-  height: 4px;
-  background: var(--mm-red); 
-  transform: scaleX(0); 
-  transform-origin: left;
-  transition: transform .25s ease;
-}
-.fin-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 10px 20px rgba(0,0,0,.08);
-  border-color: var(--mm-red-soft-2);
-}
-.fin-card:hover::before { transform: scaleX(1); }
-.fin-card-icon { font-size: 28px; line-height: 1; margin-bottom: 4px; }
-.fin-card-title {
-  font-size: 16px; 
-  font-weight: 700; 
-  color: var(--mm-black);
-  display: flex; 
-  align-items: center; 
-  gap: 8px; 
-  flex-wrap: wrap;
-}
-.fin-card-desc { font-size: 13px; color: var(--text-muted); line-height: 1.5; }
-.fin-card-arrow {
-  margin-top: auto; 
-  align-self: flex-end;
-  color: var(--mm-red); 
-  font-size: 18px; 
-  font-weight: 700;
-  transition: transform .15s;
-}
-.fin-card:hover .fin-card-arrow { transform: translateX(4px); }
+.fin-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-md);border-color:var(--mm-red-soft-2);}
+.fin-card:hover::before{transform:scaleX(1);}
+.fin-card-icon{font-size:28px;line-height:1;margin-bottom:4px;}
+.fin-card-title{font-size:15px;font-weight:800;color:var(--mm-ink);display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+.fin-card-desc{font-size:12.5px;color:var(--mm-gray);line-height:1.5;}
+.fin-card-arrow{margin-top:auto;align-self:flex-end;color:var(--mm-red);font-size:18px;font-weight:800;transition:transform .15s;}
+.fin-card:hover .fin-card-arrow{transform:translateX(4px);}
 
-/* ================= LISTAS DE ESTADO ================= */
-.grid-motivos{ 
-  display:grid; 
-  grid-template-columns:repeat(auto-fill,minmax(300px,1fr));
-  gap:12px; 
-  margin-top:16px;
-}
+.grid-motivos{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px;margin-top:16px;}
 .estado-card{
-  display:flex; flex-direction:column; gap:8px;
-  background:var(--surface); border:1px solid var(--border);
+  display:flex;flex-direction:column;gap:8px;
+  background:#fff;border:1px solid var(--mm-line);
   border-left:4px solid var(--mm-red);
-  border-radius:var(--radius-sm);
-  padding:16px;
-  text-decoration:none; color:var(--text);
-  transition:all .15s ease;
+  border-radius:var(--radius);padding:16px;
+  text-decoration:none;color:var(--mm-ink);
+  transition:all .15s ease;box-shadow:var(--shadow-sm);
 }
-.estado-card:hover{
-  transform:translateY(-2px);
-  box-shadow:var(--shadow);
-  border-color:var(--mm-red);
-}
-.estado-card .titulo{font-size:15px; font-weight:700; color:var(--mm-black); display:flex; align-items:center; gap:8px; flex-wrap:wrap}
-.estado-card .meta{font-size:13px; color:var(--text-muted); line-height:1.4}
-.estado-card .meta strong{color:var(--mm-black)}
+.estado-card:hover{transform:translateY(-2px);box-shadow:var(--shadow-md);border-color:var(--mm-red);}
+.estado-card .titulo{font-size:14.5px;font-weight:800;color:var(--mm-ink);display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.estado-card .meta{font-size:12.5px;color:var(--mm-gray);line-height:1.45}
+.estado-card .meta strong{color:var(--mm-ink)}
 .estado-card .meta.cancelar strong{color:var(--danger)}
-.estado-card .accion{color:var(--mm-red); font-weight:700; align-self:flex-end; font-size:16px; margin-top:4px;}
-.estado-card .badge-grupo{font-size:10px; padding:2px 6px}
+.estado-card .accion{color:var(--mm-red);font-weight:800;align-self:flex-end;font-size:16px;margin-top:4px;}
+.estado-card .badge-grupo{font-size:10px;padding:2px 6px}
 
-/* FAQ y Buscadores */
-.faq-search-wrap{ position:relative; margin:16px 0; }
-.faq-search-wrap input{ padding-left:48px; font-size:15px; background:var(--mm-gray-50); border-color:transparent;}
-.faq-search-wrap input:focus{ background:var(--surface); border-color:var(--mm-red);}
-.faq-search-wrap::before{ content:'🔍'; position:absolute; left:18px; top:50%;
-  transform:translateY(-50%); font-size:16px; pointer-events:none; opacity:.5; }
+.faq-search-wrap{position:relative;margin:16px 0;}
+.faq-search-wrap input{padding-left:44px;font-size:14px;background:#F7F8FA;border-color:transparent;}
+.faq-search-wrap input:focus{background:#fff;border-color:var(--mm-red);}
+.faq-search-wrap::before{content:'🔍';position:absolute;left:16px;top:50%;transform:translateY(-50%);font-size:15px;pointer-events:none;opacity:.5;}
 
-.filtros-plazo{display:flex; gap:8px; flex-wrap:wrap; margin:16px 0}
+.filtros-plazo{display:flex;gap:8px;flex-wrap:wrap;margin:16px 0}
 .filtro-pill{
-  padding:8px 16px; border-radius:20px;
-  background:var(--mm-gray-50); border:1px solid var(--border);
-  color:var(--text-muted); font-size:13px; font-weight:600;
-  cursor:pointer; text-decoration:none;
-  transition:all .15s;
+  padding:8px 16px;border-radius:999px;
+  background:#F7F8FA;border:1px solid var(--mm-line);
+  color:var(--mm-gray);font-size:12.5px;font-weight:700;
+  cursor:pointer;text-decoration:none;transition:all .15s;
 }
-.filtro-pill:hover{border-color:var(--mm-red); color:var(--mm-red)}
-.filtro-pill.active{background:var(--mm-red); color:var(--mm-white); border-color:var(--mm-red)}
+.filtro-pill:hover{border-color:var(--mm-red);color:var(--mm-red)}
+.filtro-pill.active{background:var(--mm-red);color:#fff;border-color:var(--mm-red)}
 
-/* FAQ */
-.faq-item{border:1px solid var(--border); border-radius:var(--radius-sm);
-  margin-bottom:12px; overflow:hidden; background:var(--surface);}
-.faq-item summary{padding:18px 24px; cursor:pointer; font-weight:600;
-  font-size:15px; color:var(--mm-black); list-style:none;
-  position:relative; transition:background .15s;}
+.faq-item{border:1px solid var(--mm-line);border-radius:10px;margin-bottom:12px;overflow:hidden;background:#fff;}
+.faq-item summary{padding:16px 22px;cursor:pointer;font-weight:700;font-size:14px;color:var(--mm-ink);list-style:none;position:relative;transition:background .15s;}
 .faq-item summary::-webkit-details-marker{display:none}
-.faq-item summary::after{content:'+'; position:absolute; right:24px; top:50%;
-  transform:translateY(-50%); color:var(--mm-red);
-  font-size:20px; font-weight:700; transition:transform .2s;}
+.faq-item summary::after{content:'+';position:absolute;right:22px;top:50%;transform:translateY(-50%);color:var(--mm-red);font-size:20px;font-weight:800;transition:transform .2s;}
 .faq-item[open] summary::after{content:'−'}
-.faq-item summary:hover{background:var(--mm-gray-50)}
-.faq-item p{padding:0 24px 20px 24px; font-size:14px; color:var(--text-muted);
-  line-height:1.6;}
-.faq-answer{padding:0 24px 20px 24px; font-size:14px; color:var(--text-muted);
-  line-height:1.6;}
-.faq-cats{ display:flex; flex-wrap:wrap; gap:8px; margin:16px 0; }
+.faq-item summary:hover{background:#F7F8FA}
+.faq-item p,.faq-answer{padding:0 22px 18px;font-size:13.5px;color:var(--mm-ink-soft);line-height:1.65;}
+.faq-answer p{margin-bottom:10px}
+.faq-answer p:last-child{margin-bottom:0}
+.faq-answer ol,.faq-answer ul{margin:10px 0 10px 20px}
+.faq-answer li{margin-bottom:6px}
+.faq-cats{display:flex;flex-wrap:wrap;gap:8px;margin:16px 0;}
 .faq-cat-pill{
-  display:inline-flex; align-items:center; gap:6px;
-  padding:8px 14px; border-radius:20px;
-  background:var(--mm-gray-50); color:var(--text-muted);
-  border:1px solid var(--border); font-size:13px; font-weight:600;
-  cursor:pointer; text-decoration:none; transition:all .15s;
+  display:inline-flex;align-items:center;gap:6px;
+  padding:8px 14px;border-radius:999px;
+  background:#F7F8FA;color:var(--mm-gray);
+  border:1px solid var(--mm-line);font-size:12.5px;font-weight:700;
+  cursor:pointer;text-decoration:none;transition:all .15s;
 }
-.faq-cat-pill:hover{ border-color:var(--mm-red); color:var(--mm-red); background:var(--mm-red-soft); }
-.faq-cat-pill.active{ background:var(--mm-red); color:var(--mm-white); border-color:var(--mm-red); }
+.faq-cat-pill:hover{border-color:var(--mm-red);color:var(--mm-red);background:var(--mm-red-soft);}
+.faq-cat-pill.active{background:var(--mm-red);color:#fff;border-color:var(--mm-red);}
+.faq-counter{font-size:12.5px;color:var(--mm-gray);margin-bottom:12px;}
+.faq-counter b{color:var(--mm-red);font-weight:800;}
 
-/* Badges */
-.badge{display:inline-block; padding:4px 10px; border-radius:20px;
-  font-size:12px; font-weight:700; vertical-align:middle; letter-spacing:.2px;}
-.badge-blue{background:var(--mm-red-soft-2); color:var(--mm-red-dark)}
-.badge-green{background:#DCFCE7; color:#166534}
-.badge-red{background:var(--mm-red); color:var(--mm-white)}
-.badge-purple{background:#EDE9FE; color:#5B21B6}
-.badge-gray{background:var(--mm-gray-100); color:var(--mm-gray-700)}
+.badge{display:inline-block;padding:3px 10px;border-radius:999px;
+  font-size:11px;font-weight:800;vertical-align:middle;letter-spacing:.2px;}
+.badge-blue{background:var(--mm-blue-bg);color:var(--mm-blue)}
+.badge-green{background:var(--mm-green-bg);color:var(--mm-green)}
+.badge-red{background:var(--mm-red);color:#fff}
+.badge-purple{background:#EDE9FE;color:#5B21B6}
+.badge-gray{background:#F7F8FA;color:var(--mm-gray);border:1px solid var(--mm-line)}
 
-/* Toast */
-.toast{position:fixed; bottom:32px; right:32px;
-  padding:16px 24px; border-radius:var(--radius-sm);
-  background:var(--mm-black); color:var(--mm-white);
-  font-size:14px; font-weight:600;
-  box-shadow:0 10px 25px rgba(0,0,0,.2);
-  animation:slideIn .3s cubic-bezier(0.175, 0.885, 0.32, 1.275); z-index:1000;}
+.toast{position:fixed;bottom:32px;right:32px;padding:15px 22px;border-radius:10px;
+  background:var(--mm-ink);color:#fff;font-size:13.5px;font-weight:700;
+  box-shadow:0 10px 25px rgba(0,0,0,.2);animation:slideIn .3s cubic-bezier(.175,.885,.32,1.275);z-index:1000;}
 @keyframes slideIn{from{transform:translateY(20px);opacity:0}}
 
-/* ================= RESPONSIVE ================= */
-.mobile-toggle{
-  display:none; position:fixed; top:16px; left:16px; z-index:100;
-  width:48px; height:48px; background:var(--surface); border:1px solid var(--border);
-  border-radius:12px; cursor:pointer; align-items:center; justify-content:center;
-  box-shadow:var(--shadow); color:var(--mm-black);
-}
-.sidebar-overlay{display:none; position:fixed; inset:0;
-  background:rgba(0,0,0,.4); z-index:19; opacity:0; transition:opacity .3s ease; backdrop-filter:blur(2px);}
-.sidebar-overlay.open{display:block; opacity:1}
+.overlay{display:none;position:fixed;inset:0;background:rgba(16,24,40,.45);backdrop-filter:blur(2px);z-index:150;opacity:0;transition:opacity var(--transition);}
+.overlay.is-visible{display:block;opacity:1}
 
-@media (max-width: 900px) {
-  .mobile-toggle{ display:flex; }
-  .sidebar{
-    position:fixed; top:0; left:0; bottom:0; height:100vh;
-    transform:translateX(-100%); width:var(--sidebar-w) !important;
-    box-shadow:var(--shadow-lg); z-index:20;
-  }
-  .sidebar.open{ transform:translateX(0); }
-  .sidebar .logo-text, .sidebar .menu-item span, .sidebar-footer { opacity:1 !important; pointer-events:auto !important;}
-  .sidebar .menu-item { justify-content:flex-start !important; padding:12px 16px !important; }
-  
-  .main{ padding:80px 20px 20px; }
-  .dashboard-header h1{ font-size:26px; }
-  .dash-grid{ grid-template-columns:1fr; }
-  .card{ padding:24px 20px; }
-  .btn{ width:100%; justify-content:center; margin:8px 0; }
+/* ============ RESPONSIVE ============ */
+@media (max-width:1024px){ .dash__grid{grid-template-columns:1fr} }
+@media (max-width:880px){
+  .sidebar{transform:translateX(-100%);width:var(--sidebar-w)}
+  .app.is-mobile-open .sidebar{transform:translateX(0);box-shadow:var(--shadow-lg)}
+  .app.is-mobile-open .overlay.is-visible{display:block;opacity:1}
+  .app.is-collapsed .sidebar{width:var(--sidebar-w)}
+  .app.is-collapsed .sidebar__title,
+  .app.is-collapsed .sidebar__label,
+  .app.is-collapsed .sidebar__text,
+  .app.is-collapsed .sidebar__badge,
+  .app.is-collapsed .sidebar__footer{opacity:1;pointer-events:auto;width:auto}
+  .app.is-collapsed .sidebar__link{justify-content:flex-start;padding:11px 12px}
+  .app.is-collapsed .sidebar__link.is-active::before{left:-12px}
+  .app.is-collapsed .main{margin-left:0}
+  .main{margin-left:0}
+  .topbar__hamburger{display:flex}
+  .topbar{padding:12px 16px}
+  .content{padding:18px}
+  .sidebar__collapse{display:none}
+  .dash__hero{padding:26px 24px}
+  .dash__hero-inner{align-items:flex-start;gap:20px}
+  .dash__clock{text-align:left;align-items:flex-start}
+  .card{padding:22px 20px}
+  .btn{width:100%;justify-content:center;margin:6px 0}
 }
-
-@media (min-width: 901px) {
-  .sidebar.collapsed .menu-item:hover::after {
-    content: attr(data-title);
-    position: absolute; left: 100%; top: 50%; transform: translateY(-50%);
-    background: var(--mm-black); color: white; padding: 6px 12px;
-    border-radius: 6px; font-size: 12px; white-space: nowrap; margin-left: 12px;
-    pointer-events: none; z-index: 50;
-  }
-  .sidebar.collapsed .menu-item { position: relative; }
+@media (max-width:640px){
+  .dash__hero{padding:22px 20px}
+  .dash__greeting{font-size:22px}
+  .dash__clock-time{font-size:26px}
+  .card h2{font-size:18px}
+  .grid-motivos{grid-template-columns:1fr}
+  .fin-grid{grid-template-columns:1fr}
+  .toast{bottom:20px;right:20px;left:20px;text-align:center}
 }
 </style>
 </head>
 
 <body>
 
-<button class="mobile-toggle" id="mobileToggle" aria-label="Abrir menú">
-  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
-</button>
-<div class="sidebar-overlay" id="sidebarOverlay"></div>
+<div class="app" id="app">
 
-<div class="layout">
   <!-- SIDEBAR -->
   <aside class="sidebar" id="sidebar">
-    <a class="sidebar-header" href="#/">
-      <svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg" role="img" aria-hidden="true">
-        <rect x="0" y="0" width="40" height="40" rx="8" fill="#E2001A"/>
-        <path d="M8 30V12h4.2l3.3 9.2L18.8 12H23v18h-3.6v-11l-3 8.4h-2.8l-3-8.4v11H8z" fill="#FFFFFF"/>
-        <circle cx="30" cy="11" r="2.4" fill="#FFFFFF"/>
-      </svg>
-      <div class="logo-text">
-        <span class="brand-name">MediaMarkt</span>
-        <span class="brand-sub">Operaciones</span>
+    <a class="sidebar__brand" href="#/">
+      <div class="sidebar__logo">MA</div>
+      <div class="sidebar__title">
+        <strong>MediaMarkt</strong>
+        <span>Panel Operaciones</span>
       </div>
     </a>
-
-    <nav>
-      <a class="menu-item" href="#/" data-title="Inicio">
-        <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
-        <span>Inicio</span>
+    <button type="button" class="sidebar__collapse" id="btnCollapse" aria-label="Colapsar menú">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+    </button>
+    <nav class="sidebar__nav" id="sidebarNav">
+      <div class="sidebar__label">Principal</div>
+      <a class="sidebar__link is-active" href="#/" data-title="Inicio">
+        <span class="sidebar__icon"><svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg></span>
+        <span class="sidebar__text">Inicio</span>
       </a>
-      <a class="menu-item" href="#/fecha" data-title="Reparaciones">
-        <svg viewBox="0 0 24 24"><path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.4 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/></svg>
-        <span>Reparaciones</span>
+      <div class="sidebar__label">Módulos</div>
+      <a class="sidebar__link" href="#/fecha" data-title="Reparaciones">
+        <span class="sidebar__icon"><svg viewBox="0 0 24 24"><path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.4 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/></svg></span>
+        <span class="sidebar__text">Reparaciones</span>
       </a>
-      <a class="menu-item" href="#/reclamacion" data-title="Reclamaciones">
-        <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-7 12h-2v-2h2v2zm0-4h-2V6h2v4z"/></svg>
-        <span>Reclamaciones</span>
+      <a class="sidebar__link" href="#/reclamacion" data-title="Reclamaciones">
+        <span class="sidebar__icon"><svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-7 12h-2v-2h2v2zm0-4h-2V6h2v4z"/></svg></span>
+        <span class="sidebar__text">Reclamaciones</span>
       </a>
-      <a class="menu-item" href="#/marketplace" data-title="Marketplace">
-        <svg viewBox="0 0 24 24"><path d="M19 6h-2c0-2.76-2.24-5-5-5S7 3.24 7 6H5c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-7-3c1.66 0 3 1.34 3 3H9c0-1.66 1.34-3 3-3zm0 10c-2.76 0-5-2.24-5-5h2c0 1.66 1.34 3 3 3s3-1.34 3-3h2c0 2.76-2.24 5-5 5z"/></svg>
-        <span>Marketplace</span>
+      <a class="sidebar__link" href="#/marketplace" data-title="Marketplace">
+        <span class="sidebar__icon"><svg viewBox="0 0 24 24"><path d="M19 6h-2c0-2.76-2.24-5-5-5S7 3.24 7 6H5c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-7-3c1.66 0 3 1.34 3 3H9c0-1.66 1.34-3 3-3zm0 10c-2.76 0-5-2.24-5-5h2c0 1.66 1.34 3 3 3s3-1.34 3-3h2c0 2.76-2.24 5-5 5z"/></svg></span>
+        <span class="sidebar__text">Marketplace</span>
       </a>
-      <a class="menu-item" href="#/financiacion" data-title="Financiación">
-        <svg viewBox="0 0 24 24"><path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/></svg>
-        <span>Financiación</span>
+      <a class="sidebar__link" href="#/financiacion" data-title="Financiación">
+        <span class="sidebar__icon"><svg viewBox="0 0 24 24"><path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/></svg></span>
+        <span class="sidebar__text">Financiación</span>
       </a>
-      <a class="menu-item" href="#/estado-pedido" data-title="Estado de Pedido">
-        <svg viewBox="0 0 24 24"><path d="M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4zM6 18.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm13.5-9l1.96 2.5H17V9.5h2.5zm-1.5 9c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg>
-        <span>Estado de Pedido</span>
+      <a class="sidebar__link" href="#/estado-pedido" data-title="Estado de Pedido">
+        <span class="sidebar__icon"><svg viewBox="0 0 24 24"><path d="M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4zM6 18.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm13.5-9l1.96 2.5H17V9.5h2.5zm-1.5 9c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg></span>
+        <span class="sidebar__text">Estado de Pedido</span>
       </a>
-      <a class="menu-item" href="#/devoluciones" data-title="Devoluciones">
-        <svg viewBox="0 0 24 24"><path d="M12 5V1L7 6l5 5V7c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6H4c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8z"/></svg>
-        <span>Devoluciones</span>
+      <a class="sidebar__link" href="#/devoluciones" data-title="Devoluciones">
+        <span class="sidebar__icon"><svg viewBox="0 0 24 24"><path d="M12 5V1L7 6l5 5V7c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6H4c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8z"/></svg></span>
+        <span class="sidebar__text">Devoluciones</span>
+      </a>
+      <div class="sidebar__label">Accesos</div>
+      <a class="sidebar__link" href="https://thedarkkningt17.github.io/artemisa/#inicio" target="_blank" rel="noopener">
+        <span class="sidebar__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6M10 14 21 3M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg></span>
+        <span class="sidebar__text">Portal Principal</span>
+        <span class="sidebar__badge">↗</span>
       </a>
     </nav>
-
-    <div class="sidebar-footer">
-      <button class="btn-collapse" id="btnCollapse" title="Colapsar menú">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M15 18l-6-6 6-6"/></svg>
-      </button>
+    <div class="sidebar__footer">
+      <strong>Ledezma Enterprises</strong>
+      Portal interno · 2026
     </div>
   </aside>
 
-  <!-- CONTENIDO PRINCIPAL -->
-  <div class="main-wrapper">
-    <main class="main">
+  <div class="overlay" id="sidebarOverlay"></div>
+
+  <!-- MAIN -->
+  <div class="main">
+    <header class="topbar">
+      <div class="topbar__left">
+        <button type="button" class="topbar__hamburger" id="mobileToggle" aria-label="Abrir menú">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+        </button>
+        <div class="topbar__title" id="topbarTitle">Panel <span>de Operaciones</span></div>
+      </div>
+      <div class="topbar__right">
+        <span class="topbar__date" id="topbarDate"></span>
+        <div class="topbar__avatar">MM</div>
+      </div>
+    </header>
+
+    <main class="content">
       <div id="contenido"></div>
     </main>
   </div>
 </div>
 
 <script>
-/* =====================================================================
+/* ==========================================
    utils.js
-   ===================================================================== */
+   ========================================== */
 const esc = (s) => String(s ?? '').replace(/[&<>"']/g,
   c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 
@@ -532,8 +541,7 @@ function parseFechaLocal(str){
   return new Date(y, m-1, d);
 }
 function formatearFecha(date){
-  return date.toLocaleDateString('es-ES',
-    { day:'2-digit', month:'2-digit', year:'numeric' });
+  return date.toLocaleDateString('es-ES', { day:'2-digit', month:'2-digit', year:'numeric' });
 }
 async function copiarTexto(texto){
   try{
@@ -553,41 +561,24 @@ function toast(msg){
   setTimeout(() => t.remove(), 2500);
 }
 
-/* =====================================================================
+/* ==========================================
    state.js
-   ===================================================================== */
+   ========================================== */
 const state = {
-  fechaCompra: null,
-  garantia: null,
-  tipoArticulo: null,
-  origenCompra: null,
-  danioCubierto: null,
-  seguro: null,
-  datos: {},
-  filtroPlazo: 'todos'
+  fechaCompra: null, garantia: null, tipoArticulo: null, origenCompra: null,
+  danioCubierto: null, seguro: null, datos: {}, filtroPlazo: 'todos'
 };
 function resetState(){
-  state.fechaCompra = null;
-  state.garantia = null;
-  state.tipoArticulo = null;
-  state.origenCompra = null;
-  state.danioCubierto = null;
-  state.seguro = null;
-  state.datos = {};
-  state.filtroPlazo = 'todos';
+  state.fechaCompra = null; state.garantia = null; state.tipoArticulo = null;
+  state.origenCompra = null; state.danioCubierto = null; state.seguro = null;
+  state.datos = {}; state.filtroPlazo = 'todos';
 }
 
-/* =====================================================================
-   garantia.js
-   ===================================================================== */
 function calcularGarantia(fechaStr){
   const fechaCompra = parseFechaLocal(fechaStr);
   const hoy = new Date(); hoy.setHours(0,0,0,0);
   const dias = Math.floor((hoy - fechaCompra) / 86400000);
-
-  if(dias <= 60){
-    return { estado:'devolucion', dias, restantes: 60 - dias };
-  }
+  if(dias <= 60){ return { estado:'devolucion', dias, restantes: 60 - dias }; }
   const anios = fechaCompra >= new Date(2022, 0, 1) ? 3 : 2;
   const fin = new Date(fechaCompra);
   fin.setFullYear(fin.getFullYear() + anios);
@@ -595,9 +586,9 @@ function calcularGarantia(fechaStr){
   return { estado:'vigente', anios, fechaFin: fin };
 }
 
-/* =====================================================================
-   data
-   ===================================================================== */
+/* ==========================================
+   DATA
+   ========================================== */
 const tiposReclamacion = {
   'demora-recogida': { label:'🚚 Demora en recogida o entrega', categoria:'Demora en reparación' },
   'cambio-sat':     { label:'🔄 Cambio o devolución autorizado por SAT', categoria:'Cambio o devolución SAT' },
@@ -609,14 +600,6 @@ const colasReclamacion = {
   paqueteria: 'ES MM Front Office Reparaciones',
   'gran-carga': 'ES MM Avisos SAT GC'
 };
-const tiposFinanciacion = {
-  'consulta-estado':        { label:'🔍 Consulta estado de financiación', categoria:'Condiciones y documentación', cola:'ES MM 1er Nivel', estado:'Resuelto' },
-  'reclamacion-cargo':      { label:'💳 Reclamación de cargo indebido', categoria:'Reclamación financiación', cola:'ES MM 1er Nivel', estado:'Resuelto' },
-  'modificacion-condiciones':{ label:'📝 Modificación de condiciones', categoria:'Modificación financiación', cola:'ES MM 1er Nivel', estado:'Resuelto' },
-  'cancelacion':            { label:'❌ Cancelación de financiación', categoria:'Cancelación financiación', cola:'ES MM 1er Nivel', estado:'Resuelto' },
-  'documentacion':          { label:'📄 Envío de documentación', categoria:'Documentación financiación', cola:'ES MM 1er Nivel', estado:'Resuelto' }
-};
-
 const satMarcas = {
   'aeg':{telefono:'912665682 / 902144145', horario:'L-V 09:00 a 18:00'},
   'apelson':{telefono:'938521818 / 902410450', horario:'L-V 09:00 a 14:00'},
@@ -625,68 +608,44 @@ const satMarcas = {
   'beko':{telefono:'932992581', horario:'L-V 09:00 a 20:00'},
   'bosch':{telefono:'976305713', horario:'24 horas - 7 días'},
   'candy':{telefono:'902100150', horario:'L-V 09:00 a 18:30'},
-  'cata':{telefono:'902410450', horario:'Consultar fabricante'},
-  'cointra':{telefono:'912176834', horario:'Consultar fabricante'},
-  'indesit':{telefono:'902203204', horario:'L-V 08:00 a 20:00'},
-  'fagor':{telefono:'911593032', horario:'L-S 09:00 a 18:00'},
-  'edesa':{telefono:'902305000 / 938521830', horario:'Consultar fabricante'},
-  'jocel':{telefono:'902099504', horario:'Consultar fabricante'},
-  'ariston':{telefono:'910602442', horario:'Consultar fabricante'},
-  'lg':{telefono:'963050500', horario:'Consultar fabricante'},
-  'liebherr':{telefono:'948297000', horario:'Consultar fabricante'},
-  'lynx':{telefono:'902351352', horario:'Consultar fabricante'},
-  'mepamsa':{telefono:'935653586', horario:'Consultar fabricante'},
-  'microsoft':{telefono:'902197198', horario:'Consultar fabricante'},
-  'miele':{telefono:'902398398', horario:'Consultar fabricante'},
-  'nodor':{telefono:'938521818', horario:'Consultar fabricante'},
-  'ok':{telefono:'800098482', horario:'contact@imtron.eu'},
-  'otsein':{telefono:'943914150', horario:'Consultar fabricante'},
   'samsung':{telefono:'911750015', horario:'Consultar fabricante'},
-  'smeg':{telefono:'935650392', horario:'Consultar fabricante'},
-  'teka':{telefono:'902111211', horario:'Consultar fabricante'},
-  'whirlpool':{telefono:'932382355', horario:'Consultar fabricante'},
-  'zanussi':{telefono:'912665682', horario:'Consultar fabricante'}
+  'lg':{telefono:'963050500', horario:'Consultar fabricante'},
+  'whirlpool':{telefono:'932382355', horario:'Consultar fabricante'}
 };
 
-/* =====================================================================
-   data/estadoPedido.js
-   ===================================================================== */
 const gruposEstadoPedido = {
   avanzar: { icono:'⏩', label:'Avanzar pedido', desc:'El pedido está estancado y el cliente quiere que continúe su curso.', color:'badge-green' },
   cancelar: { icono:'❌', label:'Cancelar pedido', desc:'Listado cruzado: estados del pedido con acción de cancelación accionable.', color:'badge-red' },
   incidencia: { icono:'⚠️', label:'Pedidos con incidencia', desc:'Pedidos 0, Limbo, Rechazo cliente o demoras de transporte.', color:'badge-purple' },
-  tienda: { icono:'🏪', label:'Recogidas en tienda y Ship From Store', desc:'Pedidos gestionados por la tienda: Being Picked, Ready for Pick Up, SFS…', color:'badge-blue' }
+  tienda: { icono:'🏪', label:'Recogidas en tienda y SFS', desc:'Pedidos gestionados por la tienda: Being Picked, Ready for Pick Up, SFS…', color:'badge-blue' }
 };
 
 const estadosPedido = [
-  /* AVANZAR */
   { slug:'order-created', grupo:'avanzar', icono:'🆕', estado:'Order Created', derivarA:'Abrir caso Cherwell', plazo:'—', plazoKey:'na', cancelar:'FOM (1er Nivel resuelto)', cancelable:true, notas:'Pedido recién creado. Si hay que avanzarlo, se abre caso en Cherwell.' },
   { slug:'scheduled-financiacion', grupo:'avanzar', icono:'💳⏳', estado:'Scheduled con financiación', derivarA:'Buzón administración online', plazo:'Pasadas 24 horas', plazoKey:'24h', cancelar:'FOM (1er Nivel resuelto)', cancelable:true, notas:'Pedido programado con financiación. Esperar 24h antes de escalar.' },
   { slug:'scheduled-otros', grupo:'avanzar', icono:'⏳', estado:'Scheduled con otros métodos de pago', derivarA:'Abrir caso Cherwell', plazo:'Pasadas 24 horas', plazoKey:'24h', cancelar:'FOM (1er Nivel resuelto)', cancelable:true, notas:'Pedido programado con pago distinto a financiación.' },
   { slug:'awaiting-stock', grupo:'avanzar', icono:'📦⏳', estado:'Awaiting Stock', derivarA:'PM (revisar si se trata de un lanzamiento)', plazo:'Pasada fecha de promesa de entrega', plazoKey:'fuera', cancelar:'FOM (1er Nivel resuelto)', cancelable:true, notas:'Si es un lanzamiento, revisar con PM antes de avanzar.' },
-  { slug:'backordered', grupo:'avanzar', icono:'📦❌', estado:'Backordered (verificado sin stock)', derivarA:'HD y PU → Gestión de Pedidos Online (Transferencia: Opción 3) · SDPU y Ship From Store → MM Store en estado Pendiente', plazo:'—', plazoKey:'na', cancelar:'FOM (1er Nivel resuelto)', cancelable:true, notas:'Confirmar primero que realmente no hay stock.' },
+  { slug:'backordered', grupo:'avanzar', icono:'📦❌', estado:'Backordered (verificado sin stock)', derivarA:'HD y PU → Gestión de Pedidos Online · SDPU y SFS → MM Store', plazo:'—', plazoKey:'na', cancelar:'FOM (1er Nivel resuelto)', cancelable:true, notas:'Confirmar primero que realmente no hay stock.' },
   { slug:'awaiting-fulfillment', grupo:'avanzar', icono:'📦🔄', estado:'Awaiting Fullfilment', derivarA:'PM (Gama)', plazo:'Pasada fecha de promesa de entrega', plazoKey:'fuera', cancelar:'FOM (1er Nivel resuelto)', cancelable:true, notas:'Pedido pendiente de preparación por gama.' },
   { slug:'released-financiacion', grupo:'avanzar', icono:'💳🚀', estado:'Released con financiación', derivarA:'Buzón administración online', plazo:'Pasadas 24 horas', plazoKey:'24h', cancelar:'FOM (1er Nivel resuelto)', cancelable:true, notas:'Pedido liberado con financiación.' },
   { slug:'released-otros', grupo:'avanzar', icono:'🚀', estado:'Released con otros métodos de pago', derivarA:'Abrir caso Cherwell', plazo:'Pasadas 24 horas', plazoKey:'24h', cancelar:'FOM (1er Nivel resuelto)', cancelable:true, notas:'Pedido liberado con pago no financiado.' },
-  { slug:'fulfillment-initiated', grupo:'avanzar', icono:'🏭⏩', estado:'Fullfilment Initiated (Pedidos HD)', derivarA:'Ver flujo completo en la ficha', plazo:'Pasada fecha de promesa de entrega', plazoKey:'fuera', cancelar:'Ver flujo completo en la ficha', cancelable:true, notas:'Requiere verificación con el cliente y con Caixa si es financiado.', flujoAvanzar: `<ol class="steps-list"><li><strong>Confirmar si está fuera de promesa de entrega.</strong> En pedidos con financiación, verificar con el cliente si ha recibido información de Caixa de aprobación:<ul style="margin-left:18px;margin-top:6px"><li><strong>a.</strong> Si ha recibido confirmación de aprobación → pasar al punto 2.</li><li><strong>b.</strong> Si aún no ha recibido información → indicarle que está pendiente de aprobación por la financiera y facilitar el contacto de Caixa.</li></ul></li><li>Si está fuera de promesa de entrega:<ul style="margin-left:18px;margin-top:6px"><li><strong>a.</strong> Enviar FW a <code>preparacion_pintomm@id-logistics.com</code> y escalar el caso en Oracle a <strong>ES MM BO Atento</strong> en estado <strong>Pendiente</strong>.</li><li><strong>b.</strong> Enviar el email al cliente (ver plantilla).</li></ul></li></ol>`, flujoCancelar: `<ul class="check-list"><li><strong>Dentro del plazo de entrega:</strong> reenviar a <code>gds_mmpinto@id-logistics.com</code>, <code>preparacion_pintomm@id-logistics.com</code>, <code>jorge.ocana@id-logistics.com</code> y <code>msola@id-logistics.com</code>. Usar la plantilla Oracle <em>Escalado Interno – Solicit Cancelación</em> y dejar el caso en <strong>1er Nivel Resuelto</strong>.</li><li><strong>Fuera del plazo de entrega:</strong> escalar a <strong>ES MM Omnicanal</strong> en estado <strong>Pendiente</strong>.</li></ul>`, plantillaAvanzar: `¡Hola!\n\nTe informamos que debido a una incidencia en nuestros sistemas tu pedido no está siendo gestionado con normalidad. Nuestros compañeros están trabajando para poder resolverlo. En un plazo máximo de 48 horas nos volveremos a poner en contacto contigo para ofrecerte la mejor solución.\n\nAnte cualquier consulta, puedes volver a ponerte en contacto con nosotros respondiendo a este mismo correo.\n\nTu equipo MediaMarkt.` },
+  { slug:'fulfillment-initiated', grupo:'avanzar', icono:'🏭⏩', estado:'Fullfilment Initiated (Pedidos HD)', derivarA:'Ver flujo completo en la ficha', plazo:'Pasada fecha de promesa de entrega', plazoKey:'fuera', cancelar:'Ver flujo completo en la ficha', cancelable:true, notas:'Requiere verificación con el cliente y con Caixa si es financiado.', flujoAvanzar:`<ol class="steps-list"><li><strong>Confirmar si está fuera de promesa de entrega.</strong> En pedidos con financiación, verificar con el cliente si ha recibido información de Caixa de aprobación:<ul style="margin-left:18px;margin-top:6px"><li><strong>a.</strong> Si ha recibido confirmación de aprobación → pasar al punto 2.</li><li><strong>b.</strong> Si aún no ha recibido información → indicarle que está pendiente de aprobación por la financiera y facilitar el contacto de Caixa.</li></ul></li><li>Si está fuera de promesa de entrega:<ul style="margin-left:18px;margin-top:6px"><li><strong>a.</strong> Enviar FW a <code>preparacion_pintomm@id-logistics.com</code> y escalar el caso en Oracle a <strong>ES MM BO Atento</strong> en estado <strong>Pendiente</strong>.</li><li><strong>b.</strong> Enviar el email al cliente (ver plantilla).</li></ul></li></ol>`, flujoCancelar:`<ul class="check-list"><li><strong>Dentro del plazo de entrega:</strong> reenviar a <code>gds_mmpinto@id-logistics.com</code>, <code>preparacion_pintomm@id-logistics.com</code>, <code>jorge.ocana@id-logistics.com</code> y <code>msola@id-logistics.com</code>. Usar la plantilla Oracle <em>Escalado Interno – Solicit Cancelación</em> y dejar el caso en <strong>1er Nivel Resuelto</strong>.</li><li><strong>Fuera del plazo de entrega:</strong> escalar a <strong>ES MM Omnicanal</strong> en estado <strong>Pendiente</strong>.</li></ul>`, plantillaAvanzar:`¡Hola!\n\nTe informamos que debido a una incidencia en nuestros sistemas tu pedido no está siendo gestionado con normalidad. Nuestros compañeros están trabajando para poder resolverlo. En un plazo máximo de 48 horas nos volveremos a poner en contacto contigo para ofrecerte la mejor solución.\n\nAnte cualquier consulta, puedes volver a ponerte en contacto con nosotros respondiendo a este mismo correo.\n\nTu equipo MediaMarkt.` },
   { slug:'shipped', grupo:'avanzar', icono:'🚚📦', estado:'Shipped (1887)', derivarA:'1. preparacion_pintomm@id-logistics.com · 2. (Si persiste tras 24h) Omnicanal', plazo:'Pasadas 24 horas', plazoKey:'24h', cancelar:'cancelacionpedidos@id-logistics.com y preparacion_pintomm@id-logistics.com', cancelable:true, notas:'Pedido ya enviado. Escalar a Omnicanal sólo si persiste tras 24h.' },
   { slug:'order-completed', grupo:'avanzar', icono:'✅', estado:'Order Completed', derivarA:'Estado final', plazo:'—', plazoKey:'na', cancelar:'Carrier → orden de rechazo*', cancelable:true, notas:'Estado final del pedido. No se puede avanzar.' },
 
-  /* TIENDA / SFS */
   { slug:'procurement-created', grupo:'tienda', icono:'🏪🆕', estado:'Procurement Transfer Order Created (recogidas en tienda)', derivarA:'Escalar a MM Store para que lo gestione', plazo:'—', plazoKey:'na', cancelar:'Escalar MM Store / Pendiente', cancelable:true, notas:'Pedido de recogida creado, pendiente de tienda.' },
   { slug:'being-picked', grupo:'tienda', icono:'🏪🔍', estado:'Being Picked', derivarA:'Tienda debe revisar lo ocurrido y pasar pantallazo por Cherwell (si son errores técnicos)', plazo:'—', plazoKey:'na', cancelar:'Escalar MM Store / Pendiente', cancelable:true, notas:'Pedido en preparación por parte de la tienda.' },
   { slug:'procurement-shipped', grupo:'tienda', icono:'🏪🚚', estado:'Procurement Transfer Order Shipped (recogidas en tienda)', derivarA:'Buzón Oracle ES MM Store + etiqueta de la tienda de recogida', plazo:'—', plazoKey:'na', cancelar:'Escalar MM Store / Pendiente', cancelable:true, notas:'Pedido de recogida ya enviado a tienda.' },
   { slug:'ready-pickup', grupo:'tienda', icono:'🏪📬', estado:'Ready for Pick Up', derivarA:'Tienda debe revisar lo ocurrido y pasar pantallazo al CAU (si son errores técnicos)', plazo:'—', plazoKey:'na', cancelar:'Escalar MM Store / Pendiente', cancelable:true, notas:'Pedido listo para recoger en tienda.' },
   { slug:'pickup', grupo:'tienda', icono:'🏪✅', estado:'Pick up', derivarA:'Estado final', plazo:'—', plazoKey:'na', cancelar:'Escalar MM Store / Pendiente', cancelable:true, notas:'Pedido recogido por el cliente.' },
   { slug:'ready-carrier-sfs', grupo:'tienda', icono:'🏪🚚', estado:'Ready for carrier (Ship From Store)', derivarA:'Tienda debe revisar lo ocurrido y pasar pantallazo por Cherwell (si son errores técnicos)', plazo:'—', plazoKey:'na', cancelar:'Escalar MM Store / Pendiente', cancelable:true, notas:'Pedido SFS listo para transportista.' },
-  { slug:'demora-sfs-dentro', grupo:'tienda', icono:'⏱️🏪', estado:'Demoras SFS en estado Picked up (dentro de horario)', derivarA:'Transferencia: Opción 2 + escalar a MM Store / Pendiente', plazo:'Si no localizamos el pedido en la web del Carrier, escalamos a la tienda que ha realizado el envío y dejamos el ticket en Pendiente.', plazoKey:'fuera', cancelar:'Escalar MM Store / Pendiente. Si el pedido está en manos de Ader, se puede cancelar el envío desde su web.', cancelable:true, notas:'Sólo dentro del horario de atención.' },
-  { slug:'demora-sfs-fuera', grupo:'tienda', icono:'🌙🚚', estado:'Demoras SFS (fuera de horario, chat y mail) en manos del transportista', derivarA:'Enviar Fwd al carrier (Tipsa o Ader) + escalar MM Store / Resuelto', plazo:'—', plazoKey:'na', cancelar:'—', cancelable:false, notas:'Sólo fuera de horario, chat y mail.' },
+  { slug:'demora-sfs-dentro', grupo:'tienda', icono:'⏱️🏪', estado:'Demoras SFS en estado Picked up (dentro de horario)', derivarA:'Transferencia: Opción 2 + escalar a MM Store / Pendiente', plazo:'Si no localizamos el pedido, escalamos a la tienda.', plazoKey:'fuera', cancelar:'Escalar MM Store / Pendiente. Si está en manos de Ader, se puede cancelar desde su web.', cancelable:true, notas:'Sólo dentro del horario de atención.' },
+  { slug:'demora-sfs-fuera', grupo:'tienda', icono:'🌙🚚', estado:'Demoras SFS (fuera de horario, chat y mail)', derivarA:'Enviar Fwd al carrier (Tipsa o Ader) + escalar MM Store / Resuelto', plazo:'—', plazoKey:'na', cancelar:'—', cancelable:false, notas:'Sólo fuera de horario, chat y mail.' },
 
-  /* INCIDENCIAS */
   { slug:'pedido-0-tarjeta', grupo:'incidencia', icono:'💳0️⃣', estado:'PEDIDO 0 – Pago tarjeta', derivarA:'Abrir caso Cherwell', plazo:'—', plazoKey:'na', cancelar:'CAU (Cherwell)', cancelable:true, notas:'Pedido 0 con pago por tarjeta.' },
   { slug:'pedido-0-paypal', grupo:'incidencia', icono:'💳🅿️', estado:'PEDIDO 0 – PayPal', derivarA:'Pedidos online', plazo:'—', plazoKey:'na', cancelar:'Pedidos online', cancelable:true, notas:'Pedido 0 con pago por PayPal.' },
   { slug:'pedido-limbo', grupo:'incidencia', icono:'🕳️', estado:'PEDIDO LIMBO', derivarA:'No se puede avanzar. Se gestiona como Limbo y se abonará al cliente.', plazo:'—', plazoKey:'na', cancelar:'Administración Online', cancelable:true, notas:'No se puede avanzar. Se abona al cliente.' },
-  { slug:'rechazo-cliente', grupo:'incidencia', icono:'🚫', estado:'Rechazo cliente', derivarA:'Reclamamos al carrier si el cliente dice que no es un rechazo.', plazo:'—', plazoKey:'na', cancelar:'Pedido se devolverá al almacén y se abonará automáticamente. Si hay demora en el abono, escalar a MM Transporte Cliente.', cancelable:true, notas:'Distinguir entre rechazo real y reclamación del cliente.' }
+  { slug:'rechazo-cliente', grupo:'incidencia', icono:'🚫', estado:'Rechazo cliente', derivarA:'Reclamamos al carrier si el cliente dice que no es un rechazo.', plazo:'—', plazoKey:'na', cancelar:'Pedido se devolverá al almacén y se abonará automáticamente.', cancelable:true, notas:'Distinguir entre rechazo real y reclamación del cliente.' }
 ];
 
 function getEstadosPorGrupo(grupo){ return estadosPedido.filter(e => e.grupo === grupo); }
@@ -695,9 +654,6 @@ function filtrarEstadosPorPlazo(lista, filtro){ if(filtro === 'todos') return li
 function getEstadosConCancelacion(){ return estadosPedido.filter(e => e.cancelable === true); }
 function getListaPorGrupo(grupoSlug){ if(grupoSlug === 'cancelar') return getEstadosConCancelacion(); return getEstadosPorGrupo(grupoSlug); }
 
-/* =====================================================================
-   previewRenderers / PLANTILLAS
-   ===================================================================== */
 const previewRenderers = {
   'paqueteria/tienda': (s, d) => `Buenos días,\n\nUn cliente nos informa que adquirió un artículo de paquetería (${d.articulo || '__________'}) el ${s.fechaCompra || '__________'}, en ${d.origen || 'una de nuestras tiendas'}.\n\nSe informa al cliente de las opciones disponibles para tramitar una reparación en garantía. Tras recibir la información, el cliente decide acudir a una de nuestras tiendas físicas para gestionar la reparación.\n\nQuedamos a la espera de la gestión correspondiente.\n\nMuchas gracias.`,
   'paqueteria/online': (s, d) => `Buenos días,\n\nUn cliente nos informa que adquirió un artículo de paquetería (${d.articulo || '__________'}) el ${s.fechaCompra || '__________'}, en ${d.origen || 'una de nuestras tiendas'}.\n\nSe informa al cliente de las opciones disponibles para tramitar una reparación en garantía. Tras recibir la información, el cliente decide gestionarla a través del Portal ZIR.\n\nSe realiza la solicitud correspondiente con la orden de trabajo ${d.orden || 'E601-XXXXXX-R-C'} y se informa al cliente del procedimiento.\n\nQuedamos a la espera de la gestión correspondiente.\n\nMuchas gracias.`
@@ -747,12 +703,12 @@ function plantillaFGGranCarga(s, d){
 }
 
 const tiposMarketplace = {
-  pedido: { icono:'📦', label:'Consulta de pedido', desc:'El cliente consulta el estado, detalles o seguimiento de un pedido de Marketplace.', categoria:'Consulta pedido Marketplace', cola:'ES MM Marketplace', estado:'Resuelto', campos:[ { id:'numeroPedido', label:'Número de pedido', placeholder:'Ej: 301235458' }, { id:'articulo', label:'Artículo' }, { id:'vendedor', label:'Vendedor', placeholder:'Nombre del vendedor' }, { id:'nombre', label:'Nombre y apellidos' }, { id:'telefono', label:'Teléfono' }, { id:'email', label:'Email' }, { id:'detalle', label:'Detalle de la consulta', tipo:'textarea', placeholder:'Describe brevemente la consulta…' } ] },
-  envio: { icono:'🚚', label:'Incidencia en el envío', desc:'Retraso, pérdida, daño en el transporte o problema con la entrega.', categoria:'Incidencia envío Marketplace', cola:'ES MM Marketplace', estado:'Pendiente', campos:[ { id:'numeroPedido', label:'Número de pedido' }, { id:'transportista', label:'Transportista', placeholder:'Ej: SEUR, MRW…' }, { id:'numeroSeguimiento', label:'Nº de seguimiento' }, { id:'articulo', label:'Artículo' }, { id:'nombre', label:'Nombre y apellidos' }, { id:'telefono', label:'Teléfono' }, { id:'email', label:'Email' }, { id:'detalle', label:'Detalle de la incidencia', tipo:'textarea', placeholder:'Describe qué ha ocurrido…' } ] },
-  devolucion: { icono:'🔄', label:'Devolución Marketplace', desc:'El cliente quiere devolver un producto comprado a un vendedor Marketplace.', categoria:'Devolución Marketplace', cola:'ES MM Marketplace', estado:'Pendiente', campos:[ { id:'numeroPedido', label:'Número de pedido' }, { id:'articulo', label:'Artículo' }, { id:'vendedor', label:'Vendedor' }, { id:'motivo', label:'Motivo de la devolución', tipo:'textarea', placeholder:'Motivo indicado…' }, { id:'nombre', label:'Nombre y apellidos' }, { id:'telefono', label:'Teléfono' }, { id:'email', label:'Email' } ] },
-  garantia: { icono:'🛠️', label:'Garantía o reparación', desc:'Producto Marketplace con defecto o avería.', categoria:'Reparación Marketplace', cola:'ES MM Marketplace', estado:'Pendiente', campos:[ { id:'numeroPedido', label:'Número de pedido' }, { id:'articulo', label:'Artículo' }, { id:'vendedor', label:'Vendedor' }, { id:'fechaCompra', label:'Fecha de compra', placeholder:'DD/MM/AAAA' }, { id:'fallo', label:'Descripción del fallo', tipo:'textarea', placeholder:'Describe el fallo…' }, { id:'nombre', label:'Nombre y apellidos' }, { id:'telefono', label:'Teléfono' }, { id:'email', label:'Email' } ] },
-  vendedor: { icono:'💬', label:'Contacto con el vendedor', desc:'El cliente quiere contactar directamente con el vendedor.', categoria:'Contacto vendedor Marketplace', cola:'ES MM Marketplace', estado:'Resuelto', campos:[ { id:'numeroPedido', label:'Número de pedido' }, { id:'vendedor', label:'Nombre del vendedor' }, { id:'articulo', label:'Artículo' }, { id:'nombre', label:'Nombre y apellidos' }, { id:'telefono', label:'Teléfono' }, { id:'email', label:'Email' }, { id:'detalle', label:'Detalle de la solicitud', tipo:'textarea', placeholder:'Qué necesita…' } ] },
-  reclamacion: { icono:'⚠️', label:'Reclamación', desc:'Reclamación formal sobre un pedido, vendedor o servicio.', categoria:'Reclamación Marketplace', cola:'ES MM Marketplace', estado:'Pendiente', campos:[ { id:'numeroPedido', label:'Número de pedido' }, { id:'articulo', label:'Artículo' }, { id:'vendedor', label:'Vendedor' }, { id:'motivo', label:'Motivo de la reclamación' }, { id:'detalle', label:'Detalle de la reclamación', tipo:'textarea', placeholder:'Describe los hechos…' }, { id:'nombre', label:'Nombre y apellidos' }, { id:'telefono', label:'Teléfono' }, { id:'email', label:'Email' } ] }
+  pedido: { icono:'📦', label:'Consulta de pedido', desc:'El cliente consulta el estado, detalles o seguimiento de un pedido de Marketplace.', categoria:'Consulta pedido Marketplace', cola:'ES MM Marketplace', estado:'Resuelto', campos:[ { id:'numeroPedido', label:'Número de pedido' }, { id:'articulo', label:'Artículo' }, { id:'vendedor', label:'Vendedor' }, { id:'nombre', label:'Nombre y apellidos' }, { id:'telefono', label:'Teléfono' }, { id:'email', label:'Email' }, { id:'detalle', label:'Detalle de la consulta', tipo:'textarea' } ] },
+  envio: { icono:'🚚', label:'Incidencia en el envío', desc:'Retraso, pérdida, daño en el transporte o problema con la entrega.', categoria:'Incidencia envío Marketplace', cola:'ES MM Marketplace', estado:'Pendiente', campos:[ { id:'numeroPedido', label:'Número de pedido' }, { id:'transportista', label:'Transportista' }, { id:'numeroSeguimiento', label:'Nº de seguimiento' }, { id:'articulo', label:'Artículo' }, { id:'nombre', label:'Nombre y apellidos' }, { id:'telefono', label:'Teléfono' }, { id:'email', label:'Email' }, { id:'detalle', label:'Detalle de la incidencia', tipo:'textarea' } ] },
+  devolucion: { icono:'🔄', label:'Devolución Marketplace', desc:'El cliente quiere devolver un producto comprado a un vendedor Marketplace.', categoria:'Devolución Marketplace', cola:'ES MM Marketplace', estado:'Pendiente', campos:[ { id:'numeroPedido', label:'Número de pedido' }, { id:'articulo', label:'Artículo' }, { id:'vendedor', label:'Vendedor' }, { id:'motivo', label:'Motivo de la devolución', tipo:'textarea' }, { id:'nombre', label:'Nombre y apellidos' }, { id:'telefono', label:'Teléfono' }, { id:'email', label:'Email' } ] },
+  garantia: { icono:'🛠️', label:'Garantía o reparación', desc:'Producto Marketplace con defecto o avería.', categoria:'Reparación Marketplace', cola:'ES MM Marketplace', estado:'Pendiente', campos:[ { id:'numeroPedido', label:'Número de pedido' }, { id:'articulo', label:'Artículo' }, { id:'vendedor', label:'Vendedor' }, { id:'fechaCompra', label:'Fecha de compra' }, { id:'fallo', label:'Descripción del fallo', tipo:'textarea' }, { id:'nombre', label:'Nombre y apellidos' }, { id:'telefono', label:'Teléfono' }, { id:'email', label:'Email' } ] },
+  vendedor: { icono:'💬', label:'Contacto con el vendedor', desc:'El cliente quiere contactar directamente con el vendedor.', categoria:'Contacto vendedor Marketplace', cola:'ES MM Marketplace', estado:'Resuelto', campos:[ { id:'numeroPedido', label:'Número de pedido' }, { id:'vendedor', label:'Nombre del vendedor' }, { id:'articulo', label:'Artículo' }, { id:'nombre', label:'Nombre y apellidos' }, { id:'telefono', label:'Teléfono' }, { id:'email', label:'Email' }, { id:'detalle', label:'Detalle de la solicitud', tipo:'textarea' } ] },
+  reclamacion: { icono:'⚠️', label:'Reclamación', desc:'Reclamación formal sobre un pedido, vendedor o servicio.', categoria:'Reclamación Marketplace', cola:'ES MM Marketplace', estado:'Pendiente', campos:[ { id:'numeroPedido', label:'Número de pedido' }, { id:'articulo', label:'Artículo' }, { id:'vendedor', label:'Vendedor' }, { id:'motivo', label:'Motivo de la reclamación' }, { id:'detalle', label:'Detalle de la reclamación', tipo:'textarea' }, { id:'nombre', label:'Nombre y apellidos' }, { id:'telefono', label:'Teléfono' }, { id:'email', label:'Email' } ] }
 };
 
 function plantillaMarketplace(s, d, tipo){
@@ -764,33 +720,17 @@ function plantillaMarketplace(s, d, tipo){
 }
 
 const faqsMarketplace = [
-  { categoria:'contacto', q:'¿Cómo puedo contactar con el vendedor de mi pedido Marketplace?', a:`<p>Si realizaste la compra como <strong>usuario registrado</strong> en nuestra web o App, puedes contactar directamente con el vendedor desde <strong>Área de Cliente → Mis pedidos → Selecciona tu pedido</strong>. Desde allí podrás elegir el motivo de tu consulta, enviar un mensaje y consultar el historial de la conversación.</p><p>Si realizaste la compra <strong>sin iniciar sesión</strong> en nuestra web o App, encontrarás los datos de contacto del vendedor en los emails relacionados con tu pedido, como la confirmación de compra o de envío.</p><p>El vendedor gestionará tu consulta y te responderá a la mayor brevedad posible a través del canal de contacto utilizado.</p>` },
-  { categoria:'contacto', q:'¿Dónde puedo consultar el estado de mi consulta al vendedor?', a:`<p>Si realizaste la compra como <strong>usuario registrado</strong> en nuestra web o App y has contactado con el vendedor desde tu <strong>Área de Cliente → Mis pedidos</strong>, podrás consultar allí los mensajes enviados y recibidos y seguir toda la conversación.</p><p>El vendedor gestionará tu consulta y te responderá a la mayor brevedad posible.</p>` },
-  { categoria:'contacto', q:'¿Dónde puedo consultar la información de un vendedor de Marketplace?', a:`<p>Puedes comprobar quién gestiona el producto tanto antes como después de realizar tu compra:</p><ol class="steps-list"><li><strong>En la página del producto (antes de comprar):</strong> justo debajo del precio, verás la indicación «Vendido y enviado por: [Nombre del vendedor]». Si haces clic sobre el nombre del comercio, podrás acceder a su ficha para consultar la información disponible. Si el producto lo comercializamos nosotros directamente, verás «Vendido y enviado por MediaMarkt».</li><li><strong>En tus comunicaciones y documentación:</strong> en el correo electrónico de confirmación de tu pedido y en los comprobantes de compra encontrarás desglosado qué vendedor externo suministra cada artículo.</li><li><strong>Desde tu cuenta de cliente:</strong> si ya has realizado la compra como usuario registrado, entra en tu <strong>Área de Cliente → Mis pedidos</strong>. En el detalle del pedido verás el nombre del vendedor y encontrarás la opción para contactar directamente con él si necesitas ayuda.</li></ol>` },
-  { categoria:'pedidos', q:'¿Dónde puedo consultar los detalles de mi pedido Marketplace?', a:`<p>Recibirás la información de tu pedido en el <strong>email de confirmación de compra</strong>.</p><p>Si realizaste la compra como <strong>usuario registrado</strong> en nuestra web o App, también puedes consultar la información desde <strong>Mis pedidos</strong> dentro de tu Área de Cliente.</p>` },
-  { categoria:'pedidos', q:'Quiero modificar los datos de entrega. ¿Qué puedo hacer?', a:`<p>La posibilidad de modificar los datos de entrega <strong>dependerá del estado de preparación</strong> del pedido. Contacta cuanto antes con el vendedor para consultar si todavía es posible realizar el cambio.</p><p>Si realizaste la compra como <strong>usuario registrado</strong>, puedes hacerlo desde tu <strong>Área de Cliente → Mis pedidos</strong>. Si compraste como <strong>invitado</strong>, utiliza los datos de contacto del vendedor que encontrarás en los emails de tu pedido.</p>` },
-  { categoria:'pedidos', q:'¿Cuándo recibiré mi pedido?', a:`<p>Cuando el vendedor envíe tu pedido, recibirás un <strong>email con la información disponible sobre el envío</strong> y un enlace para realizar su seguimiento.</p><p>Te recomendamos revisar también la carpeta de <strong>correo no deseado o spam</strong>. Si necesitas más información sobre la entrega, contacta directamente con el vendedor.</p><p>Si realizaste la compra como <strong>usuario registrado</strong>, también podrás ver la información de seguimiento desde tu <strong>Área de Cliente → Mis pedidos</strong>.</p>` },
-  { categoria:'pedidos', q:'Mi pedido todavía no ha llegado. ¿Qué puedo hacer?', a:`<p>Consulta primero el <strong>email de confirmación de envío</strong> y comprueba el seguimiento del pedido si dispones de un enlace de tracking.</p><p>Si la <strong>fecha prevista de entrega ya ha pasado</strong>, no has recibido información de seguimiento o tienes alguna incidencia con la entrega, contacta directamente con el vendedor.</p><p>Si realizaste la compra como <strong>usuario registrado</strong>, puedes hacerlo desde tu <strong>Área de Cliente → Mis pedidos</strong>. Si compraste como <strong>invitado</strong>, encontrarás los datos de contacto del vendedor en los emails de tu pedido.</p>` },
-  { categoria:'pedidos', q:'¿Cómo sé si un producto está disponible?', a:`<p>La <strong>disponibilidad del producto se muestra directamente en su página de producto</strong>.</p><p>La información de stock puede actualizarse a medida que se realizan nuevas compras o el vendedor actualiza la disponibilidad de sus productos. La disponibilidad que se muestre <strong>en el momento de realizar tu pedido</strong> será la que se tendrá en cuenta para la compra.</p>` },
-  { categoria:'pedidos', q:'¿Qué métodos de pago puedo utilizar para comprar en el Marketplace?', a:`<p>Puedes pagar tus pedidos Marketplace mediante <strong>tarjeta de crédito o débito, PayPal, Bizum o financiación</strong>. Las opciones disponibles se mostrarán durante el proceso de compra.</p>` },
-  { categoria:'pedidos', q:'Quiero cancelar mi pedido Marketplace. ¿Qué tengo que hacer?', a:`<p>Puedes cancelar tu pedido Marketplace desde tu <strong>Área de Cliente → Mis pedidos</strong> mientras el vendedor todavía no lo haya enviado. Mientras la cancelación sea posible, encontrarás la opción correspondiente dentro del detalle de tu pedido.</p><p>Una vez que el pedido haya sido <strong>enviado</strong>, la opción de cancelación dejará de estar disponible. Si ya no quieres el producto, deberás solicitar su <strong>devolución al vendedor</strong>.</p><p>Si compraste como <strong>invitado</strong>, encontrarás los datos de contacto del vendedor en los emails relacionados con tu pedido.</p>` },
-  { categoria:'productos', q:'Mi producto ha llegado defectuoso. ¿Qué puedo hacer?', a:`<p>Contacta con el <strong>vendedor</strong> para que pueda revisar el caso y ofrecerte una solución.</p><p>Si realizaste la compra como <strong>usuario registrado</strong>, puedes contactar desde tu <strong>Área de Cliente → Mis pedidos</strong>. Si compraste como <strong>invitado</strong>, encontrarás los datos de contacto del vendedor en los emails relacionados con tu pedido.</p>` },
-  { categoria:'productos', q:'Mi pedido ha llegado incompleto. ¿Qué puedo hacer?', a:`<p>Si falta algún producto, accesorio o componente de tu pedido, contacta directamente con el <strong>vendedor</strong> para que pueda comprobar lo sucedido.</p><p>Si realizaste la compra como <strong>usuario registrado</strong>, puedes hacerlo desde tu <strong>Área de Cliente → Mis pedidos</strong>. Si compraste como <strong>invitado</strong>, utiliza los datos de contacto del vendedor incluidos en los emails de tu pedido.</p>` },
-  { categoria:'productos', q:'He recibido un producto diferente al que compré. ¿Qué puedo hacer?', a:`<p>Contacta con el <strong>vendedor</strong> para que pueda revisar el caso y gestionar la solución correspondiente.</p><p>Si realizaste la compra como <strong>usuario registrado</strong>, puedes hacerlo desde tu <strong>Área de Cliente → Mis pedidos</strong>. Si compraste como <strong>invitado</strong>, encontrarás los datos de contacto del vendedor en los emails de tu pedido.</p>` },
-  { categoria:'productos', q:'Mi producto ha llegado dañado. ¿Qué puedo hacer?', a:`<p>Sentimos que tu pedido haya llegado dañado. Contacta con el <strong>vendedor lo antes posible</strong> para informarle de lo ocurrido y para que pueda indicarte los siguientes pasos.</p><p>Si realizaste la compra como <strong>usuario registrado</strong>, contacta desde tu <strong>Área de Cliente → Mis pedidos</strong>. Si compraste como <strong>invitado</strong>, utiliza los datos de contacto que encontrarás en los emails de tu pedido.</p>` },
-  { categoria:'productos', q:'Mi producto ha dejado de funcionar. ¿Cómo gestiono la garantía?', a:`<p>Si un producto Marketplace presenta un defecto o deja de funcionar, contacta directamente con el <strong>vendedor</strong> para gestionar la garantía y conocer los siguientes pasos.</p><p>Si realizaste la compra como <strong>usuario registrado</strong>, puedes contactar desde tu <strong>Área de Cliente → Mis pedidos</strong>. Si compraste como <strong>invitado</strong>, encontrarás los datos de contacto del vendedor en los emails relacionados con tu pedido.</p>` },
-  { categoria:'facturas', q:'¿Cómo puedo solicitar la factura de mi pedido Marketplace?', a:`<p>La factura de los productos Marketplace es <strong>emitida por el vendedor correspondiente</strong>.</p><p>Si necesitas solicitarla o tienes alguna consulta relacionada con ella, contacta directamente con el vendedor. Si realizaste la compra como <strong>usuario registrado</strong>, puedes hacerlo desde tu <strong>Área de Cliente → Mis pedidos</strong>. Si compraste como <strong>invitado</strong>, utiliza los datos de contacto del vendedor incluidos en los emails de tu pedido.</p>` },
-  { categoria:'devoluciones', q:'Quiero devolver un producto Marketplace. ¿Cómo puedo hacerlo?', a:`<p>Dispones de <strong>30 días</strong> para devolver un producto Marketplace.</p><p>Para gestionar la devolución, contacta directamente con el <strong>vendedor</strong> de tu pedido. El vendedor te indicará cómo realizarla y los pasos necesarios para enviar el producto.</p><p>Si realizaste la compra como <strong>usuario registrado</strong>, puedes solicitar la gestión desde tu <strong>Área de Cliente → Mis pedidos</strong>. Si compraste como <strong>invitado</strong>, encontrarás los datos de contacto del vendedor en los emails de tu pedido.</p><p>⚠️ Si tu pedido contiene productos de <strong>diferentes vendedores</strong>, deberás gestionar la devolución de cada producto con el vendedor correspondiente.</p>` },
-  { categoria:'devoluciones', q:'¿Quién paga los gastos de devolución?', a:`<p>Los gastos de devolución pueden <strong>depender del motivo</strong> de la devolución y de las circunstancias del pedido.</p><p>Contacta con el vendedor <strong>antes de enviar el producto</strong> para que pueda indicarte cómo realizar la devolución y, cuando corresponda, facilitarte las instrucciones o documentación necesaria.</p>` },
-  { categoria:'devoluciones', q:'¿Cuándo recibiré el reembolso de mi devolución?', a:`<p>Una vez que el vendedor procese el reembolso, recibirás un <strong>email de confirmación</strong>. El importe se devolverá utilizando el <strong>mismo método de pago</strong> empleado en la compra y podrás verlo reflejado en tu cuenta en los días siguientes. El plazo puede variar en función de la entidad bancaria o del método de pago utilizado.</p><p>Si quieres consultar el estado de tu reembolso, contacta directamente con el vendedor. Si realizaste la compra como <strong>usuario registrado</strong>, puedes hacerlo desde tu <strong>Área de Cliente → Mis pedidos</strong>, donde además podrás consultar el historial de la conversación.</p>` }
+  { categoria:'contacto', q:'¿Cómo puedo contactar con el vendedor de mi pedido Marketplace?', a:`<p>Si realizaste la compra como <strong>usuario registrado</strong>, puedes contactar directamente con el vendedor desde <strong>Área de Cliente → Mis pedidos</strong>.</p>` },
+  { categoria:'pedidos', q:'¿Cuándo recibiré mi pedido?', a:`<p>Cuando el vendedor envíe tu pedido, recibirás un <strong>email con la información de seguimiento</strong>.</p>` },
+  { categoria:'productos', q:'Mi producto ha llegado defectuoso. ¿Qué puedo hacer?', a:`<p>Contacta con el <strong>vendedor</strong> para que pueda revisar el caso y ofrecerte una solución.</p>` },
+  { categoria:'devoluciones', q:'Quiero devolver un producto Marketplace. ¿Cómo puedo hacerlo?', a:`<p>Dispones de <strong>30 días</strong> para devolver un producto Marketplace. Contacta directamente con el <strong>vendedor</strong>.</p>` }
 ];
-
 const categoriasFaqsMarketplace = {
-  contacto: { label:'📞 Contacto', desc:'Cómo contactar con el vendedor y consultar tus mensajes.' },
-  pedidos: { label:'📦 Pedidos y envíos', desc:'Detalles, seguimiento, cancelación y métodos de pago.' },
-  productos: { label:'🛠️ Productos', desc:'Defectuosos, incompletos, dañados o que no funcionan.' },
-  facturas: { label:'🧾 Facturas', desc:'Solicitud de facturas y gestión de garantías.' },
-  devoluciones: { label:'🔄 Devoluciones', desc:'Plazos, gastos de devolución y estado del reembolso.' }
+  contacto: { label:'📞 Contacto' },
+  pedidos: { label:'📦 Pedidos y envíos' },
+  productos: { label:'🛠️ Productos' },
+  facturas: { label:'🧾 Facturas' },
+  devoluciones: { label:'🔄 Devoluciones' }
 };
 
 function renderOracle({ categoria, cola, estado, extras }){
@@ -827,58 +767,106 @@ function plantillaLayout({ breadcrumb, titulo, badge, info, oracle, campos, volv
   `;
 }
 
-/* =====================================================================
-   views.js
-   ===================================================================== */
-
+/* ==========================================
+   VIEWS
+   ========================================== */
 function viewHome(){
   return `
-    <div class="dashboard-header">
-      <h1>Panel de Operaciones</h1>
-      <p>Bienvenido al centro de control. Selecciona un módulo para comenzar.</p>
-    </div>
-
-    <div class="dash-grid">
-      <div class="dash-card">
-        <h3>Accesos Rápidos</h3>
-        <div class="dash-list">
-          <a class="dash-item" href="#/estado-pedido">
-            <div class="dash-item-left">
-              <div class="dash-item-icon"><svg viewBox="0 0 24 24"><path d="M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4zM6 18.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm13.5-9l1.96 2.5H17V9.5h2.5zm-1.5 9c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg></div>
-              <div class="dash-item-text"><strong>Estado de Pedido</strong><span>Consulta y gestiona el ciclo de vida del pedido</span></div>
-            </div>
-            <span class="dash-item-arrow">→</span>
-          </a>
-          <a class="dash-item" href="#/fecha">
-            <div class="dash-item-left">
-              <div class="dash-item-icon"><svg viewBox="0 0 24 24"><path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.4 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/></svg></div>
-              <div class="dash-item-text"><strong>Solicitud de Reparaciones</strong><span>Registra reparaciones en garantía o fuera de ella</span></div>
-            </div>
-            <span class="dash-item-arrow">→</span>
-          </a>
-          <a class="dash-item" href="#/marketplace">
-            <div class="dash-item-left">
-              <div class="dash-item-icon"><svg viewBox="0 0 24 24"><path d="M19 6h-2c0-2.76-2.24-5-5-5S7 3.24 7 6H5c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-7-3c1.66 0 3 1.34 3 3H9c0-1.66 1.34-3 3-3zm0 10c-2.76 0-5-2.24-5-5h2c0 1.66 1.34 3 3 3s3-1.34 3-3h2c0 2.76-2.24 5-5 5z"/></svg></div>
-              <div class="dash-item-text"><strong>Marketplace</strong><span>Gestiona pedidos y vendedores externos</span></div>
-            </div>
-            <span class="dash-item-arrow">→</span>
-          </a>
+    <div class="dash">
+      <div class="dash__hero">
+        <div class="dash__hero-inner">
+          <div>
+            <span class="dash__eyebrow">Portal interno · MediaMarkt</span>
+            <h1 class="dash__greeting" id="dashGreeting">Bienvenido, <span class="accent">equipo</span></h1>
+            <p class="dash__sub">Centro de control de operaciones. Reparaciones, reclamaciones, marketplace, financiación, estado de pedidos y devoluciones. Todo en un solo lugar.</p>
+          </div>
+          <div class="dash__clock">
+            <div class="dash__clock-time" id="dashClock">--:--:--</div>
+            <div class="dash__clock-date" id="dashDate">—</div>
+          </div>
         </div>
       </div>
 
-      <div class="clock-widget">
-        <div class="clock-user">Ledezma Enterprises</div>
-        <div class="clock-sep"></div>
-        <div class="clock-time" id="relojHora">00:00</div>
-        <div class="clock-date" id="relojFecha">Cargando...</div>
+      <div class="dash__grid">
+        <div class="dash__panel">
+          <div class="dash__panel-head">
+            <h2>Accesos directos</h2>
+            <span>Ir a</span>
+          </div>
+          <ul class="dash__list">
+            <li>
+              <a class="dash__item" href="#/fecha">
+                <span class="dash__item-icon"><svg viewBox="0 0 24 24"><path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.4 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/></svg></span>
+                <span class="dash__item-body">
+                  <span class="dash__item-title">Solicitud de Reparaciones</span>
+                  <span class="dash__item-desc">Registra reparaciones en garantía o fuera de ella.</span>
+                </span>
+                <span class="dash__item-arrow">→</span>
+              </a>
+            </li>
+            <li>
+              <a class="dash__item" href="#/estado-pedido">
+                <span class="dash__item-icon"><svg viewBox="0 0 24 24"><path d="M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4z"/></svg></span>
+                <span class="dash__item-body">
+                  <span class="dash__item-title">Estado de Pedido</span>
+                  <span class="dash__item-desc">Consulta y gestiona el ciclo de vida del pedido.</span>
+                </span>
+                <span class="dash__item-arrow">→</span>
+              </a>
+            </li>
+            <li>
+              <a class="dash__item" href="#/marketplace">
+                <span class="dash__item-icon"><svg viewBox="0 0 24 24"><path d="M19 6h-2c0-2.76-2.24-5-5-5S7 3.24 7 6H5c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2z"/></svg></span>
+                <span class="dash__item-body">
+                  <span class="dash__item-title">Marketplace</span>
+                  <span class="dash__item-desc">Gestiona pedidos y vendedores externos.</span>
+                </span>
+                <span class="dash__item-arrow">→</span>
+              </a>
+            </li>
+            <li>
+              <a class="dash__item" href="#/financiacion">
+                <span class="dash__item-icon"><svg viewBox="0 0 24 24"><path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/></svg></span>
+                <span class="dash__item-body">
+                  <span class="dash__item-title">Financiación</span>
+                  <span class="dash__item-desc">Consulta, requisitos y gestiones de financiación.</span>
+                </span>
+                <span class="dash__item-arrow">→</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+
+        <div class="dash__panel">
+          <div class="dash__panel-head">
+            <h2>Resumen</h2>
+            <span>Módulos</span>
+          </div>
+          <div class="dash__stats">
+            <div class="dash__stat">
+              <span class="dash__stat-icon"><svg viewBox="0 0 24 24"><path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.4 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/></svg></span>
+              <div class="dash__stat-body"><div class="dash__stat-label">Reparaciones</div><div class="dash__stat-value">Garantía / FG</div></div>
+            </div>
+            <div class="dash__stat">
+              <span class="dash__stat-icon"><svg viewBox="0 0 24 24"><path d="M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4z"/></svg></span>
+              <div class="dash__stat-body"><div class="dash__stat-label">Estados de pedido</div><div class="dash__stat-value">${estadosPedido.length} estados</div></div>
+            </div>
+            <div class="dash__stat">
+              <span class="dash__stat-icon"><svg viewBox="0 0 24 24"><path d="M19 6h-2c0-2.76-2.24-5-5-5S7 3.24 7 6H5c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2z"/></svg></span>
+              <div class="dash__stat-body"><div class="dash__stat-label">Marketplace</div><div class="dash__stat-value">${Object.keys(tiposMarketplace).length} gestiones</div></div>
+            </div>
+            <div class="dash__stat">
+              <span class="dash__stat-icon"><svg viewBox="0 0 24 24"><path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/></svg></span>
+              <div class="dash__stat-body"><div class="dash__stat-label">Financiación</div><div class="dash__stat-value">CAIXA BANK</div></div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   `;
 }
 
-function viewNotFound(){
-  return `<div class="card"><div class="alert alert-warning"><h3>Página no encontrada</h3><p>La ruta solicitada no existe.</p></div><a class="btn btn-primary" href="#/">Volver al inicio</a></div>`;
-}
+function viewNotFound(){ return `<div class="card"><div class="alert alert-warning"><h3>Página no encontrada</h3><p>La ruta solicitada no existe.</p></div><a class="btn btn-primary" href="#/">Volver al inicio</a></div>`; }
 
 function viewFecha(){
   const s = state;
@@ -904,7 +892,7 @@ function viewFueraGarantia(){
   const g = state.garantia;
   return `
     <div class="card">
-      <div class="alert alert-danger"><h2>🔴 Fuera de garantía</h2><p>Han transcurrido más de <strong>${g.anios}</strong> años desde la compra (fin de garantía: ${formatearFecha(g.fechaFin)}).</p><p style="margin-top:10px">¿El cliente contrató un seguro en el momento de la compra?</p></div>
+      <div class="alert alert-danger"><h2>🔴 Fuera de garantía</h2><p>Han transcurrido más de <strong>${g.anios}</strong> años desde la compra (fin: ${formatearFecha(g.fechaFin)}).</p><p style="margin-top:10px">¿El cliente contrató un seguro en el momento de la compra?</p></div>
       <a class="btn btn-success" href="#/fuera-garantia/seguro">✅ Sí, tiene seguro</a>
       <a class="btn btn-danger"  href="#/fuera-garantia/sin-seguro">❌ No tiene seguro</a>
       <button class="btn btn-primary" data-nuevo-caso>🔄 Nuevo caso</button>
@@ -915,7 +903,7 @@ function viewFueraGarantia(){
 function viewValidarDanio(){
   return `
     <div class="card">
-      <div class="breadcrumb">Inicio &gt; Reparaciones &gt; Validación de garantía</div>
+      <div class="breadcrumb">Inicio &gt; Reparaciones &gt; Validación</div>
       <h2>🔍 Validación de garantía</h2>
       <div class="alert alert-warning"><h3>¿La incidencia corresponde a un defecto de fabricación?</h3><p><strong>Ejemplos NO cubiertos por garantía:</strong></p><ul><li>Golpes</li><li>Caídas</li><li>Pantalla rota</li><li>Líquidos</li><li>Mal uso</li></ul></div>
       <a class="btn btn-success" href="#/tipo">✅ Sí, es defecto de fabricación</a>
@@ -930,7 +918,7 @@ function viewTipo(){
     <div class="card">
       <div class="breadcrumb">Inicio &gt; Reparaciones &gt; Tipo de artículo</div>
       <h2>¿Qué tipo de artículo es?</h2>
-      <p style="color:var(--text-muted);margin-bottom:16px">Fecha de compra registrada: <strong>${esc(state.fechaCompra)}</strong></p>
+      <p style="color:var(--mm-gray);margin-bottom:16px">Fecha de compra registrada: <strong>${esc(state.fechaCompra)}</strong></p>
       <a class="btn btn-success"   href="#/tipo/paqueteria">📦 Paquetería</a>
       <a class="btn btn-primary"   href="#/tipo/gran-carga">🏠 Gran carga</a>
       <a class="btn btn-purple"    href="#/tipo/tv">📺 TV · 🚲 Bicicletas · 🛴 Patinetes</a>
@@ -943,8 +931,8 @@ function viewPaqueteria(){
   return `
     <div class="card">
       <div class="breadcrumb">Inicio &gt; Reparaciones &gt; Paquetería</div>
-      <h2>📦 Paquetería <span class="badge badge-blue">Garantía vigente</span></h2>
-      <p style="color:var(--text-muted);margin-bottom:24px">Seleccione cómo desea gestionar la reparación:</p>
+      <h2>📦 Paquetería <span class="badge badge-green">Garantía vigente</span></h2>
+      <p style="color:var(--mm-gray);margin-bottom:24px">Seleccione cómo desea gestionar la reparación:</p>
       <a class="btn btn-primary" href="#/paqueteria/tienda">🏪 Gestión en tienda</a>
       <a class="btn btn-success" href="#/paqueteria/online">🚚 Gestión online</a>
       <a class="btn btn-ghost"   href="#/tipo">⬅ Volver</a>
@@ -954,41 +942,38 @@ function viewPaqueteria(){
 
 function viewPaqueteriaTienda(){
   return plantillaLayout({
-    breadcrumb: 'Inicio &gt; Reparaciones &gt; Paquetería &gt; Tienda', titulo: '🏪 Gestión en Tienda Física', badge: { clase: 'badge-blue', texto: 'Garantía vigente' },
+    breadcrumb: 'Inicio &gt; Reparaciones &gt; Paquetería &gt; Tienda', titulo: '🏪 Gestión en Tienda Física', badge: { clase: 'badge-green', texto: 'Garantía vigente' },
     info: `<div class="alert alert-warning"><h3>📌 Información para el agente</h3><p>Indique al cliente que debe acudir a cualquiera de nuestras tiendas físicas con:</p><ul><li>Artículo a reparar.</li><li>Factura o comprobante de compra.</li></ul></div>`,
     oracle: { categoria: 'Solicitud de reparación en garantía', cola: '1er Nivel', estado: 'Resuelto' },
     campos: [ { id:'articulo', label:'Nombre del artículo', placeholder:'Ej: Aspirador Xiaomi' }, { id:'origen', label:'Origen de compra', tipo:'select', opciones:['una de nuestras tiendas','nuestra web'] } ],
     volverA: '#/tipo/paqueteria'
   });
 }
-
 function viewPaqueteriaOnline(){
   return plantillaLayout({
-    breadcrumb: 'Inicio &gt; Reparaciones &gt; Paquetería &gt; Online', titulo: '🚚 Gestión Online', badge: { clase: 'badge-blue', texto: 'Garantía vigente' },
+    breadcrumb: 'Inicio &gt; Reparaciones &gt; Paquetería &gt; Online', titulo: '🚚 Gestión Online', badge: { clase: 'badge-green', texto: 'Garantía vigente' },
     info: `<div class="alert alert-warning"><h3>⚠ Importante</h3><p>El cliente debe disponer del número de serie del artículo.</p><p>Sin el número de serie no será posible completar el formulario.</p></div><a href="https://reparaciones.mediamarkt.es/portal/task/create" target="_blank" rel="noopener" class="btn btn-primary" style="margin-bottom:8px">🌐 Abrir Portal ZIR</a>`,
     oracle: { categoria: 'Solicitud de reparación en garantía', cola: '1er Nivel', estado: 'Resuelto' },
     campos: [ { id:'articulo', label:'Nombre del artículo' }, { id:'origen', label:'Origen de compra', tipo:'select', opciones:['una de nuestras tiendas','nuestra web'] }, { id:'orden', label:'Orden de trabajo', placeholder:'E601-XXXXXX-R-C' } ],
     volverA: '#/tipo/paqueteria'
   });
 }
-
 function viewGranCarga(){
   return `
     <div class="card">
       <div class="breadcrumb">Inicio &gt; Reparaciones &gt; Gran Carga</div>
-      <h2>🏠 Gran Carga <span class="badge badge-blue">Garantía vigente</span></h2>
-      <p style="color:var(--text-muted);margin-bottom:24px">¿Dónde realizó la compra el cliente?</p>
+      <h2>🏠 Gran Carga <span class="badge badge-green">Garantía vigente</span></h2>
+      <p style="color:var(--mm-gray);margin-bottom:24px">¿Dónde realizó la compra el cliente?</p>
       <a class="btn btn-primary" href="#/gran-carga/tienda">🏪 Nuestra tienda física</a>
       <a class="btn btn-success" href="#/gran-carga/web">🌐 Nuestra página web</a>
       <a class="btn btn-ghost"   href="#/tipo">⬅ Volver</a>
     </div>
   `;
 }
-
 function viewGranCargaTienda(){
   return `
     <div class="card">
-      <div class="breadcrumb">Inicio &gt; Reparaciones &gt; Gran Carga &gt; Tienda</div>
+      <div class="breadcrumb">Inicio &gt; Gran Carga &gt; Tienda</div>
       <h2>🏪 Gran Carga — Compra en tienda física</h2>
       <div class="alert alert-info"><p>El cliente dispone de dos opciones para solicitar la reparación.</p></div>
       <a class="btn btn-primary" href="#/gran-carga/tienda/visita">🏪 Acudir a tienda física</a>
@@ -997,31 +982,28 @@ function viewGranCargaTienda(){
     </div>
   `;
 }
-
 function viewGranCargaTiendaVisita(){
   return plantillaLayout({
-    breadcrumb: 'Inicio &gt; Gran Carga &gt; Tienda &gt; Visita', titulo: '🏪 Visita a Tienda Física', badge: { clase: 'badge-blue', texto: 'Garantía vigente' },
-    info: `<div class="alert alert-warning"><p>El cliente puede acudir a <strong>cualquiera de nuestras tiendas físicas</strong>. No es necesario acudir a la misma tienda donde realizó la compra.</p><p>Debe presentar únicamente la factura.</p><p>Desde la tienda se solicitará la visita del técnico al domicilio.</p><p>Recuerda solicitar los datos del cliente para dejar registro de la gestión.</p></div>`,
+    breadcrumb: 'Inicio &gt; Gran Carga &gt; Tienda &gt; Visita', titulo: '🏪 Visita a Tienda Física', badge: { clase: 'badge-green', texto: 'Garantía vigente' },
+    info: `<div class="alert alert-warning"><p>El cliente puede acudir a <strong>cualquiera de nuestras tiendas físicas</strong>. No es necesario acudir a la misma tienda donde realizó la compra.</p><p>Debe presentar únicamente la factura.</p><p>Recuerda solicitar los datos del cliente para dejar registro de la gestión.</p></div>`,
     oracle: { categoria: 'Solicitud de reparación en garantía', cola: '1er Nivel', estado: 'Resuelto' },
     campos: [ { id:'articulo', label:'Artículo' }, { id:'fallo', label:'Información del fallo' } ],
     volverA: '#/gran-carga/tienda'
   });
 }
-
 function viewGranCargaTiendaCorreo(){
   return plantillaLayout({
-    breadcrumb: 'Inicio &gt; Gran Carga &gt; Tienda &gt; Correo', titulo: '📧 Solicitud por Correo — Gran Carga', badge: { clase: 'badge-blue', texto: 'Garantía vigente' },
+    breadcrumb: 'Inicio &gt; Gran Carga &gt; Tienda &gt; Correo', titulo: '📧 Solicitud por Correo — Gran Carga', badge: { clase: 'badge-green', texto: 'Garantía vigente' },
     info: `<div class="alert alert-warning"><h3>📌 Información para el agente</h3><p>Se enviará al cliente una plantilla de Oracle por correo electrónico.</p><p>El cliente deberá responder adjuntando:</p><ul><li>Fotografía de la factura.</li><li>Breve descripción del fallo.</li><li>Teléfono de contacto.</li><li>Dirección donde se encuentra el artículo.</li></ul><p>⚠️ Recuerda pulsar <strong>Guardar</strong> y posteriormente <strong>Enviar</strong>.</p></div>`,
     oracle: { categoria: 'Solicitud de reparación en garantía', cola: 'SAT', estado: 'Resuelto' },
     campos: [ { id:'articulo', label:'Artículo' }, { id:'fallo', label:'Información del fallo' } ],
     volverA: '#/gran-carga/tienda'
   });
 }
-
 function viewGranCargaWeb(){
   return `
     <div class="card">
-      <div class="breadcrumb">Inicio &gt; Reparaciones &gt; Gran Carga &gt; Web</div>
+      <div class="breadcrumb">Inicio &gt; Gran Carga &gt; Web</div>
       <h2>🌐 Gran Carga — Compra Web</h2>
       <div class="alert alert-info"><p>Seleccione la opción que prefiera el cliente para gestionar la reparación.</p></div>
       <a class="btn btn-success" href="#/gran-carga/web/sat">📨 Escalar directamente a SAT</a>
@@ -1030,85 +1012,77 @@ function viewGranCargaWeb(){
     </div>
   `;
 }
-
 function viewGranCargaWebTienda(){
   return plantillaLayout({
-    breadcrumb: 'Inicio &gt; Gran Carga &gt; Web &gt; Tienda', titulo: '🏪 Compra Web — Tienda Física', badge: { clase: 'badge-blue', texto: 'Garantía vigente' },
-    info: `<div class="alert alert-warning"><p>El cliente puede acudir a <strong>cualquiera de nuestras tiendas físicas</strong>.</p><p>Debe presentar la factura o comprobante de compra.</p><p>Desde la tienda se solicitará la visita técnica correspondiente.</p><p>Recuerda solicitar los datos del cliente para dejar registro de la gestión.</p></div>`,
+    breadcrumb: 'Inicio &gt; Gran Carga &gt; Web &gt; Tienda', titulo: '🏪 Compra Web — Tienda Física', badge: { clase: 'badge-green', texto: 'Garantía vigente' },
+    info: `<div class="alert alert-warning"><p>El cliente puede acudir a <strong>cualquiera de nuestras tiendas físicas</strong>.</p><p>Debe presentar la factura o comprobante de compra.</p><p>Recuerda solicitar los datos del cliente para dejar registro de la gestión.</p></div>`,
     oracle: { categoria: 'Solicitud de reparación en garantía', cola: '1er Nivel', estado: 'Resuelto' },
     campos: [ { id:'articulo', label:'Artículo' }, { id:'fallo', label:'Información del fallo' } ],
     volverA: '#/gran-carga/web'
   });
 }
-
 function viewGranCargaWebSat(){
   return plantillaLayout({
     breadcrumb: 'Inicio &gt; Gran Carga &gt; Web &gt; SAT', titulo: '📨 Escalado SAT', badge: { clase: 'badge-blue', texto: 'Pendiente' },
     info: `<div class="alert alert-warning"><p>Solicita al cliente la siguiente información:</p><ul><li>Número de pedido online.</li><li>Teléfono de contacto.</li><li>Dirección donde se encuentra el artículo.</li><li>Breve descripción del fallo.</li></ul></div>`,
-    oracle: { categoria: 'Solicitud de reparación en garantía', cola: 'SAT', estado: 'Pendiente', extras: [ { k:'Pedido', v:'Completar' }, { k:'Tipo de pedido', v:'Completar' } ] },
-    campos: [ { id:'articulo', label:'Artículo' }, { id:'pedido', label:'Número de pedido' }, { id:'telefono', label:'Teléfono de contacto' }, { id:'direccion', label:'Dirección' }, { id:'fallo', label:'Descripción del fallo' } ],
+    oracle: { categoria: 'Solicitud de reparación en garantía', cola: 'SAT', estado: 'Pendiente' },
+    campos: [ { id:'articulo', label:'Artículo' }, { id:'pedido', label:'Número de pedido' }, { id:'telefono', label:'Teléfono' }, { id:'direccion', label:'Dirección' }, { id:'fallo', label:'Descripción del fallo' } ],
     volverA: '#/gran-carga/web'
   });
 }
-
 function viewTvPatinetes(){
   return plantillaLayout({
     breadcrumb: 'Inicio &gt; Reparaciones &gt; TV · Bicicletas · Patinetes', titulo: '📺 TV · 🚲 Bicicletas · 🛴 Patinetes', badge: { clase: 'badge-blue', texto: 'Front Office Reparaciones' },
-    info: `<div class="alert alert-warning"><h3>📌 Gestión</h3><p>La solicitud debe <strong>escalarse al equipo de Front Office Reparaciones</strong>.</p><p>Si son <strong>antes de las 18:00 h (España)</strong>, se puede realizar transferencia directa en llamada.</p><p>Si son las 18:00 o más tarde, no será posible transferir y únicamente se dejará el caso escalado.</p><p><strong>No hay transferencias fines de semana ni festivos.</strong></p></div><div class="alert alert-info" id="horaEspana" aria-live="polite">Cargando hora…</div>`,
+    info: `<div class="alert alert-warning"><h3>📌 Gestión</h3><p>La solicitud debe <strong>escalarse al equipo de Front Office Reparaciones</strong>.</p><p>Si son <strong>antes de las 18:00 h (España)</strong>, se puede realizar transferencia directa en llamada.</p><p><strong>No hay transferencias fines de semana ni festivos.</strong></p></div><div class="alert alert-info" id="horaEspana" aria-live="polite">Cargando hora…</div>`,
     oracle: { categoria: 'Solicitud de reparación en garantía', cola: 'Front Office Reparaciones', estado: 'Pendiente' },
-    campos: [ { id:'tipoArticulo', label:'Tipo de artículo', tipo:'select', opciones:['Televisor','Bicicleta eléctrica','Patinete eléctrico'] }, { id:'origen', label:'Compra realizada en', tipo:'select', opciones:['nuestra tienda','nuestra web'] }, { id:'pedido', label:'Pedido' }, { id:'telefono', label:'Teléfono de contacto' }, { id:'direccion', label:'Dirección del artículo' }, { id:'fallo', label:'Descripción del fallo' } ],
+    campos: [ { id:'tipoArticulo', label:'Tipo de artículo', tipo:'select', opciones:['Televisor','Bicicleta eléctrica','Patinete eléctrico'] }, { id:'origen', label:'Compra realizada en', tipo:'select', opciones:['nuestra tienda','nuestra web'] }, { id:'pedido', label:'Pedido' }, { id:'telefono', label:'Teléfono' }, { id:'direccion', label:'Dirección del artículo' }, { id:'fallo', label:'Descripción del fallo' } ],
     volverA: '#/tipo'
   });
 }
-
 function viewFueraGarantiaSeguro(){
   return `
     <div class="card">
-      <div class="breadcrumb">Inicio &gt; Reparaciones &gt; Fuera de garantía &gt; Seguro</div>
+      <div class="breadcrumb">Inicio &gt; Fuera de garantía &gt; Seguro</div>
       <h2>🛡️ Uso de póliza de seguro</h2>
-      <div class="alert alert-info"><p>El cliente confirma que contrató un seguro en el momento de la compra.</p><p>Selecciona la opción según la fecha de compra y el tipo de artículo:</p></div>
+      <div class="alert alert-info"><p>Selecciona la opción según la fecha de compra y el tipo de artículo:</p></div>
       <a class="btn btn-primary" href="#/fuera-garantia/seguro/square-trade">🛡️ Seguro Square Trade (compra ≥ 01/05/2023)</a>
-      <a class="btn btn-secondary" href="#/fuera-garantia/seguro/movil">📱 Teléfono móvil (compra &lt; 01/05/2023)</a>
-      <a class="btn btn-secondary" href="#/fuera-garantia/seguro/domestic">📦 Otros productos (compra &lt; 01/05/2023)</a>
+      <a class="btn btn-secondary" href="#/fuera-garantia/seguro/movil">📱 Teléfono móvil (&lt; 01/05/2023)</a>
+      <a class="btn btn-secondary" href="#/fuera-garantia/seguro/domestic">📦 Otros productos (&lt; 01/05/2023)</a>
       <a class="btn btn-ghost" href="#/fuera-garantia">⬅ Volver</a>
     </div>
   `;
 }
-
 function viewSeguroSquareTrade(){
   return plantillaLayout({
-    breadcrumb: 'Inicio &gt; Fuera de garantía &gt; Seguro &gt; Square Trade', titulo: '🛡️ Uso de póliza Square Trade', badge: { clase: 'badge-green', texto: 'Seguro contratado' },
-    info: `<div class="alert alert-info"><p>El cliente confirma que contrató un seguro.</p><p>Debe contactar con:</p><h2 style="color:var(--mm-red);margin:10px 0">📞 900 905 098</h2><p>Seleccionando la opción <strong>1</strong> para hacer uso de la póliza.</p></div>`,
+    breadcrumb: 'Fuera de garantía &gt; Seguro &gt; Square Trade', titulo: '🛡️ Póliza Square Trade', badge: { clase: 'badge-green', texto: 'Seguro contratado' },
+    info: `<div class="alert alert-info"><p>El cliente debe contactar con:</p><h2 style="color:var(--mm-red);margin:10px 0">📞 900 905 098</h2><p>Seleccionando la opción <strong>1</strong> para hacer uso de la póliza.</p></div>`,
     oracle: { categoria: 'Square Trade - Uso de póliza', cola: '1er Nivel', estado: 'Resuelto' },
     campos: [ { id:'articulo', label:'Artículo' } ],
     volverA: '#/fuera-garantia/seguro'
   });
 }
-
 function viewSeguroMovil(){
   return plantillaLayout({
-    breadcrumb: 'Inicio &gt; Fuera de garantía &gt; Seguro &gt; Móvil', titulo: '🛡️ Uso de póliza Square Trade (móvil)', badge: { clase: 'badge-green', texto: 'Seguro contratado' },
-    info: `<div class="alert alert-info"><p>Al tratarse de un <strong>teléfono móvil</strong> con compra anterior al 01/05/2023, el cliente debe contactar con:</p><h2 style="color:var(--mm-red);margin:10px 0">📞 871 182 501</h2><p>✉ servicioalcliente@squaretrade.es</p><p><strong>Horario:</strong> L-V 10:00 a 22:00 · Sábados 10:00 a 16:00</p></div>`,
+    breadcrumb: 'Fuera de garantía &gt; Seguro &gt; Móvil', titulo: '🛡️ Square Trade (móvil)', badge: { clase: 'badge-green', texto: 'Seguro contratado' },
+    info: `<div class="alert alert-info"><p>Contacto Square Trade para móviles:</p><h2 style="color:var(--mm-red);margin:10px 0">📞 871 182 501</h2><p>✉ servicioalcliente@squaretrade.es</p><p><strong>Horario:</strong> L-V 10:00 a 22:00 · Sábados 10:00 a 16:00</p></div>`,
     oracle: { categoria: 'Square Trade - Uso de póliza', cola: '1er Nivel', estado: 'Resuelto' },
     campos: [ { id:'articulo', label:'Artículo' } ],
     volverA: '#/fuera-garantia/seguro'
   });
 }
-
 function viewSeguroDomestic(){
   return plantillaLayout({
-    breadcrumb: 'Inicio &gt; Fuera de garantía &gt; Seguro &gt; Domestic', titulo: '🛡️ Uso de póliza Domestic & General', badge: { clase: 'badge-green', texto: 'Seguro contratado' },
+    breadcrumb: 'Fuera de garantía &gt; Seguro &gt; Domestic', titulo: '🛡️ Domestic & General', badge: { clase: 'badge-green', texto: 'Seguro contratado' },
     info: `<div class="alert alert-info"><p>El cliente debe contactar con:</p><h2 style="color:var(--mm-red);margin:10px 0">📞 900 823 608</h2><p>✉ soporte.clientes@domesticandgeneral.com</p><p><strong>Horario:</strong> L-V 08:00 a 20:00 · Sábados 09:00 a 20:00</p></div>`,
     oracle: { categoria: 'Suscripciones - Uso de póliza', cola: '1er Nivel', estado: 'Resuelto' },
     campos: [ { id:'articulo', label:'Artículo' } ],
     volverA: '#/fuera-garantia/seguro'
   });
 }
-
 function viewFueraGarantiaSinSeguro(){
   return `
     <div class="card">
-      <div class="breadcrumb">Inicio &gt; Reparaciones &gt; Fuera de garantía &gt; Sin seguro</div>
+      <div class="breadcrumb">Fuera de garantía &gt; Sin seguro</div>
       <h2>🔧 Reparación fuera de garantía <span class="badge badge-red">Fuera de garantía</span></h2>
       <div class="alert alert-warning"><p>El cliente <strong>no dispone de seguro</strong> asociado a la compra.</p><p>Selecciona el tipo de artículo para continuar:</p></div>
       <a class="btn btn-success" href="#/fuera-garantia/paqueteria">📦 Paquetería</a>
@@ -1117,11 +1091,10 @@ function viewFueraGarantiaSinSeguro(){
     </div>
   `;
 }
-
 function viewFueraGarantiaPaqueteria(){
   return `
     <div class="card">
-      <div class="breadcrumb">Inicio &gt; Fuera de garantía &gt; Paquetería</div>
+      <div class="breadcrumb">Fuera de garantía &gt; Paquetería</div>
       <h2>📦 Paquetería fuera de garantía <span class="badge badge-red">Fuera de garantía</span></h2>
       <h3>Seleccione una opción</h3>
       <a class="btn btn-primary" href="#/fuera-garantia/paqueteria/tienda">🏪 Acudir a tienda</a>
@@ -1130,52 +1103,47 @@ function viewFueraGarantiaPaqueteria(){
     </div>
   `;
 }
-
 function viewFueraGarantiaPaqueteriaTienda(){
   return plantillaLayout({
-    breadcrumb: 'Inicio &gt; Fuera de garantía &gt; Paquetería &gt; Tienda', titulo: '🏪 Reparación fuera de garantía — Tienda física', badge: { clase: 'badge-red', texto: 'Fuera de garantía' },
-    info: `<div class="alert alert-info"><p>El cliente puede acudir a cualquiera de nuestras tiendas físicas con el artículo.</p><p>Desde la tienda podrán ayudarle con la gestión de la reparación.</p></div>`,
+    breadcrumb: 'Fuera de garantía &gt; Paquetería &gt; Tienda', titulo: '🏪 Reparación fuera de garantía — Tienda', badge: { clase: 'badge-red', texto: 'Fuera de garantía' },
+    info: `<div class="alert alert-info"><p>El cliente puede acudir a cualquiera de nuestras tiendas físicas con el artículo.</p></div>`,
     oracle: { categoria: 'Solicitud de reparación fuera de garantía', cola: '1er Nivel', estado: 'Resuelto' },
     campos: [ { id:'articulo', label:'Artículo' } ],
     volverA: '#/fuera-garantia/paqueteria'
   });
 }
-
 function viewFueraGarantiaPaqueteriaHub(){
   return plantillaLayout({
-    breadcrumb: 'Inicio &gt; Fuera de garantía &gt; Paquetería &gt; HUB', titulo: '🚚 HUB Service Center', badge: { clase: 'badge-red', texto: 'Pendiente' },
-    info: `<div class="alert alert-warning"><h3>⚠ Importante — Coste adicional</h3><p>Además del coste de la reparación se cobrará un importe adicional de <strong>9,99 €</strong> por la recogida del artículo en el domicilio.</p><p>Es obligatorio informar al cliente antes de escalar el caso.</p></div>`,
+    breadcrumb: 'Fuera de garantía &gt; Paquetería &gt; HUB', titulo: '🚚 HUB Service Center', badge: { clase: 'badge-blue', texto: 'Pendiente' },
+    info: `<div class="alert alert-warning"><h3>⚠ Importante — Coste adicional</h3><p>Además del coste de la reparación se cobrará un importe adicional de <strong>9,99 €</strong> por la recogida del artículo en el domicilio.</p></div>`,
     oracle: { categoria: 'Solicitud de reparación fuera de garantía', cola: 'ES MM HUB Service Center', estado: 'Pendiente' },
     campos: [ { id:'descripcion', label:'Descripción de la solicitud' }, { id:'fallo', label:'Fallo concreto del artículo' }, { id:'modelo', label:'Marca y modelo' }, { id:'nombre', label:'Nombre y apellidos' }, { id:'telefono', label:'Teléfono' }, { id:'email', label:'Email' } ],
     volverA: '#/fuera-garantia/paqueteria'
   });
 }
-
 function viewFueraGarantiaGranCarga(){
   return `
     <div class="card">
-      <div class="breadcrumb">Inicio &gt; Fuera de garantía &gt; Gran carga</div>
+      <div class="breadcrumb">Fuera de garantía &gt; Gran carga</div>
       <h2>🏠 Gran carga fuera de garantía <span class="badge badge-red">Fuera de garantía</span></h2>
-      <div class="alert alert-info"><h3>ℹ️ Información al cliente</h3><p>El cliente debe contactar directamente con el SAT de la marca.</p><p>También puede acudir a cualquier técnico reparador multimarca o al técnico de su elección.</p><p>Al haber finalizado la garantía del fabricante, <strong>no es obligatorio contactar con un servicio técnico concreto</strong>.</p></div>
+      <div class="alert alert-info"><h3>ℹ️ Información al cliente</h3><p>El cliente debe contactar directamente con el SAT de la marca o con cualquier técnico reparador multimarca.</p></div>
       <a class="btn btn-primary" href="#/fuera-garantia/gran-carga/buscar-sat">🔍 Buscar SAT</a>
       <a class="btn btn-success" href="#/fuera-garantia/gran-carga/plantilla">📝 Generar plantilla</a>
       <a class="btn btn-ghost"   href="#/fuera-garantia/sin-seguro">⬅ Volver</a>
     </div>
   `;
 }
-
 function viewFueraGarantiaGranCargaPlantilla(){
   return plantillaLayout({
-    breadcrumb: 'Inicio &gt; Fuera de garantía &gt; Gran carga &gt; Plantilla', titulo: '📝 Plantilla Oracle — Fuera de garantía', badge: { clase: 'badge-red', texto: 'Fuera de garantía' },
+    breadcrumb: 'Fuera de garantía &gt; Gran carga &gt; Plantilla', titulo: '📝 Plantilla Oracle — Fuera de garantía', badge: { clase: 'badge-red', texto: 'Fuera de garantía' },
     info: '', oracle: { categoria: 'Solicitud de reparación fuera de garantía', cola: '1er Nivel', estado: 'Resuelto' },
     campos: [ { id:'articulo', label:'Artículo' } ], volverA: '#/fuera-garantia/gran-carga'
   });
 }
-
 function viewBuscarSat(){
   return `
     <div class="card">
-      <div class="breadcrumb">Inicio &gt; Fuera de garantía &gt; Gran carga &gt; Buscar SAT</div>
+      <div class="breadcrumb">Fuera de garantía &gt; Gran carga &gt; Buscar SAT</div>
       <h2>🔍 Buscar SAT de la marca</h2>
       <label for="marcaSAT">Marca</label>
       <input type="text" id="marcaSAT" placeholder="Ej: Samsung" oninput="buscarSAT()">
@@ -1184,20 +1152,18 @@ function viewBuscarSat(){
     </div>
   `;
 }
-
 function viewReclamacionHub(){
   return `
     <div class="card">
-      <div class="breadcrumb">Inicio &gt; Reclamación de reparaciones</div>
+      <div class="breadcrumb">Inicio &gt; Reclamación</div>
       <h2>📣 Reclamación de reparaciones</h2>
-      <p style="color:var(--text-muted);margin-bottom:24px">Seleccione el tipo de artículo:</p>
-      <a class="btn btn-success" href="#/reclamacion/paqueteria">📦 Paquetería · TV · Bicicleta eléctrica · Patinete</a>
+      <p style="color:var(--mm-gray);margin-bottom:24px">Seleccione el tipo de artículo:</p>
+      <a class="btn btn-success" href="#/reclamacion/paqueteria">📦 Paquetería · TV · Bicicleta · Patinete</a>
       <a class="btn btn-primary" href="#/reclamacion/gran-carga">🏠 Gran carga</a>
       <a class="btn btn-ghost" href="#/">⬅ Volver</a>
     </div>
   `;
 }
-
 function viewReclamacionListaPaqueteria(){
   const motivos = Object.entries(tiposReclamacion).map(([slug, t]) => `<a class="btn btn-secondary" href="#/reclamacion/paqueteria/${slug}">${esc(t.label)}</a>`).join('');
   return `
@@ -1212,7 +1178,6 @@ function viewReclamacionListaPaqueteria(){
     </div>
   `;
 }
-
 function viewReclamacionListaGranCarga(){
   const motivos = Object.entries(tiposReclamacion).map(([slug, t]) => `<a class="btn btn-secondary" href="#/reclamacion/gran-carga/${slug}">${esc(t.label)}</a>`).join('');
   return `
@@ -1226,211 +1191,179 @@ function viewReclamacionListaGranCarga(){
     </div>
   `;
 }
-
 function viewReclamacionForm(tipoSlug, rama){
   const tipoInfo = tiposReclamacion[tipoSlug]; if(!tipoInfo) return viewNotFound();
   const esPaqueteria = rama === 'paqueteria';
-  const campos = [ ...(esPaqueteria ? [{ id:'orden', label:'Orden de trabajo', placeholder:'E601-XXXXXX-R-C' }] : []), { id:'nombre', label:'Nombre y apellidos' }, { id:'telefono', label:'Teléfono' }, { id:'email', label:'Email' }, { id:'detalle', label:'Detalle de la reclamación', tipo:'textarea', placeholder:'Describe brevemente lo sucedido…' } ];
+  const campos = [ ...(esPaqueteria ? [{ id:'orden', label:'Orden de trabajo', placeholder:'E601-XXXXXX-R-C' }] : []), { id:'nombre', label:'Nombre y apellidos' }, { id:'telefono', label:'Teléfono' }, { id:'email', label:'Email' }, { id:'detalle', label:'Detalle de la reclamación', tipo:'textarea' } ];
   return plantillaLayout({
-    breadcrumb: `Inicio &gt; Reclamación &gt; ${esPaqueteria ? 'Paquetería' : 'Gran Carga'} &gt; ${esc(tipoInfo.label.replace(/^[^ ]+ /,''))}`,
+    breadcrumb: `Reclamación &gt; ${esPaqueteria ? 'Paquetería' : 'Gran Carga'} &gt; ${esc(tipoInfo.label.replace(/^[^ ]+ /,''))}`,
     titulo: esPaqueteria ? '📦 Reclamación de reparación' : '🏠 Reclamación Gran Carga',
-    badge: esPaqueteria ? { clase:'badge-blue', texto:'Front Office Reparaciones' } : { clase:'badge-red', texto:'Avisos SAT GC' },
-    info: esPaqueteria ? `<div class="alert alert-warning"><p>Recuerda <strong>hablar con el compañero antes de transferir</strong> a ES MM Front Office Reparaciones (opción CC SPV).</p></div>` : '',
-    oracle: { categoria: tipoInfo.categoria, cola: colasReclamacion[rama], estado: 'Pendiente', extras: [{ k:'Tienda', v:'Online / Tienda' }] },
+    badge: esPaqueteria ? { clase:'badge-blue', texto:'Front Office' } : { clase:'badge-red', texto:'Avisos SAT GC' },
+    info: esPaqueteria ? `<div class="alert alert-warning"><p>Recuerda <strong>hablar con el compañero antes de transferir</strong> a ES MM Front Office Reparaciones.</p></div>` : '',
+    oracle: { categoria: tipoInfo.categoria, cola: colasReclamacion[rama], estado: 'Pendiente' },
     campos, volverA: `#/reclamacion/${rama}`
   });
 }
-
 function viewFinanciacionHub(){
   return `
     <div class="card">
       <div class="breadcrumb">Inicio &gt; Financiación</div>
       <h2>🏦 Financiación</h2>
-      <p style="color:var(--text-muted);margin-bottom:24px">Consulta, requisitos y gestiones de financiación de los clientes.</p>
+      <p style="color:var(--mm-gray);margin-bottom:24px">Consulta, requisitos y gestiones de financiación de los clientes.</p>
       <div class="fin-grid">
-        <a class="fin-card" href="#/financiacion/consulta"><span class="fin-card-icon">🔍</span><span class="fin-card-title">Consulta de financiación <span class="badge badge-green">Resuelto</span></span><span class="fin-card-desc">Comprueba el estado, condiciones o cuotas.</span><span class="fin-card-arrow">→</span></a>
-        <a class="fin-card" href="#/financiacion/requisitos"><span class="fin-card-icon">📋</span><span class="fin-card-title">Requisitos <span class="badge badge-green">Resuelto</span></span><span class="fin-card-desc">Consulta los requisitos y documentación.</span><span class="fin-card-arrow">→</span></a>
-        <a class="fin-card" href="#/financiacion/solicitud"><span class="fin-card-icon">📝</span><span class="fin-card-title">Cómo solicitar <span class="badge badge-green">Resuelto</span></span><span class="fin-card-desc">Pasos para solicitar la Club Card.</span><span class="fin-card-arrow">→</span></a>
-        <a class="fin-card" href="#/financiacion/condiciones"><span class="fin-card-icon">💳</span><span class="fin-card-title">Condiciones <span class="badge badge-green">Resuelto</span></span><span class="fin-card-desc">Modalidades, plazos e intereses.</span><span class="fin-card-arrow">→</span></a>
-        <a class="fin-card" href="#/financiacion/gestiones"><span class="fin-card-icon">📣</span><span class="fin-card-title">Gestiones <span class="badge badge-red">Escalar</span></span><span class="fin-card-desc">Reclamaciones o cancelaciones.</span><span class="fin-card-arrow">→</span></a>
-        <a class="fin-card" href="#/financiacion/ventajas"><span class="fin-card-icon">⭐</span><span class="fin-card-title">Ventajas <span class="badge badge-green">Resuelto</span></span><span class="fin-card-desc">Beneficios de la tarjeta.</span><span class="fin-card-arrow">→</span></a>
-        <a class="fin-card" href="#/financiacion/faqs"><span class="fin-card-icon">❓</span><span class="fin-card-title">Preguntas frecuentes <span class="badge badge-green">Resuelto</span></span><span class="fin-card-desc">Respuestas rápidas.</span><span class="fin-card-arrow">→</span></a>
+        <a class="fin-card" href="#/financiacion/consulta"><span class="fin-card-icon">🔍</span><span class="fin-card-title">Consulta de financiación</span><span class="fin-card-desc">Comprueba el estado, condiciones o cuotas.</span><span class="fin-card-arrow">→</span></a>
+        <a class="fin-card" href="#/financiacion/requisitos"><span class="fin-card-icon">📋</span><span class="fin-card-title">Requisitos</span><span class="fin-card-desc">Consulta los requisitos y documentación.</span><span class="fin-card-arrow">→</span></a>
+        <a class="fin-card" href="#/financiacion/solicitud"><span class="fin-card-icon">📝</span><span class="fin-card-title">Cómo solicitar</span><span class="fin-card-desc">Pasos para solicitar la Club Card.</span><span class="fin-card-arrow">→</span></a>
+        <a class="fin-card" href="#/financiacion/condiciones"><span class="fin-card-icon">💳</span><span class="fin-card-title">Condiciones</span><span class="fin-card-desc">Modalidades, plazos e intereses.</span><span class="fin-card-arrow">→</span></a>
+        <a class="fin-card" href="#/financiacion/gestiones"><span class="fin-card-icon">📣</span><span class="fin-card-title">Gestiones</span><span class="fin-card-desc">Reclamaciones o cancelaciones.</span><span class="fin-card-arrow">→</span></a>
+        <a class="fin-card" href="#/financiacion/ventajas"><span class="fin-card-icon">⭐</span><span class="fin-card-title">Ventajas</span><span class="fin-card-desc">Beneficios de la tarjeta.</span><span class="fin-card-arrow">→</span></a>
+        <a class="fin-card" href="#/financiacion/faqs"><span class="fin-card-icon">❓</span><span class="fin-card-title">Preguntas frecuentes</span><span class="fin-card-desc">Respuestas rápidas.</span><span class="fin-card-arrow">→</span></a>
       </div>
       <div style="margin-top:24px"><a class="btn btn-ghost" href="#/">⬅ Volver</a></div>
     </div>
   `;
 }
-
 function viewFinanciacionConsulta(){
   return `
     <div class="card">
-      <div class="breadcrumb">Inicio &gt; Financiación &gt; Consulta</div>
+      <div class="breadcrumb">Financiación &gt; Consulta</div>
       <h2>🔍 Consulta de financiación</h2>
-      <div class="alert alert-info"><h3>ℹ️ ¿Cuándo usar esta opción?</h3><p>Cuando un cliente contacta para <strong>consultar el estado, condiciones o cuotas</strong> de una financiación existente.</p></div>
-      <div class="oracle"><h3>🖥️ Oracle</h3><p><strong>Categoría:</strong> Condiciones y documentación</p><p><strong>Cola:</strong> 1er Nivel</p><p><strong>Estado:</strong> Resuelto</p><p><strong>Registro:</strong> Anónimo.</p></div>
-      <div class="alert alert-success"><h3>✅ Gestión informativa — No requiere transferencia</h3></div>
-      <div class="alert alert-warning"><h3>📞 Transferencia a CAIXA BANK</h3><p>Si el cliente necesita información detallada, transferir a CAIXA BANK.</p></div>
-      <div class="alert alert-danger" style="text-align:center"><h3>📱 Número de contacto CAIXA BANK</h3><p style="font-size:28px;font-weight:800;color:var(--mm-red);letter-spacing:1px;margin:8px 0">900 101 161</p><p><strong>Horario:</strong><br>Lunes a domingo, de 09:00 a 23:00 h</p></div>
-      <h3>📋 Pasos a seguir</h3>
-      <ol class="steps-list"><li>Informar al cliente de las condiciones generales.</li><li>Registrar la gestión en Oracle.</li><li>Si requiere más detalle, facilitar el número 900 101 161 antes de transferir.</li><li>Transferir la llamada a CAIXA BANK (solo si es necesario).</li></ol>
+      <div class="alert alert-info"><h3>ℹ️ ¿Cuándo usar esta opción?</h3><p>Cuando un cliente contacta para <strong>consultar el estado, condiciones o cuotas</strong>.</p></div>
+      <div class="oracle"><h3>🖥️ Oracle</h3><p><strong>Categoría:</strong> Condiciones y documentación</p><p><strong>Cola:</strong> 1er Nivel</p><p><strong>Estado:</strong> Resuelto</p></div>
+      <div class="alert alert-danger" style="text-align:center"><h3>📱 Contacto CAIXA BANK</h3><p style="font-size:28px;font-weight:800;color:var(--mm-red);margin:8px 0">900 101 161</p><p><strong>Horario:</strong> L-D, 09:00 a 23:00 h</p></div>
       <a class="btn btn-ghost" href="#/financiacion">⬅ Volver</a>
     </div>
   `;
 }
-
 function viewFinanciacionRequisitos(){
   return `
     <div class="card">
-      <div class="breadcrumb">Inicio &gt; Financiación &gt; Requisitos</div>
+      <div class="breadcrumb">Financiación &gt; Requisitos</div>
       <h2>📋 Requisitos de financiación</h2>
-      <div class="alert alert-info"><h3>ℹ️ ¿Qué es la financiación MediaMarkt?</h3><p>Permite <strong>pagar y fraccionar</strong> compras mediante la <strong>MediaMarkt Club Card</strong>. Es <strong>100% gratuita</strong>.</p></div>
-      <div class="oracle"><h3>🖥️ Oracle</h3><p><strong>Categoría:</strong> Condiciones y documentación</p><p><strong>Cola:</strong> 1er Nivel</p><p><strong>Estado:</strong> Resuelto</p><p><strong>Registro:</strong> Anónimo.</p></div>
+      <div class="alert alert-info"><p>Permite <strong>pagar y fraccionar</strong> compras mediante la <strong>MediaMarkt Club Card</strong>. Es <strong>100% gratuita</strong>.</p></div>
       <h3>📌 Requisitos generales</h3>
       <ul class="check-list"><li>Ser <strong>mayor de 18 años</strong>.</li><li>Importe entre <strong>100 € y 10.000 €</strong>.</li><li>No tener entradas negativas en <strong>Schufa o Infoscore</strong>.</li><li>Ingresos netos mínimos de <strong>650 €/mes</strong> a partir de 1.500 € financiados.</li><li>Tener cuenta bancaria activa.</li><li>Residir en España.</li></ul>
-      <h3>👥 Requisitos por perfil</h3>
-      <table class="info-table"><thead><tr><th>Perfil</th><th>Requisitos</th></tr></thead><tbody><tr><td><strong>Cuenta ajena</strong></td><td>Ingresos netos mínimos de 650 €/mes a partir de 1.500 € financiados.</td></tr><tr><td><strong>Autónomos</strong></td><td>Mínimo 12 meses de actividad y máximo 5.000 €.</td></tr><tr><td><strong>Estudiantes</strong></td><td>Máximo 1.500 € y plazo máximo de 20 meses.</td></tr><tr><td><strong>Hogar</strong></td><td>Máximo 1.500 €, plazo 20 meses, mayor de 25 años y casado/a.</td></tr></tbody></table>
       <a class="btn btn-ghost" href="#/financiacion">⬅ Volver</a>
     </div>
   `;
 }
-
 function viewFinanciacionSolicitud(){
   return `
     <div class="card">
-      <div class="breadcrumb">Inicio &gt; Financiación &gt; Solicitud</div>
+      <div class="breadcrumb">Financiación &gt; Solicitud</div>
       <h2>📝 Cómo solicitar la financiación</h2>
-      <div class="oracle"><h3>🖥️ Oracle</h3><p><strong>Categoría:</strong> Condiciones y documentación</p><p><strong>Cola:</strong> 1er Nivel</p><p><strong>Estado:</strong> Resuelto</p><p><strong>Registro:</strong> Anónimo.</p></div>
+      <div class="oracle"><h3>🖥️ Oracle</h3><p><strong>Categoría:</strong> Condiciones y documentación</p><p><strong>Cola:</strong> 1er Nivel</p><p><strong>Estado:</strong> Resuelto</p></div>
       <h3>🛒 Solicitud online</h3>
-      <ol class="steps-list"><li>Añadir los productos al carrito y proceder al pago.</li><li>En el método de pago, seleccionar <strong>"Solicitar y pagar con tarjeta de financiación de MediaMarkt"</strong>.</li><li>Rellenar el formulario con los datos personales solicitados.</li><li>Elegir el plazo de financiación deseado (si aplica).</li><li>La entidad financiera evalúa la solicitud y comunica si está preaprobada.</li><li>Finalizar el proceso de firma de contrato y aportación de documentos.</li></ol>
-      <h3>🏪 Solicitud en tienda física</h3>
-      <ol class="steps-list"><li>Acudir a la tienda y dirigirse a la zona de Atención al Cliente.</li><li>Indicar que se desea financiar una compra.</li><li>El empleado ayudará a rellenar el formulario de solicitud.</li><li>La entidad financiera evalúa la solicitud y comunica la preaprobación.</li><li><strong>Verificación de identidad</strong> en el momento (si es posible).</li><li>Firma del contrato y entrega de la tarjeta (o activación digital).</li></ol>
-      <div class="alert alert-warning"><h3>⚠️ Recuerda</h3><p>Si no se realiza la verificación de identidad en los 7 días siguientes, la solicitud puede quedar anulada.</p></div>
+      <ol class="steps-list"><li>Añadir los productos al carrito.</li><li>En el método de pago, seleccionar <strong>"Solicitar y pagar con tarjeta de financiación de MediaMarkt"</strong>.</li><li>Rellenar el formulario con los datos personales.</li><li>Elegir el plazo de financiación.</li><li>La entidad financiera evalúa la solicitud.</li><li>Firma del contrato y aportación de documentos.</li></ol>
+      <h3>🏪 Solicitud en tienda</h3>
+      <ol class="steps-list"><li>Acudir a la tienda y dirigirse a Atención al Cliente.</li><li>Indicar que se desea financiar una compra.</li><li>El empleado ayudará con el formulario.</li><li>La entidad financiera evalúa la solicitud.</li><li><strong>Verificación de identidad</strong> en el momento.</li><li>Firma del contrato y entrega de tarjeta.</li></ol>
       <a class="btn btn-ghost" href="#/financiacion">⬅ Volver</a>
     </div>
   `;
 }
-
 function viewFinanciacionCondiciones(){
   return `
     <div class="card">
-      <div class="breadcrumb">Inicio &gt; Financiación &gt; Condiciones</div>
+      <div class="breadcrumb">Financiación &gt; Condiciones</div>
       <h2>💳 Condiciones y plazos</h2>
-      <div class="oracle"><h3>🖥️ Oracle</h3><p><strong>Categoría:</strong> Condiciones y documentación</p><p><strong>Cola:</strong> 1er Nivel</p><p><strong>Estado:</strong> Resuelto</p><p><strong>Registro:</strong> Anónimo.</p></div>
-      <h3>📊 Modalidades de financiación</h3>
+      <div class="oracle"><h3>🖥️ Oracle</h3><p><strong>Categoría:</strong> Condiciones y documentación</p><p><strong>Cola:</strong> 1er Nivel</p><p><strong>Estado:</strong> Resuelto</p></div>
       <table class="info-table"><thead><tr><th>Modalidad</th><th>Plazos</th><th>Intereses</th></tr></thead><tbody><tr><td><strong>Sin intereses</strong></td><td>3, 6, 10, 12, 18, 20 y 24 meses</td><td><strong>TAE 0% / TIN 0%</strong></td></tr><tr><td><strong>Con intereses</strong></td><td>Hasta 48 meses</td><td>TIN 18,95% / TAE 20,69%</td></tr></tbody></table>
-      <h3>💰 Importes y cuotas</h3>
-      <ul class="check-list"><li><strong>Importe mínimo sin intereses:</strong> 299 €.</li><li><strong>Importe mínimo general:</strong> 100 €.</li><li><strong>Importe máximo general:</strong> 10.000 €.</li><li><strong>Cuota mínima mensual:</strong> 5 €.</li></ul>
       <a class="btn btn-ghost" href="#/financiacion">⬅ Volver</a>
     </div>
   `;
 }
-
 function viewFinanciacionGestiones(){
   return `
     <div class="card">
-      <div class="breadcrumb">Inicio &gt; Financiación &gt; Gestiones</div>
+      <div class="breadcrumb">Financiación &gt; Gestiones</div>
       <h2>📣 Gestiones de financiación</h2>
-      <p style="color:var(--text-muted);margin-bottom:24px">Selecciona el tipo de gestión según el origen de la financiación:</p>
+      <p style="color:var(--mm-gray);margin-bottom:24px">Selecciona el tipo de gestión:</p>
       <div class="fin-grid">
-        <a class="fin-card" href="#/financiacion/gestiones/tienda"><span class="fin-card-icon">🏪</span><span class="fin-card-title">Tienda física <span class="badge badge-red">Escalar</span></span><span class="fin-card-desc">CAIXA deriva al cliente a MediaMarkt.</span><span class="fin-card-arrow">→</span></a>
-        <a class="fin-card" href="#/financiacion/gestiones/online"><span class="fin-card-icon">🌐</span><span class="fin-card-title">Online <span class="badge badge-green">Resuelto</span></span><span class="fin-card-desc">Consulta de estado online.</span><span class="fin-card-arrow">→</span></a>
+        <a class="fin-card" href="#/financiacion/gestiones/tienda"><span class="fin-card-icon">🏪</span><span class="fin-card-title">Tienda física</span><span class="fin-card-desc">CAIXA deriva al cliente a MediaMarkt.</span><span class="fin-card-arrow">→</span></a>
+        <a class="fin-card" href="#/financiacion/gestiones/online"><span class="fin-card-icon">🌐</span><span class="fin-card-title">Online</span><span class="fin-card-desc">Consulta de estado online.</span><span class="fin-card-arrow">→</span></a>
       </div>
       <div class="alert alert-warning" style="margin-top:24px"><h3>⚠️ Importante</h3><p>En <strong>ninguno de los dos escenarios</strong> el registro en Oracle puede quedar en anónimo.</p></div>
       <a class="btn btn-ghost" href="#/financiacion">⬅ Volver</a>
     </div>
   `;
 }
-
 function viewFinanciacionGestionesTienda(){
   return plantillaLayout({
-    breadcrumb: 'Inicio &gt; Financiación &gt; Gestiones &gt; Tienda física', titulo: '🏪 Financiación en tienda física', badge: { clase:'badge-red', texto:'Pendiente' },
-    info: `<div class="oracle"><h3>🖥️ Oracle</h3><p><strong>Categoría:</strong> Estado de la financiación</p><p><strong>Cola:</strong> ES MM STORE</p><p><strong>Estado:</strong> Pendiente</p><p><strong>Registro:</strong> <span style="color:var(--danger);font-weight:700">NO anónimo</span>.</p></div><div class="alert alert-warning"><h3>⚠️ Escenario</h3><p>El cliente ha sido informado por <strong>CAIXA</strong> de que <strong>MediaMarkt debe gestionar</strong> su solicitud.</p></div>`,
-    oracle: { categoria: 'Estado de la financiación', cola: 'ES MM STORE', estado: 'Pendiente', extras: [{ k:'Canal', v:'Teléfono / Email' },{ k:'Registro', v:'NO anónimo (obligatorio)' }] },
-    campos: [ { id:'nombre', label:'Nombre y apellidos' }, { id:'telefono', label:'Teléfono' }, { id:'email', label:'Email' }, { id:'factura', label:'Número de factura', placeholder:'Ej: F-2026-XXXXXX' }, { id:'dni', label:'DNI / NIE', placeholder:'Ej: 12345678A' }, { id:'detalle', label:'Detalle de la gestión', tipo:'textarea', placeholder:'Describe el motivo…' } ],
+    breadcrumb: 'Financiación &gt; Gestiones &gt; Tienda', titulo: '🏪 Financiación en tienda', badge: { clase:'badge-red', texto:'Pendiente' },
+    info: `<div class="alert alert-warning"><p>El cliente ha sido informado por <strong>CAIXA</strong> de que <strong>MediaMarkt debe gestionar</strong> su solicitud.</p></div>`,
+    oracle: { categoria: 'Estado de la financiación', cola: 'ES MM STORE', estado: 'Pendiente', extras: [{ k:'Registro', v:'NO anónimo (obligatorio)' }] },
+    campos: [ { id:'nombre', label:'Nombre y apellidos' }, { id:'telefono', label:'Teléfono' }, { id:'email', label:'Email' }, { id:'factura', label:'Número de factura' }, { id:'dni', label:'DNI / NIE' }, { id:'detalle', label:'Detalle', tipo:'textarea' } ],
     volverA: '#/financiacion/gestiones'
   });
 }
-
 function viewFinanciacionGestionesOnline(){
   return plantillaLayout({
-    breadcrumb: 'Inicio &gt; Financiación &gt; Gestiones &gt; Online', titulo: '🌐 Financiación online', badge: { clase:'badge-green', texto:'Resuelto' },
-    info: `<div class="oracle"><h3>🖥️ Oracle</h3><p><strong>Categoría:</strong> Estado de la financiación</p><p><strong>Cola:</strong> 1er Nivel</p><p><strong>Estado:</strong> Resuelto</p><p><strong>Registro:</strong> <span style="color:var(--danger);font-weight:700">NO anónimo</span>.</p></div><div class="alert alert-success"><h3>✅ Gestión de 1er Nivel — Resuelta</h3></div><div class="alert alert-danger" style="text-align:center"><h3>📱 Número de contacto CAIXA BANK</h3><p style="font-size:28px;font-weight:800;color:var(--mm-red);letter-spacing:1px;margin:8px 0">900 101 161</p><p><strong>Horario:</strong> L-D, 09:00 a 23:00 h</p></div>`,
-    oracle: { categoria: 'Estado de la financiación', cola: '1er Nivel', estado: 'Resuelto', extras: [{ k:'Canal', v:'Teléfono / Email' },{ k:'Registro', v:'NO anónimo (obligatorio)' }] },
-    campos: [ { id:'nombre', label:'Nombre y apellidos' }, { id:'telefono', label:'Teléfono' }, { id:'email', label:'Email' }, { id:'pedido', label:'Número de pedido', placeholder:'Ej: 301235458' }, { id:'dni', label:'DNI / NIE', placeholder:'Ej: 12345678A' }, { id:'detalle', label:'Detalle de la consulta', tipo:'textarea', placeholder:'Describe el motivo…' } ],
+    breadcrumb: 'Financiación &gt; Gestiones &gt; Online', titulo: '🌐 Financiación online', badge: { clase:'badge-green', texto:'Resuelto' },
+    info: `<div class="alert alert-danger" style="text-align:center"><h3>📱 Contacto CAIXA BANK</h3><p style="font-size:28px;font-weight:800;color:var(--mm-red);margin:8px 0">900 101 161</p><p><strong>Horario:</strong> L-D, 09:00 a 23:00 h</p></div>`,
+    oracle: { categoria: 'Estado de la financiación', cola: '1er Nivel', estado: 'Resuelto', extras: [{ k:'Registro', v:'NO anónimo (obligatorio)' }] },
+    campos: [ { id:'nombre', label:'Nombre y apellidos' }, { id:'telefono', label:'Teléfono' }, { id:'email', label:'Email' }, { id:'pedido', label:'Número de pedido' }, { id:'dni', label:'DNI / NIE' }, { id:'detalle', label:'Detalle', tipo:'textarea' } ],
     volverA: '#/financiacion/gestiones'
   });
 }
-
 function viewFinanciacionVentajas(){
   return `
     <div class="card">
-      <div class="breadcrumb">Inicio &gt; Financiación &gt; Ventajas</div>
-      <h2>⭐ Ventajas de la MediaMarkt Club Card</h2>
+      <div class="breadcrumb">Financiación &gt; Ventajas</div>
+      <h2>⭐ Ventajas de la Club Card</h2>
       <div class="oracle"><h3>🖥️ Oracle</h3><p><strong>Categoría:</strong> Condiciones y documentación</p><p><strong>Cola:</strong> 1er Nivel</p><p><strong>Estado:</strong> Resuelto</p></div>
-      <div class="alert alert-info"><h3>🎉 Beneficios principales</h3><ul><li><strong>0 €</strong> de emisión, gestión y mantenimiento.</li><li><strong>Welcome Bonus:</strong> 5 € en la primera compra de 50 €.</li><li>Participación en <strong>sorteos exclusivos</strong>.</li><li>Pago flexible desde <strong>20 €/mes</strong>.</li><li>Válida en cualquier establecimiento que acepte <strong>VISA</strong>.</li></ul></div>
+      <div class="alert alert-info"><h3>🎉 Beneficios</h3><ul><li><strong>0 €</strong> de emisión, gestión y mantenimiento.</li><li><strong>Welcome Bonus:</strong> 5 € en la primera compra de 50 €.</li><li>Participación en <strong>sorteos exclusivos</strong>.</li><li>Pago flexible desde <strong>20 €/mes</strong>.</li><li>Válida en cualquier establecimiento que acepte <strong>VISA</strong>.</li></ul></div>
       <a class="btn btn-ghost" href="#/financiacion">⬅ Volver</a>
     </div>
   `;
 }
-
 function viewFinanciacionFaqs(){
   const faqs = [
     { q:'¿Dónde puedo solicitar la tarjeta?', a:'Tanto en tienda física como online, en el proceso de pago.' },
     { q:'¿Puedo usar la tarjeta si aún no la he recibido?', a:'No. Hasta recibirla físicamente no podrás usarla.' },
     { q:'¿Qué pasa si me deniegan la financiación?', a:'Puedes volver a solicitarla si cambian tus condiciones.' },
     { q:'¿Cómo puedo pagar online con la Club Card?', a:'Seleccionando la opción <strong>"Pagar MediaMarkt Visa"</strong> en el proceso de pago.' },
-    { q:'¿Cuánto tarda la aprobación?', a:'La preaprobación en segundos. La verificación en 7 días.' },
-    { q:'¿Puedo financiar cualquier producto?', a:'No. Hay exclusiones según promoción vigente.' },
-    { q:'¿Cuánto cuesta la tarjeta?', a:'La <strong>MediaMarkt Club Card es 100% gratuita</strong>.' },
-    { q:'¿Qué hago si tengo un cargo indebido?', a:'Contacta con Atención al Cliente facilitando el <strong>detalle del cargo</strong>.' },
-    { q:'¿Puedo cancelar la financiación antes de tiempo?', a:'Sí, es posible la cancelación anticipada.' },
-    { q:'¿Puedo cambiar las condiciones de mi financiación?', a:'Depende de la entidad y del tipo de contrato.' }
+    { q:'¿Cuánto cuesta la tarjeta?', a:'La <strong>MediaMarkt Club Card es 100% gratuita</strong>.' }
   ];
   const faqHtml = faqs.map(f => `<details class="faq-item"><summary>${f.q}</summary><p>${f.a}</p></details>`).join('');
   return `
     <div class="card">
-      <div class="breadcrumb">Inicio &gt; Financiación &gt; Preguntas frecuentes</div>
+      <div class="breadcrumb">Financiación &gt; FAQs</div>
       <h2>❓ Preguntas frecuentes</h2>
-      <div class="oracle"><h3>🖥️ Oracle</h3><p><strong>Categoría:</strong> Condiciones y documentación</p><p><strong>Cola:</strong> 1er Nivel</p><p><strong>Estado:</strong> Resuelto</p></div>
-      <div class="alert alert-success"><h3>✅ Gestión informativa</h3></div>
       ${faqHtml}
       <a class="btn btn-ghost" href="#/financiacion">⬅ Volver</a>
     </div>
   `;
 }
-
 function viewMarketplaceHub(){
   const totalFaqs = faqsMarketplace.length; const totalTipos = Object.keys(tiposMarketplace).length;
   return `
     <div class="card">
       <div class="breadcrumb">Inicio &gt; Marketplaces</div>
       <h2>🛒 Marketplaces</h2>
-      <p style="color:var(--text-muted);margin-bottom:24px">Centro de información y gestión para pedidos de vendedores externos.</p>
-      <div class="alert alert-info"><h3>ℹ️ ¿Qué es el Marketplace?</h3><p>Los productos Marketplace se venden a través de <strong>mediamarkt.es</strong> por <strong>vendedores externos</strong>. En la ficha del producto se identifica con la indicación «Vendido y enviado por…».</p></div>
+      <p style="color:var(--mm-gray);margin-bottom:24px">Centro de información y gestión para pedidos de vendedores externos.</p>
+      <div class="alert alert-info"><h3>ℹ️ ¿Qué es el Marketplace?</h3><p>Los productos Marketplace se venden a través de <strong>mediamarkt.es</strong> por <strong>vendedores externos</strong>.</p></div>
       <div class="fin-grid">
-        <a class="fin-card" href="#/marketplace/faqs"><span class="fin-card-icon">❓</span><span class="fin-card-title">Preguntas frecuentes <span class="badge badge-purple">${totalFaqs} FAQs</span></span><span class="fin-card-desc">Respuestas rápidas sobre pedidos, envíos, devoluciones, facturas y garantías.</span><span class="fin-card-arrow">→</span></a>
-        <a class="fin-card" href="#/marketplace/gestion"><span class="fin-card-icon">📝</span><span class="fin-card-title">Gestiones y escalados <span class="badge badge-red">${totalTipos} tipos</span></span><span class="fin-card-desc">Registra incidencias, escalados y reclamaciones en Oracle.</span><span class="fin-card-arrow">→</span></a>
+        <a class="fin-card" href="#/marketplace/faqs"><span class="fin-card-icon">❓</span><span class="fin-card-title">Preguntas frecuentes <span class="badge badge-purple">${totalFaqs}</span></span><span class="fin-card-desc">Respuestas rápidas sobre pedidos, envíos, devoluciones.</span><span class="fin-card-arrow">→</span></a>
+        <a class="fin-card" href="#/marketplace/gestion"><span class="fin-card-icon">📝</span><span class="fin-card-title">Gestiones y escalados <span class="badge badge-red">${totalTipos}</span></span><span class="fin-card-desc">Registra incidencias, escalados y reclamaciones.</span><span class="fin-card-arrow">→</span></a>
       </div>
       <a class="btn btn-ghost" href="#/" style="margin-top:24px">⬅ Volver al inicio</a>
     </div>
   `;
 }
-
 function viewMarketplaceFaqs(categoriaSlug){
   const catActual = categoriaSlug && categoriasFaqsMarketplace[categoriaSlug] ? categoriaSlug : null;
   const faqsFiltradas = catActual ? faqsMarketplace.filter(f => f.categoria === catActual) : faqsMarketplace;
   const pills = [
-    `<a class="faq-cat-pill ${!catActual ? 'active' : ''}" href="#/marketplace/faqs">🗂️ Todas <span class="count">${faqsMarketplace.length}</span></a>`,
+    `<a class="faq-cat-pill ${!catActual ? 'active' : ''}" href="#/marketplace/faqs">🗂️ Todas <span>${faqsMarketplace.length}</span></a>`,
     ...Object.entries(categoriasFaqsMarketplace).map(([slug, cat]) => {
       const count = faqsMarketplace.filter(f => f.categoria === slug).length;
-      return `<a class="faq-cat-pill ${catActual === slug ? 'active' : ''}" href="#/marketplace/faqs/${slug}">${esc(cat.label)} <span class="count">${count}</span></a>`;
+      return `<a class="faq-cat-pill ${catActual === slug ? 'active' : ''}" href="#/marketplace/faqs/${slug}">${esc(cat.label)} <span>${count}</span></a>`;
     })
   ].join('');
   const faqsHtml = faqsFiltradas.map(f => `<details class="faq-item"><summary>${esc(f.q)}</summary><div class="faq-answer">${f.a}</div></details>`).join('');
-  const catInfo = catActual ? categoriasFaqsMarketplace[catActual] : null;
   return `
     <div class="card">
-      <div class="breadcrumb">Inicio &gt; <a href="#/marketplace">Marketplace</a> &gt; Preguntas frecuentes${catInfo ? ` &gt; ${esc(catInfo.label)}` : ''}</div>
+      <div class="breadcrumb">Marketplace &gt; Preguntas frecuentes</div>
       <h2>❓ Preguntas frecuentes — Marketplace</h2>
       <div class="faq-search-wrap"><input type="text" id="faqSearch" placeholder="Buscar en las preguntas frecuentes…" autocomplete="off" data-faq-search></div>
       <div class="faq-cats">${pills}</div>
@@ -1440,47 +1373,44 @@ function viewMarketplaceFaqs(categoriaSlug){
     </div>
   `;
 }
-
 function viewMarketplaceGestionHub(){
   const cards = Object.entries(tiposMarketplace).map(([slug, t]) => `
     <a class="fin-card" href="#/marketplace/gestion/${slug}">
       <span class="fin-card-icon">${t.icono}</span>
-      <span class="fin-card-title">${esc(t.label)} <span class="badge badge-purple">Marketplace</span></span>
+      <span class="fin-card-title">${esc(t.label)}</span>
       <span class="fin-card-desc">${esc(t.desc)}</span>
       <span class="fin-card-arrow">→</span>
     </a>
   `).join('');
   return `
     <div class="card">
-      <div class="breadcrumb">Inicio &gt; <a href="#/marketplace">Marketplace</a> &gt; Gestiones</div>
+      <div class="breadcrumb">Marketplace &gt; Gestiones</div>
       <h2>📝 Gestiones de Marketplace</h2>
-      <div class="alert alert-warning"><h3>⚠️ Antes de escalar</h3><p>Recuerda informar al cliente de que el <strong>vendedor externo</strong> es quien gestiona entregas, devoluciones, facturas y garantías.</p></div>
+      <div class="alert alert-warning"><p>Recuerda informar al cliente de que el <strong>vendedor externo</strong> es quien gestiona entregas, devoluciones, facturas y garantías.</p></div>
       <div class="fin-grid">${cards}</div>
       <div style="margin-top:24px"><a class="btn btn-primary" href="#/marketplace/faqs">❓ Ver FAQs</a><a class="btn btn-ghost" href="#/marketplace">⬅ Volver</a></div>
     </div>
   `;
 }
-
 function viewMarketplaceForm(tipoSlug){
   const tipo = tiposMarketplace[tipoSlug]; if(!tipo) return viewNotFound();
   return plantillaLayout({
-    breadcrumb: `Inicio &gt; Marketplace &gt; Gestiones &gt; ${esc(tipo.label)}`, titulo: `${tipo.icono} ${tipo.label}`, badge: { clase:'badge-purple', texto:'Marketplace' },
+    breadcrumb: `Marketplace &gt; Gestiones &gt; ${esc(tipo.label)}`, titulo: `${tipo.icono} ${tipo.label}`, badge: { clase:'badge-purple', texto:'Marketplace' },
     info: `<div class="alert alert-info"><p>${esc(tipo.desc)}</p></div>`,
-    oracle: { categoria: tipo.categoria, cola: tipo.cola, estado: tipo.estado, extras: [{ k:'Canal', v:'Marketplace · 1er Nivel' },{ k:'Registro', v:'Datos del cliente (NO anónimo)' }] },
+    oracle: { categoria: tipo.categoria, cola: tipo.cola, estado: tipo.estado },
     campos: tipo.campos, volverA: '#/marketplace/gestion'
   });
 }
-
 function viewEstadoPedidoHub(){
   const cards = Object.entries(gruposEstadoPedido).map(([slug, g]) => {
     const lista = getListaPorGrupo(slug); const count = lista.length;
-    return `<a class="fin-card" href="#/estado-pedido/${slug}"><span class="fin-card-icon">${g.icono}</span><span class="fin-card-title">${esc(g.label)} <span class="badge ${g.color}">${count} estados</span></span><span class="fin-card-desc">${esc(g.desc)}</span><span class="fin-card-arrow">→</span></a>`;
+    return `<a class="fin-card" href="#/estado-pedido/${slug}"><span class="fin-card-icon">${g.icono}</span><span class="fin-card-title">${esc(g.label)} <span class="badge ${g.color}">${count}</span></span><span class="fin-card-desc">${esc(g.desc)}</span><span class="fin-card-arrow">→</span></a>`;
   }).join('');
   return `
     <div class="card">
       <div class="breadcrumb">Inicio &gt; Estado de Pedido</div>
       <h2>📦 Estado de Pedido</h2>
-      <p style="color:var(--text-muted);margin-bottom:16px">Consulta cómo actuar según el estado del pedido en FOM.</p>
+      <p style="color:var(--mm-gray);margin-bottom:16px">Consulta cómo actuar según el estado del pedido en FOM.</p>
       <div class="faq-search-wrap"><input type="text" id="buscarEstado" placeholder="Buscar estado del pedido (ej: Shipped, Limbo…)" autocomplete="off" data-buscar-estado></div>
       <div id="resultadoBuscarEstado"></div>
       <h3 style="margin-top:24px">Categorías</h3>
@@ -1489,60 +1419,52 @@ function viewEstadoPedidoHub(){
     </div>
   `;
 }
-
 function viewEstadoPedidoLista(grupoSlug){
   const grupo = gruposEstadoPedido[grupoSlug]; if(!grupo) return viewNotFound();
   const esGrupoCancelar = grupoSlug === 'cancelar';
   const listaBase = getListaPorGrupo(grupoSlug);
   const listaFiltrada = filtrarEstadosPorPlazo(listaBase, state.filtroPlazo || 'todos');
-
   const pills = `
     <div class="filtros-plazo">
       <a class="filtro-pill ${state.filtroPlazo==='todos'?'active':''}" href="#/estado-pedido/${grupoSlug}" data-filtro-plazo="todos">🗂️ Todos (${listaBase.length})</a>
       <a class="filtro-pill ${state.filtroPlazo==='24h'?'active':''}" href="#/estado-pedido/${grupoSlug}" data-filtro-plazo="24h">⏱️ Plazo 24h</a>
       <a class="filtro-pill ${state.filtroPlazo==='fuera'?'active':''}" href="#/estado-pedido/${grupoSlug}" data-filtro-plazo="fuera">📅 Fuera de plazo</a>
       <a class="filtro-pill ${state.filtroPlazo==='na'?'active':''}" href="#/estado-pedido/${grupoSlug}" data-filtro-plazo="na">— Sin plazo</a>
-    </div>
-  `;
-
+    </div>`;
   const avisoCancelar = esGrupoCancelar ? `<div class="alert alert-warning"><strong>Listado cruzado.</strong> Este grupo muestra <em>todos</em> los estados con acción de cancelación accionable (${getEstadosConCancelacion().length} de ${estadosPedido.length} estados).</div>` : '';
-
   const tarjetas = listaFiltrada.length ? listaFiltrada.map(e => {
     const grupoOriginal = gruposEstadoPedido[e.grupo];
     const badgeGrupo = esGrupoCancelar ? `<span class="badge ${grupoOriginal.color} badge-grupo">${esc(grupoOriginal.label)}</span>` : '';
     const modo = esGrupoCancelar ? 'cancelar' : 'avanzar';
     const href = `#/estado-pedido/ficha/${e.slug}?modo=${modo}`;
-    const infoPrincipal = esGrupoCancelar 
+    const infoPrincipal = esGrupoCancelar
       ? `<div class="meta cancelar"><strong>Cancelar:</strong> ${esc(e.cancelar.length>90?e.cancelar.slice(0,90)+'…':e.cancelar)}</div>`
       : `<div class="meta"><strong>Avanzar:</strong> ${esc(e.derivarA.length>90?e.derivarA.slice(0,90)+'…':e.derivarA)}</div>`;
     return `<a class="estado-card" href="${href}"><div class="titulo"><span style="font-size:20px">${esc(e.icono)}</span><span>${esc(e.estado)}</span>${badgeGrupo}</div>${infoPrincipal}<div class="meta"><strong>Plazo:</strong> ${esc(e.plazo)}</div><span class="accion">→</span></a>`;
   }).join('') : '<div class="alert alert-warning">No hay estados para este filtro.</div>';
-
   return `
     <div class="card">
-      <div class="breadcrumb">Inicio &gt; <a href="#/estado-pedido">Estado de Pedido</a> &gt; ${esc(grupo.label)}</div>
+      <div class="breadcrumb">Estado de Pedido &gt; ${esc(grupo.label)}</div>
       <h2>${grupo.icono} ${esc(grupo.label)}</h2>
-      <p style="color:var(--text-muted);margin-bottom:16px">${esc(grupo.desc)}</p>
+      <p style="color:var(--mm-gray);margin-bottom:16px">${esc(grupo.desc)}</p>
       ${avisoCancelar} ${pills}
       <div class="grid-motivos">${tarjetas}</div>
       <div style="margin-top:24px"><a class="btn btn-ghost" href="#/estado-pedido">⬅ Volver</a></div>
     </div>
   `;
 }
-
 function viewEstadoPedidoFicha(slug, modo = 'avanzar'){
   const e = getEstadoPorSlug(slug); if(!e) return viewNotFound();
   const grupo = gruposEstadoPedido[e.grupo]; const esCancelar = modo === 'cancelar';
-
   const bloquePlantilla = e.plantillaAvanzar && !esCancelar ? `<h3 style="margin-top:24px">📧 Plantilla email al cliente</h3><textarea id="preview" readonly>${esc(e.plantillaAvanzar)}</textarea><div style="margin-top:12px"><button class="btn btn-success" data-copiar>📋 Copiar plantilla</button></div>` : '';
-  const bloqueAvanzar = e.flujoAvanzar && !esCancelar ? `<h3 style="margin-top:24px">⏩ Pasos detallados para avanzar</h3>${e.flujoAvanzar}` : '';
-  const bloqueCancelar = e.flujoCancelar && esCancelar ? `<h3 style="margin-top:24px">❌ Pasos detallados para cancelar</h3>${e.flujoCancelar}` : '';
-
-  const tarjetaAccion = esCancelar ? `<div class="alert alert-danger" style="border-left-width:6px"><h3>❌ Cancelar pedido</h3><p><strong>Derivamos a:</strong><br>${esc(e.cancelar)}</p></div>` : `<div class="alert alert-success" style="border-left-width:6px"><h3>⏩ Avanzar pedido</h3><p><strong>Derivamos a:</strong><br>${esc(e.derivarA)}</p>${e.plazo !== '—' ? `<p style="margin-top:8px"><strong>Plazo:</strong> ${esc(e.plazo)}</p>` : ''}</div>`;
-
+  const bloqueAvanzar = e.flujoAvanzar && !esCancelar ? `<h3 style="margin-top:24px">⏩ Pasos para avanzar</h3>${e.flujoAvanzar}` : '';
+  const bloqueCancelar = e.flujoCancelar && esCancelar ? `<h3 style="margin-top:24px">❌ Pasos para cancelar</h3>${e.flujoCancelar}` : '';
+  const tarjetaAccion = esCancelar
+    ? `<div class="alert alert-danger" style="border-left-width:6px"><h3>❌ Cancelar pedido</h3><p><strong>Derivamos a:</strong><br>${esc(e.cancelar)}</p></div>`
+    : `<div class="alert alert-success" style="border-left-width:6px"><h3>⏩ Avanzar pedido</h3><p><strong>Derivamos a:</strong><br>${esc(e.derivarA)}</p>${e.plazo !== '—' ? `<p style="margin-top:8px"><strong>Plazo:</strong> ${esc(e.plazo)}</p>` : ''}</div>`;
   return `
     <div class="card">
-      <div class="breadcrumb">Inicio &gt; <a href="#/estado-pedido">Estado de Pedido</a> &gt; <a href="#/estado-pedido/${esCancelar ? 'cancelar' : e.grupo}">${esCancelar ? 'Cancelar pedido' : esc(grupo.label)}</a> &gt; ${esc(e.estado)}</div>
+      <div class="breadcrumb">Estado de Pedido &gt; ${esCancelar ? 'Cancelar' : esc(grupo.label)} &gt; ${esc(e.estado)}</div>
       <h2><span style="margin-right:8px">${esc(e.icono)}</span>${esc(e.estado)}</h2>
       <div class="alert alert-info"><p>${esc(e.notas || '')}</p></div>
       ${tarjetaAccion} ${bloqueAvanzar} ${bloqueCancelar} ${bloquePlantilla}
@@ -1550,14 +1472,11 @@ function viewEstadoPedidoFicha(slug, modo = 'avanzar'){
     </div>
   `;
 }
+function viewProximamente(){ return `<div class="card"><div class="alert alert-info"><h3>🚧 En construcción</h3><p>Esta sección estará disponible próximamente.</p></div><a class="btn btn-ghost" href="#/">⬅ Volver</a></div>`; }
 
-function viewProximamente(){
-  return `<div class="card"><div class="alert alert-info"><h3>🚧 En construcción</h3><p>Esta sección estará disponible próximamente.</p></div><a class="btn btn-ghost" href="#/">⬅ Volver</a></div>`;
-}
-
-/* =====================================================================
+/* ==========================================
    ROUTER
-   ===================================================================== */
+   ========================================== */
 const routes = {
   '' : viewHome,
   'fecha' : viewFecha, 'devolucion' : viewDevolucion, 'fuera' : viewFueraGarantia, 'validar-danio' : viewValidarDanio,
@@ -1596,124 +1515,159 @@ function resolveRoute(route){
   if(mMkt && tiposMarketplace[mMkt[1]]) return () => viewMarketplaceForm(mMkt[1]);
   return null;
 }
-
 function currentRoute(){ return location.hash.replace(/^#\/?/, ''); }
 
-/* =====================================================================
-   UI & EVENTOS
-   ===================================================================== */
+/* ==========================================
+   SIDEBAR & NAV
+   ========================================== */
+const TITULOS = {
+  '': 'Panel <span>de Operaciones</span>',
+  'fecha': 'Solicitud <span>de Reparaciones</span>',
+  'reclamacion': 'Reclamaciones',
+  'marketplace': 'Marketplace',
+  'financiacion': 'Financiación',
+  'estado-pedido': 'Estado <span>de Pedido</span>',
+  'devoluciones': 'Devoluciones'
+};
+
 function initSidebar(){
-  const sidebar = document.getElementById('sidebar');
+  const app = document.getElementById('app');
   const btnCollapse = document.getElementById('btnCollapse');
   const mobileToggle = document.getElementById('mobileToggle');
   const overlay = document.getElementById('sidebarOverlay');
 
-  if(btnCollapse) {
+  function esMovil(){ return window.matchMedia('(max-width: 880px)').matches; }
+
+  if(btnCollapse){
     btnCollapse.addEventListener('click', () => {
-      sidebar.classList.toggle('collapsed');
-      const svg = btnCollapse.querySelector('svg');
-      if(sidebar.classList.contains('collapsed')){
-        svg.style.transform = 'rotate(180deg)';
-      } else {
-        svg.style.transform = 'rotate(0deg)';
-      }
+      app.classList.toggle('is-collapsed');
+      try { localStorage.setItem('mm-apoyo-sidebar-collapsed', app.classList.contains('is-collapsed') ? '1' : '0'); } catch(e){}
     });
   }
-
-  if(mobileToggle && overlay) {
+  if(mobileToggle && overlay){
     mobileToggle.addEventListener('click', () => {
-      sidebar.classList.add('open');
-      overlay.classList.add('open');
+      app.classList.add('is-mobile-open');
+      overlay.classList.add('is-visible');
     });
     overlay.addEventListener('click', () => {
-      sidebar.classList.remove('open');
-      overlay.classList.remove('open');
+      app.classList.remove('is-mobile-open');
+      overlay.classList.remove('is-visible');
     });
-    document.querySelectorAll('.sidebar nav .menu-item').forEach(el => {
+    document.querySelectorAll('.sidebar__link').forEach(el => {
       el.addEventListener('click', () => {
-        if(window.innerWidth <= 900) {
-          sidebar.classList.remove('open');
-          overlay.classList.remove('open');
-        }
+        if(esMovil()){ app.classList.remove('is-mobile-open'); overlay.classList.remove('is-visible'); }
       });
     });
   }
+  window.addEventListener('resize', () => {
+    if(!esMovil()){ app.classList.remove('is-mobile-open'); overlay.classList.remove('is-visible'); }
+  });
+  try {
+    if(localStorage.getItem('mm-apoyo-sidebar-collapsed') === '1' && !esMovil()){
+      app.classList.add('is-collapsed');
+    }
+  } catch(e){}
 }
 
+/* ==========================================
+   RENDER
+   ========================================== */
 function render(){
   const route = currentRoute();
   const view = resolveRoute(route) || viewNotFound;
   document.getElementById('contenido').innerHTML = view();
 
-  document.querySelectorAll('.sidebar .menu-item').forEach(el => {
+  document.querySelectorAll('.sidebar__link[href^="#"]').forEach(el => {
     const target = el.getAttribute('href')?.replace(/^#\/?/, '') ?? '';
     const segmento = target.split('/')[0];
     const routeSeg = route.split('/')[0];
-    el.classList.toggle('active', target !== '' && segmento === routeSeg);
+    el.classList.toggle('is-active', segmento === routeSeg && (route === '' || segmento !== ''));
+    if(target === '' && route === '') el.classList.add('is-active');
   });
+
+  const key = route.split('/')[0] || '';
+  const titleEl = document.getElementById('topbarTitle');
+  if(titleEl) titleEl.innerHTML = TITULOS[key] || 'Panel <span>de Operaciones</span>';
 
   updatePreview();
   gestionarReloj(route);
   startDashboardClock();
+  actualizarRelojTopbar();
 }
 
 window.addEventListener('hashchange', render);
 
+/* ==========================================
+   RELOJES
+   ========================================== */
+const MESES = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+const DIAS = ['domingo','lunes','martes','miércoles','jueves','viernes','sábado'];
+function pad2(n){ return String(n).padStart(2,'0'); }
+
 let dashClockInterval = null;
 function startDashboardClock(){
   if(dashClockInterval) clearInterval(dashClockInterval);
-  const timeEl = document.getElementById('relojHora');
-  const dateEl = document.getElementById('relojFecha');
+  const timeEl = document.getElementById('dashClock');
+  const dateEl = document.getElementById('dashDate');
+  const greetEl = document.getElementById('dashGreeting');
   if(!timeEl || !dateEl) return;
-
   const update = () => {
     const now = new Date();
-    const hh = String(now.getHours()).padStart(2,'0');
-    const mm = String(now.getMinutes()).padStart(2,'0');
-    timeEl.textContent = `${hh}:${mm}`;
-    dateEl.textContent = now.toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+    timeEl.textContent = `${pad2(now.getHours())}:${pad2(now.getMinutes())}:${pad2(now.getSeconds())}`;
+    const dia = DIAS[now.getDay()];
+    dateEl.textContent = `${dia.charAt(0).toUpperCase()+dia.slice(1)}, ${now.getDate()} de ${MESES[now.getMonth()]} de ${now.getFullYear()}`.toUpperCase();
+    if(greetEl){
+      const h = now.getHours();
+      const saludo = h < 12 ? 'Buenos días' : h < 20 ? 'Buenas tardes' : 'Buenas noches';
+      greetEl.innerHTML = `${saludo}, <span class="accent">equipo</span>`;
+    }
   };
   update();
   dashClockInterval = setInterval(update, 1000);
+}
+
+function actualizarRelojTopbar(){
+  const el = document.getElementById('topbarDate');
+  if(!el) return;
+  const now = new Date();
+  const dia = DIAS[now.getDay()];
+  const diaCap = dia.charAt(0).toUpperCase() + dia.slice(1);
+  el.textContent = `${diaCap}, ${pad2(now.getDate())}/${pad2(now.getMonth()+1)}`;
 }
 
 let clockInterval = null;
 function gestionarReloj(route){
   if(clockInterval){ clearInterval(clockInterval); clockInterval = null; }
   if(route !== 'reclamacion/paqueteria' && route !== 'tipo/tv') return;
-
   const el = document.getElementById('horaEspana');
   if(!el) return;
-
   const actualizar = () => {
     const ahora = new Date();
     const madrid = new Date(ahora.toLocaleString('en-US', { timeZone:'Europe/Madrid' }));
-    const hh = String(madrid.getHours()).padStart(2,'0');
-    const mm = String(madrid.getMinutes()).padStart(2,'0');
-    const ss = String(madrid.getSeconds()).padStart(2,'0');
+    const hh = pad2(madrid.getHours()), mm = pad2(madrid.getMinutes()), ss = pad2(madrid.getSeconds());
     const dia = madrid.getDay();
-    const esFinDeSemana = dia === 0 || dia === 6;
+    const esFinde = dia === 0 || dia === 6;
     const enHorario = madrid.getHours() >= 9 && madrid.getHours() < 18;
-    const disponible = enHorario && !esFinDeSemana;
-
+    const disponible = enHorario && !esFinde;
     el.className = `alert ${disponible ? 'alert-success' : 'alert-danger'}`;
-    el.innerHTML = `<div style="font-size:22px;font-weight:700;margin-bottom:6px">${hh}:${mm}:${ss}</div><div>${disponible ? '🟢 Transferencia disponible' : '🔴 Fuera de horario de transferencia'}</div>`;
+    el.innerHTML = `<div style="font-size:22px;font-weight:800;margin-bottom:6px">${hh}:${mm}:${ss}</div><div>${disponible ? '🟢 Transferencia disponible' : '🔴 Fuera de horario de transferencia'}</div>`;
   };
   actualizar();
   clockInterval = setInterval(actualizar, 1000);
 }
 
+/* ==========================================
+   PREVIEWS
+   ========================================== */
 function updatePreview(){
   const route = currentRoute();
   const preview = document.getElementById('preview');
   if(!preview) return;
-
   if(previewRenderers[route]){ preview.value = previewRenderers[route](state, state.datos); return; }
   const mRec = route.match(/^reclamacion\/(paqueteria|gran-carga)\/([\w-]+)$/);
   if(mRec && tiposReclamacion[mRec[2]]){ preview.value = plantillaReclamacion(state, state.datos, mRec[2], mRec[1]); return; }
   const mMkt = route.match(/^marketplace\/gestion\/([\w-]+)$/);
   if(mMkt && tiposMarketplace[mMkt[1]]){ preview.value = plantillaMarketplace(state, state.datos, mMkt[1]); return; }
-  
   if(route === 'gran-carga/tienda/visita'){ preview.value = plantillaGranCargaTiendaVisita(state, state.datos); return; }
   if(route === 'gran-carga/tienda/correo'){ preview.value = plantillaGranCargaCorreo(state, state.datos); return; }
   if(route === 'gran-carga/web/tienda'){ preview.value = plantillaGranCargaWebTienda(state, state.datos); return; }
@@ -1729,29 +1683,28 @@ function updatePreview(){
   if(route === 'financiacion/gestiones/online'){ preview.value = plantillaFinanciacionGestionOnline(state, state.datos); return; }
 }
 
+/* ==========================================
+   FILTROS & BÚSQUEDA
+   ========================================== */
 function filtrarFaqs(query){
   const q = String(query || '').toLowerCase().trim();
   const items = document.querySelectorAll('#faqList .faq-item');
   let visibles = 0;
   items.forEach(el => {
-    const txt = el.textContent.toLowerCase();
-    const match = !q || txt.includes(q);
+    const match = !q || el.textContent.toLowerCase().includes(q);
     el.style.display = match ? '' : 'none';
     if(match) visibles++;
   });
   const contador = document.getElementById('faqCount');
   if(contador) contador.textContent = visibles;
 }
-
 function buscarEstadoPedido(){
   const q = (document.getElementById('buscarEstado')?.value || '').toLowerCase().trim();
   const out = document.getElementById('resultadoBuscarEstado');
   if(!out) return;
   if(!q){ out.innerHTML = ''; return; }
-
   const matches = estadosPedido.filter(e => e.estado.toLowerCase().includes(q) || e.derivarA.toLowerCase().includes(q) || (e.cancelar || '').toLowerCase().includes(q));
   if(!matches.length){ out.innerHTML = '<div class="alert alert-warning">❌ No se encontraron estados con ese texto.</div>'; return; }
-
   out.innerHTML = matches.slice(0, 8).map(e => `
     <a class="estado-card" href="#/estado-pedido/ficha/${e.slug}?modo=avanzar" style="margin-bottom:8px">
       <div class="titulo"><span style="font-size:18px">${esc(e.icono)}</span><span>${esc(e.estado)}</span></div>
@@ -1759,7 +1712,6 @@ function buscarEstadoPedido(){
     </a>
   `).join('');
 }
-
 function validarFecha(){
   const input = document.getElementById('fechaCompra');
   const aviso = document.getElementById('avisoFecha');
@@ -1772,20 +1724,17 @@ function validarFecha(){
     default:           location.hash = '#/validar-danio'; break;
   }
 }
-
 async function copiarPreview(){
   const preview = document.getElementById('preview');
   if(!preview) return;
   const ok = await copiarTexto(preview.value);
   toast(ok ? '✅ Copiado al portapapeles' : '❌ No se pudo copiar');
 }
-
 function nuevoCaso(){
   resetState();
   if(currentRoute() === 'fecha'){ render(); }
   else{ location.hash = '#/fecha'; }
 }
-
 function buscarSAT(){
   const texto = document.getElementById('marcaSAT')?.value.toLowerCase().trim();
   const resultado = document.getElementById('resultadoSAT');
@@ -1800,6 +1749,9 @@ function buscarSAT(){
   resultado.innerHTML = html || '<div class="alert alert-warning">❌ No se encontraron resultados</div>';
 }
 
+/* ==========================================
+   EVENTOS
+   ========================================== */
 document.addEventListener('input', e => {
   if(e.target.matches('[data-faq-search]')){ filtrarFaqs(e.target.value); return; }
   if(e.target.matches('[data-buscar-estado]')){ buscarEstadoPedido(); return; }
@@ -1808,37 +1760,33 @@ document.addEventListener('input', e => {
   const campoEl = e.target.closest('[data-campo]');
   if(campoEl){ state.datos[campoEl.dataset.campo] = campoEl.value; updatePreview(); }
 });
-
 document.addEventListener('change', e => {
   const campoEl = e.target.closest('[data-campo]');
   if(campoEl){ state.datos[campoEl.dataset.campo] = campoEl.value; updatePreview(); }
 });
-
 document.addEventListener('click', e => {
   if(e.target.closest('[data-validar-fecha]')){ validarFecha(); return; }
   if(e.target.closest('[data-copiar]'))       { copiarPreview(); return; }
   if(e.target.closest('[data-nuevo-caso]'))   { nuevoCaso(); return; }
-
   const filtro = e.target.closest('[data-filtro-plazo]');
   if(filtro){ e.preventDefault(); state.filtroPlazo = filtro.dataset.filtroPlazo; render(); return; }
-
   const link = e.target.closest('a[href^="#"]');
   if(!link) return;
   const href = link.getAttribute('href') || '#/';
   const currentHash = (location.hash.replace(/^#/, '') || '').replace(/^\/+/, '');
   const targetHash  = (href.replace(/^#/, '') || '').replace(/^\/+/, '');
-
   if(currentHash === targetHash && !link.dataset.filtroPlazo){
     e.preventDefault();
     render();
-    document.querySelector('.main').scrollTo({ top:0, behavior:'smooth' });
+    document.querySelector('.content')?.scrollTo({ top:0, behavior:'smooth' });
   }
 });
 
+/* ==========================================
+   INIT
+   ========================================== */
 (function init(){
   initSidebar();
-  const yearEl = document.getElementById('year');
-  if(yearEl) yearEl.textContent = new Date().getFullYear();
   render();
 })();
 </script>
