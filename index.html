@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Portal MediaMarkt</title>
-<!-- Favicon MediaMarkt -->
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='15' fill='%23cc0000'/%3E%3Ctext x='50' y='68' font-family='Montserrat,Arial,sans-serif' font-size='52' font-weight='900' fill='white' text-anchor='middle'%3EM%3C/text%3E%3C/svg%3E">
+<!-- Favicon MediaMarkt "MA" -->
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='18' fill='%23DF0000'/%3E%3Ctext x='50' y='66' font-family='Montserrat,Arial,sans-serif' font-size='38' font-weight='900' fill='white' text-anchor='middle' letter-spacing='-2'%3EMA%3C/text%3E%3C/svg%3E">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
 /* ============ BASE ============ */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -17,888 +17,1352 @@
   --mm-red-dark:#B00000;
   --mm-red-soft:#FFF0F0;
   --mm-ink:#1A1A1A;
+  --mm-ink-soft:#3A3A3A;
   --mm-gray:#6B6B6B;
-  --mm-line:#E4E4E4;
-  --mm-bg:#F6F6F7;
-  --radius:14px;
-  --hero-img: url("https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1920&q=80");
+  --mm-gray-light:#9A9A9A;
+  --mm-line:#E6E8EC;
+  --mm-bg:#F7F8FA;
+  --mm-bg-alt:#FFFFFF;
+  --radius:12px;
+  --radius-lg:16px;
+  --sidebar-w:260px;
+  --sidebar-w-collapsed:76px;
+  --shadow-sm:0 1px 2px rgba(16,24,40,.05);
+  --shadow-md:0 4px 12px rgba(16,24,40,.08);
+  --shadow-lg:0 12px 32px rgba(16,24,40,.12);
+  --transition:.22s cubic-bezier(.4,0,.2,1);
 }
 
 body{
   font-family:'Montserrat',-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
   background:var(--mm-bg);color:var(--mm-ink);line-height:1.55;
   -webkit-font-smoothing:antialiased;
-  min-height:100vh;display:flex;flex-direction:column;
+  min-height:100vh;
 }
 a{color:inherit}
-.container{width:min(1080px,92%);margin-inline:auto}
-.container--narrow{width:min(820px,92%);margin-inline:auto}
+button{font-family:inherit}
 
-/* ============ HEADER ============ */
-.site-header{
-  background:var(--mm-red);position:sticky;top:0;z-index:100;
-  box-shadow:0 2px 14px rgba(0,0,0,.16);
+/* ============ LAYOUT ============ */
+.app{
+  display:flex;
+  min-height:100vh;
 }
-.site-header__inner{display:flex;align-items:center;justify-content:space-between;gap:16px;height:70px;width:min(1400px,96%);margin-inline:auto}
-.logo{color:#fff;font-size:25px;font-weight:800;letter-spacing:-.8px;text-decoration:none;flex-shrink:0;cursor:pointer;font-family:'Montserrat',sans-serif}
-.main-nav{display:flex;gap:3px;flex-wrap:wrap;align-items:center}
-.main-nav a{
-  color:#fff;text-decoration:none;font-size:13px;font-weight:600;
-  padding:8px 13px;border-radius:999px;white-space:nowrap;
-  opacity:.82;transition:background .2s,opacity .2s,color .2s;cursor:pointer;
-  font-family:'Montserrat',sans-serif;
-  display:inline-flex;align-items:center;gap:6px;
-  letter-spacing:-.1px;
-}
-.main-nav a:hover{background:rgba(255,255,255,.16);opacity:1}
-.main-nav a.is-active{background:#fff;color:var(--mm-red);opacity:1}
 
-/* Estilo especial para el enlace externo "Datos de acceso web" */
-.main-nav a.nav-external{
-  background:rgba(255,255,255,.14);
-  border:1px solid rgba(255,255,255,.45);
+/* ============ SIDEBAR ============ */
+.sidebar{
+  position:fixed;
+  top:0;left:0;bottom:0;
+  width:var(--sidebar-w);
+  background:#fff;
+  border-right:1px solid var(--mm-line);
+  display:flex;flex-direction:column;
+  z-index:200;
+  transition:width var(--transition),transform var(--transition);
+  overflow:hidden;
 }
-.main-nav a.nav-external:hover{
-  background:#fff;color:var(--mm-red);opacity:1;
+.sidebar__brand{
+  display:flex;align-items:center;gap:12px;
+  padding:20px 20px 18px;
+  border-bottom:1px solid var(--mm-line);
+  flex-shrink:0;
 }
-/* ============ HERO ============ */
-.hero{
-  position:relative;display:flex;align-items:center;
-  min-height:clamp(420px, 62vh, 620px);
-  background-image:var(--hero-img);
-  background-size:cover;background-position:center;background-repeat:no-repeat;
-  color:var(--mm-ink);overflow:hidden;
+.sidebar__logo{
+  width:38px;height:38px;border-radius:10px;
+  background:var(--mm-red);color:#fff;
+  display:flex;align-items:center;justify-content:center;
+  font-weight:900;font-size:16px;letter-spacing:-1px;
+  flex-shrink:0;
+  box-shadow:0 4px 12px rgba(223,0,0,.28);
 }
-.hero::before{
-  content:"";position:absolute;inset:0;
-  background:linear-gradient(100deg, rgba(255,255,255,.88) 0%, rgba(255,255,255,.68) 42%, rgba(255,255,255,.34) 100%);
+.sidebar__title{
+  display:flex;flex-direction:column;
+  min-width:0;
+  transition:opacity var(--transition);
 }
-.hero::after{
-  content:"";position:absolute;inset:0;
-  background:radial-gradient(ellipse at 50% 40%, transparent 0%, rgba(255,255,255,.45) 100%);
+.sidebar__title strong{
+  font-size:15px;font-weight:800;letter-spacing:-.3px;
+  color:var(--mm-ink);white-space:nowrap;
+}
+.sidebar__title span{
+  font-size:10.5px;font-weight:700;letter-spacing:1.2px;
+  text-transform:uppercase;color:var(--mm-gray-light);
+  white-space:nowrap;
+}
+.sidebar__nav{
+  flex:1;
+  padding:14px 12px;
+  display:flex;flex-direction:column;gap:4px;
+  overflow-y:auto;
+}
+.sidebar__label{
+  font-size:10px;font-weight:800;letter-spacing:1.4px;
+  text-transform:uppercase;color:var(--mm-gray-light);
+  padding:12px 12px 6px;
+  white-space:nowrap;
+  transition:opacity var(--transition);
+}
+.sidebar__link{
+  display:flex;align-items:center;gap:12px;
+  padding:11px 12px;
+  border-radius:10px;
+  font-size:13.5px;font-weight:600;
+  color:var(--mm-ink-soft);
+  cursor:pointer;
+  text-decoration:none;
+  transition:background var(--transition),color var(--transition);
+  white-space:nowrap;
+  position:relative;
+  border:none;background:transparent;text-align:left;
+  width:100%;
+}
+.sidebar__link:hover{background:#F2F3F5;color:var(--mm-ink)}
+.sidebar__link.is-active{
+  background:var(--mm-red-soft);
+  color:var(--mm-red);
+  font-weight:800;
+}
+.sidebar__link.is-active::before{
+  content:"";position:absolute;left:-12px;top:50%;transform:translateY(-50%);
+  width:4px;height:22px;border-radius:0 3px 3px 0;
+  background:var(--mm-red);
+}
+.sidebar__icon{
+  width:20px;height:20px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+}
+.sidebar__icon svg{width:19px;height:19px}
+.sidebar__text{
+  flex:1;overflow:hidden;text-overflow:ellipsis;
+  transition:opacity var(--transition);
+}
+.sidebar__badge{
+  font-size:10px;font-weight:800;letter-spacing:.4px;
+  padding:2px 7px;border-radius:999px;
+  background:var(--mm-red);color:#fff;
+  flex-shrink:0;
+}
+.sidebar__footer{
+  padding:14px 16px;
+  border-top:1px solid var(--mm-line);
+  font-size:11px;font-weight:600;
+  color:var(--mm-gray-light);
+  white-space:nowrap;
+  transition:opacity var(--transition);
+  flex-shrink:0;
+}
+.sidebar__footer strong{color:var(--mm-ink);font-weight:800;display:block;font-size:11.5px}
+
+.sidebar__collapse{
+  position:absolute;
+  top:74px;right:-13px;
+  width:26px;height:26px;
+  border-radius:50%;
+  background:#fff;border:1px solid var(--mm-line);
+  color:var(--mm-gray);
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;
+  box-shadow:var(--shadow-sm);
+  transition:background var(--transition),color var(--transition),transform var(--transition);
+  z-index:2;
+}
+.sidebar__collapse:hover{background:var(--mm-red);color:#fff;border-color:var(--mm-red)}
+.sidebar__collapse svg{width:12px;height:12px;transition:transform var(--transition)}
+
+/* Estado colapsado (escritorio) */
+.app.is-collapsed .sidebar{width:var(--sidebar-w-collapsed)}
+.app.is-collapsed .sidebar__title,
+.app.is-collapsed .sidebar__label,
+.app.is-collapsed .sidebar__text,
+.app.is-collapsed .sidebar__badge,
+.app.is-collapsed .sidebar__footer{opacity:0;pointer-events:none;width:0;overflow:hidden}
+.app.is-collapsed .sidebar__link{justify-content:center;padding:12px}
+.app.is-collapsed .sidebar__link.is-active::before{left:-8px}
+.app.is-collapsed .sidebar__collapse svg{transform:rotate(180deg)}
+.app.is-collapsed .main{margin-left:var(--sidebar-w-collapsed)}
+
+/* ============ MAIN ============ */
+.main{
+  flex:1;
+  margin-left:var(--sidebar-w);
+  min-height:100vh;
+  display:flex;flex-direction:column;
+  transition:margin-left var(--transition);
+  min-width:0;
+}
+
+/* ============ TOPBAR ============ */
+.topbar{
+  position:sticky;top:0;z-index:100;
+  background:rgba(255,255,255,.88);
+  backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--mm-line);
+  display:flex;align-items:center;justify-content:space-between;
+  gap:16px;
+  padding:14px 28px;
+  min-height:66px;
+}
+.topbar__left{display:flex;align-items:center;gap:14px;min-width:0}
+.topbar__hamburger{
+  display:none;
+  width:38px;height:38px;border-radius:10px;
+  border:1px solid var(--mm-line);background:#fff;color:var(--mm-ink);
+  align-items:center;justify-content:center;cursor:pointer;
+  transition:background var(--transition),color var(--transition);
+}
+.topbar__hamburger:hover{background:var(--mm-red-soft);color:var(--mm-red);border-color:var(--mm-red)}
+.topbar__title{
+  font-size:16px;font-weight:800;letter-spacing:-.3px;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.topbar__title span{color:var(--mm-red)}
+.topbar__right{display:flex;align-items:center;gap:14px;flex-shrink:0}
+.topbar__date{
+  font-size:12px;font-weight:700;letter-spacing:.6px;
+  text-transform:uppercase;color:var(--mm-gray);
+  white-space:nowrap;
+}
+.topbar__avatar{
+  width:36px;height:36px;border-radius:50%;
+  background:linear-gradient(135deg,var(--mm-red),#8E0000);
+  color:#fff;display:flex;align-items:center;justify-content:center;
+  font-size:12.5px;font-weight:800;letter-spacing:-.3px;
+  box-shadow:0 4px 12px rgba(223,0,0,.25);
+}
+
+/* ============ VISTAS ============ */
+.content{
+  flex:1;
+  padding:28px;
+  width:100%;
+}
+.view{display:none}
+.view.is-visible{display:block;animation:fadeUp .35s ease both}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+/* ============ DASHBOARD / PORTADA ============ */
+.dash{
+  display:flex;flex-direction:column;gap:24px;
+  max-width:1180px;margin-inline:auto;
+}
+.dash__hero{
+  background:linear-gradient(120deg,#1A1A1A 0%,#2E0B0B 100%);
+  border-radius:var(--radius-lg);
+  padding:34px 38px;
+  color:#fff;
+  position:relative;
+  overflow:hidden;
+  box-shadow:var(--shadow-lg);
+}
+.dash__hero::before{
+  content:"";position:absolute;
+  top:-80px;right:-60px;width:340px;height:340px;border-radius:50%;
+  background:radial-gradient(circle,rgba(223,0,0,.55) 0%,transparent 68%);
   pointer-events:none;
 }
-.hero__inner{
-  position:relative;z-index:2;padding:56px 0 120px;width:100%;
-  display:flex;flex-direction:column;align-items:center;text-align:center;
+.dash__hero::after{
+  content:"";position:absolute;
+  bottom:-100px;left:20%;width:280px;height:280px;border-radius:50%;
+  background:radial-gradient(circle,rgba(255,255,255,.05) 0%,transparent 70%);
+  pointer-events:none;
 }
-.hero__eyebrow{
-  display:inline-flex;align-items:center;gap:9px;
-  font-size:12px;font-weight:800;letter-spacing:1.8px;text-transform:uppercase;
-  background:rgba(255,255,255,.75);border:1px solid rgba(223,0,0,.22);
-  color:var(--mm-red);padding:6px 14px;border-radius:999px;
-  backdrop-filter:blur(10px);box-shadow:0 4px 14px rgba(0,0,0,.05);margin-bottom:18px;
+.dash__hero-inner{position:relative;z-index:1;display:flex;flex-wrap:wrap;gap:28px;justify-content:space-between;align-items:flex-end}
+.dash__eyebrow{
+  display:inline-flex;align-items:center;gap:8px;
+  font-size:11px;font-weight:800;letter-spacing:1.8px;text-transform:uppercase;
+  color:#FF8A8A;margin-bottom:14px;
 }
-.hero__eyebrow::before{
-  content:"";width:8px;height:8px;border-radius:50%;
-  background:var(--mm-red);box-shadow:0 0 0 4px rgba(223,0,0,.15);
+.dash__eyebrow::before{
+  content:"";width:7px;height:7px;border-radius:50%;
+  background:var(--mm-red);box-shadow:0 0 0 4px rgba(223,0,0,.25);
 }
-.hero h1{
-  font-size:clamp(34px,5vw,54px);font-weight:800;letter-spacing:-1.6px;line-height:1.05;
-  max-width:20ch;margin-inline:auto;color:var(--mm-ink);text-align:center;
+.dash__greeting{
+  font-size:clamp(24px,3.2vw,34px);
+  font-weight:800;letter-spacing:-1px;line-height:1.15;
+  margin-bottom:10px;
 }
-.hero h1 .accent{color:var(--mm-red)}
-.hero p{
-  margin-top:16px;margin-inline:auto;max-width:56ch;
-  font-size:clamp(15px,1.4vw,17px);color:#3A3A3A;font-weight:500;text-align:center;
+.dash__greeting .accent{color:#FF5252}
+.dash__sub{
+  font-size:14.5px;color:rgba(255,255,255,.72);
+  font-weight:500;max-width:60ch;line-height:1.6;
+}
+.dash__clock{
+  display:flex;flex-direction:column;align-items:flex-end;gap:4px;
+  text-align:right;flex-shrink:0;
+}
+.dash__clock-time{
+  font-size:clamp(28px,4vw,40px);
+  font-weight:800;letter-spacing:-1.2px;line-height:1;
+  font-variant-numeric:tabular-nums;
+  color:#fff;
+}
+.dash__clock-date{
+  font-size:12px;font-weight:700;letter-spacing:1.2px;
+  text-transform:uppercase;color:rgba(255,255,255,.55);
 }
 
-/* Estilo especial para el enlace externo "Datos de acceso web" */
-.main-nav a.nav-external{
-  background:rgba(255,255,255,.14);
-  border:1px solid rgba(255,255,255,.45);
-  display:inline-flex;align-items:center;gap:6px;
+.dash__grid{
+  display:grid;
+  grid-template-columns:1.55fr 1fr;
+  gap:22px;
 }
-.main-nav a.nav-external::after{
-  content:"↗";
-  font-size:12px;font-weight:800;line-height:1;
-  transition:transform .2s;
-}
-.main-nav a.nav-external:hover{
-  background:#fff;color:var(--mm-red);opacity:1;
-}
-.main-nav a.nav-external:hover::after{transform:translate(2px,-2px)}
 
-/* ============ ACCESOS RÁPIDOS ============ */
-.quick-links{
-  display:grid;grid-template-columns:repeat(4,1fr);gap:16px;
-  margin-top:-100px;margin-bottom:24px;position:relative;z-index:5;
+.dash__panel{
+  background:#fff;
+  border:1px solid var(--mm-line);
+  border-radius:var(--radius-lg);
+  box-shadow:var(--shadow-sm);
+  overflow:hidden;
 }
-.quick-card{
-  font-family:inherit;text-align:left;background:#fff;
-  border:1px solid var(--mm-line);border-top:4px solid var(--mm-red);
-  border-radius:var(--radius);padding:22px 18px 18px;cursor:pointer;
-  transition:transform .25s,box-shadow .25s,border-color .25s;
-  box-shadow:0 18px 40px rgba(0,0,0,.12);
-  display:flex;flex-direction:column;gap:12px;color:var(--mm-ink);
+.dash__panel-head{
+  display:flex;align-items:center;justify-content:space-between;
+  gap:12px;padding:18px 22px;
+  border-bottom:1px solid var(--mm-line);
 }
-.quick-card:hover{transform:translateY(-5px);box-shadow:0 26px 52px rgba(0,0,0,.18);border-color:var(--mm-red)}
-.quick-card__icon{
-  width:52px;height:52px;border-radius:14px;background:var(--mm-red-soft);color:var(--mm-red);
+.dash__panel-head h2{
+  font-size:14px;font-weight:800;letter-spacing:.4px;
+  text-transform:uppercase;color:var(--mm-ink);
+  display:flex;align-items:center;gap:9px;
+}
+.dash__panel-head h2::before{
+  content:"";width:4px;height:16px;border-radius:2px;
+  background:var(--mm-red);
+}
+.dash__panel-head span{
+  font-size:11.5px;font-weight:700;color:var(--mm-gray-light);
+  letter-spacing:.4px;text-transform:uppercase;
+}
+
+.dash__list{list-style:none;padding:8px}
+.dash__item{
+  display:flex;align-items:center;gap:16px;
+  padding:14px 14px;
+  border-radius:10px;
+  text-decoration:none;color:inherit;cursor:pointer;
+  transition:background var(--transition),transform var(--transition);
+  border:none;background:transparent;width:100%;text-align:left;
+}
+.dash__item:hover{background:#F7F8FA}
+.dash__item:hover .dash__item-arrow{transform:translateX(4px);color:var(--mm-red)}
+.dash__item-icon{
+  width:42px;height:42px;border-radius:11px;
+  background:var(--mm-red-soft);color:var(--mm-red);
   display:flex;align-items:center;justify-content:center;
-  transition:background .25s,color .25s,transform .25s;
+  flex-shrink:0;
+  transition:background var(--transition),color var(--transition);
 }
-.quick-card__icon svg{width:24px;height:24px}
-.quick-card:hover .quick-card__icon{background:var(--mm-red);color:#fff;transform:scale(1.05)}
-.quick-card h3{font-size:15.5px;font-weight:800;letter-spacing:-.3px;line-height:1.25}
-.quick-card p{font-size:12px;color:var(--mm-gray);line-height:1.5}
-.quick-card__arrow{margin-top:auto;padding-top:8px;font-size:12.5px;font-weight:800;color:var(--mm-red);display:inline-flex;align-items:center;gap:7px}
-.quick-card__arrow span{transition:transform .2s}
-.quick-card:hover .quick-card__arrow span{transform:translateX(5px)}
+.dash__item-icon svg{width:20px;height:20px}
+.dash__item:hover .dash__item-icon{background:var(--mm-red);color:#fff}
+.dash__item-body{flex:1;min-width:0}
+.dash__item-title{font-size:14px;font-weight:800;letter-spacing:-.2px;color:var(--mm-ink);margin-bottom:2px}
+.dash__item-desc{font-size:12px;color:var(--mm-gray);line-height:1.45}
+.dash__item-arrow{color:var(--mm-gray-light);flex-shrink:0;transition:transform var(--transition),color var(--transition)}
 
-/* ============ SECTION HEAD ============ */
-.section-head{display:flex;align-items:baseline;justify-content:space-between;gap:16px;margin:0 0 18px}
-.section-head h2{font-size:20px;font-weight:800;letter-spacing:-.5px}
-.section-head h2::before{
-  content:"";display:inline-block;width:6px;height:18px;
-  background:var(--mm-red);border-radius:2px;margin-right:10px;vertical-align:-3px;
+.dash__stats{
+  display:grid;grid-template-columns:1fr;gap:14px;padding:18px 22px 22px;
 }
+.dash__stat{
+  display:flex;align-items:center;gap:14px;
+  padding:14px 16px;
+  background:#F7F8FA;
+  border-radius:10px;
+  border-left:3px solid var(--mm-red);
+}
+.dash__stat-icon{
+  width:34px;height:34px;border-radius:9px;
+  background:#fff;color:var(--mm-red);
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;
+  box-shadow:var(--shadow-sm);
+}
+.dash__stat-icon svg{width:17px;height:17px}
+.dash__stat-body{flex:1;min-width:0}
+.dash__stat-label{font-size:10.5px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:var(--mm-gray-light);margin-bottom:2px}
+.dash__stat-value{font-size:15px;font-weight:800;color:var(--mm-ink);letter-spacing:-.3px}
+
+.dash__link{
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  padding:12px 16px;margin:0 22px 22px;
+  background:#1A1A1A;color:#fff;
+  border-radius:10px;
+  font-size:13px;font-weight:800;letter-spacing:.3px;
+  text-decoration:none;cursor:pointer;border:none;
+  transition:background var(--transition),transform var(--transition);
+  width:calc(100% - 44px);
+}
+.dash__link:hover{background:var(--mm-red);transform:translateY(-1px)}
+
+/* ============ SECTION HEAD (para otras vistas) ============ */
+.page-head{
+  display:flex;align-items:flex-end;justify-content:space-between;
+  gap:16px;margin-bottom:22px;flex-wrap:wrap;
+  max-width:1180px;margin-inline:auto;
+}
+.page-head__title{
+  font-size:clamp(20px,2.4vw,26px);
+  font-weight:800;letter-spacing:-.6px;color:var(--mm-ink);
+  display:flex;align-items:center;gap:12px;
+}
+.page-head__title::before{
+  content:"";width:5px;height:26px;border-radius:3px;background:var(--mm-red);
+}
+.page-head__sub{
+  font-size:13px;color:var(--mm-gray);font-weight:500;margin-top:6px;
+  max-width:60ch;
+}
+
+.page-body{max-width:1180px;margin-inline:auto}
 
 /* ============ INFO CARD ============ */
 .info-card{
-  display:grid;grid-template-columns:auto 1fr;gap:24px;align-items:center;
-  background:linear-gradient(135deg, #FFF0F0 0%, #FFFFFF 55%);
-  border:1px solid #FAD4D4;border-left:6px solid var(--mm-red);
-  border-radius:var(--radius);padding:24px 28px;margin-bottom:30px;
+  display:grid;grid-template-columns:auto 1fr;gap:22px;align-items:center;
+  background:#fff;
+  border:1px solid var(--mm-line);border-left:4px solid var(--mm-red);
+  border-radius:var(--radius);padding:22px 24px;margin-bottom:16px;
   text-decoration:none;color:inherit;cursor:pointer;
-  transition:transform .25s,box-shadow .25s,border-color .25s;
-  box-shadow:0 8px 24px rgba(0,0,0,.05);
+  transition:transform var(--transition),box-shadow var(--transition),border-color var(--transition);
+  box-shadow:var(--shadow-sm);
   position:relative;overflow:hidden;
 }
-.info-card::after{
-  content:"";position:absolute;top:-40px;right:-40px;
-  width:180px;height:180px;border-radius:50%;
-  background:radial-gradient(circle, rgba(223,0,0,.08), transparent 70%);
-  pointer-events:none;
-}
-.info-card:hover{transform:translateY(-3px);box-shadow:0 16px 40px rgba(0,0,0,.12);border-color:var(--mm-red)}
+.info-card:hover{transform:translateY(-2px);box-shadow:var(--shadow-md);border-left-color:var(--mm-red-dark)}
 .info-card__icon{
-  width:64px;height:64px;border-radius:18px;flex-shrink:0;
-  background:var(--mm-red);color:#fff;
+  width:54px;height:54px;border-radius:13px;flex-shrink:0;
+  background:var(--mm-red-soft);color:var(--mm-red);
   display:flex;align-items:center;justify-content:center;
-  box-shadow:0 8px 20px rgba(223,0,0,.35);position:relative;z-index:1;
 }
+.info-card:hover .info-card__icon{background:var(--mm-red);color:#fff}
 .info-card__body{position:relative;z-index:1;min-width:0}
 .info-card__top{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-bottom:8px}
 .info-card__tag{
   display:inline-flex;align-items:center;gap:6px;
-  font-size:10.5px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;
-  padding:4px 11px;border-radius:999px;background:var(--mm-red);color:#fff;
+  font-size:10px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;
+  padding:4px 10px;border-radius:999px;background:var(--mm-red-soft);color:var(--mm-red);
+  border:1px solid #FAD4D4;
 }
 .info-card__tag::before{
-  content:"";width:6px;height:6px;border-radius:50%;background:#fff;
+  content:"";width:5px;height:5px;border-radius:50%;background:var(--mm-red);
   animation:pulse 1.6s infinite;
 }
-@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.75)}}
-.info-card__date{font-size:12px;font-weight:700;letter-spacing:1.1px;text-transform:uppercase;color:var(--mm-gray)}
-.info-card__title{font-size:clamp(17px,1.7vw,21px);font-weight:800;letter-spacing:-.5px;line-height:1.25;margin-bottom:6px}
-.info-card__text{font-size:13.5px;color:var(--mm-gray);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.info-card__read{font-size:13px;font-weight:800;color:var(--mm-red);display:inline-flex;align-items:center;gap:7px;margin-top:10px}
-.info-card__read span{transition:transform .2s}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.7)}}
+.info-card__date{font-size:11.5px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--mm-gray-light)}
+.info-card__title{font-size:clamp(15px,1.5vw,18px);font-weight:800;letter-spacing:-.4px;line-height:1.3;margin-bottom:5px}
+.info-card__text{font-size:12.5px;color:var(--mm-gray);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;line-height:1.5}
+.info-card__read{font-size:12.5px;font-weight:800;color:var(--mm-red);display:inline-flex;align-items:center;gap:7px;margin-top:9px}
+.info-card__read span{transition:transform var(--transition)}
 .info-card:hover .info-card__read span{transform:translateX(5px)}
 
 /* ============ EMPTY ============ */
-.empty{background:#fff;border:1px dashed var(--mm-line);border-radius:var(--radius);padding:48px 20px;text-align:center;color:var(--mm-gray);font-size:14.5px}
-.empty strong{display:block;color:var(--mm-ink);font-size:16px;margin-bottom:6px}
+.empty{background:#fff;border:1px dashed var(--mm-line);border-radius:var(--radius);padding:48px 20px;text-align:center;color:var(--mm-gray);font-size:14px}
+.empty strong{display:block;color:var(--mm-ink);font-size:15.5px;margin-bottom:6px}
 
 /* =========================================================
-   NOTICIAS
+   NOTICIAS / TARJETAS
    ========================================================= */
 .news-featured{
-  display:grid;grid-template-columns:minmax(220px,1fr) 1.35fr;
-  background:#fff;border:1px solid var(--mm-line);border-radius:var(--radius);
-  overflow:hidden;margin-bottom:22px;box-shadow:0 8px 26px rgba(0,0,0,.07);
-  transition:box-shadow .25s,transform .25s;text-decoration:none;color:inherit;cursor:pointer;
+  display:grid;grid-template-columns:minmax(200px,1fr) 1.5fr;
+  background:#fff;border:1px solid var(--mm-line);border-radius:var(--radius-lg);
+  overflow:hidden;margin-bottom:20px;box-shadow:var(--shadow-sm);
+  transition:box-shadow var(--transition),transform var(--transition);
+  text-decoration:none;color:inherit;cursor:pointer;
 }
-.news-featured:hover{box-shadow:0 16px 40px rgba(0,0,0,.13);transform:translateY(-3px)}
+.news-featured:hover{box-shadow:var(--shadow-md);transform:translateY(-2px)}
 .news-featured__media{
   position:relative;display:flex;align-items:center;justify-content:center;
   background:linear-gradient(135deg, var(--cat-color, #DF0000), #1A1A1A);
-  min-height:280px;padding:24px;overflow:hidden;
+  min-height:260px;padding:24px;overflow:hidden;
 }
 .news-featured__media::before{
   content:"";position:absolute;inset:0;
-  background:radial-gradient(circle at 20% 25%, rgba(255,255,255,.22) 0%, transparent 55%),
-             radial-gradient(circle at 85% 80%, rgba(0,0,0,.32) 0%, transparent 60%);
+  background:radial-gradient(circle at 20% 25%, rgba(255,255,255,.2) 0%, transparent 55%),
+             radial-gradient(circle at 85% 80%, rgba(0,0,0,.3) 0%, transparent 60%);
   pointer-events:none;
 }
 .news-featured__icon{
-  position:relative;z-index:1;width:96px;height:96px;border-radius:24px;
-  background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.28);
+  position:relative;z-index:1;width:88px;height:88px;border-radius:22px;
+  background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.25);
   display:flex;align-items:center;justify-content:center;color:#fff;backdrop-filter:blur(6px);
 }
-.news-featured__body{padding:32px 34px;display:flex;flex-direction:column;justify-content:center}
-.news-featured__top{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-bottom:14px}
+.news-featured__body{padding:28px 30px;display:flex;flex-direction:column;justify-content:center}
+.news-featured__top{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-bottom:12px}
 .news-cat{
   display:inline-flex;align-items:center;gap:6px;
-  font-size:11px;font-weight:800;letter-spacing:1px;text-transform:uppercase;
-  padding:5px 11px;border-radius:999px;
+  font-size:10.5px;font-weight:800;letter-spacing:1px;text-transform:uppercase;
+  padding:4px 10px;border-radius:999px;
   background:var(--cat-bg,#FFF0F0);color:var(--cat-color,#DF0000);
 }
-.news-cat::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor}
-.news-date{font-size:12px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:var(--mm-gray)}
-.news-featured__title{font-size:clamp(20px,2.3vw,26px);font-weight:800;letter-spacing:-.7px;line-height:1.2;margin-bottom:12px}
-.news-featured__text{font-size:14.5px;color:var(--mm-gray);margin-bottom:16px}
-.news-loc{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:700;color:var(--mm-ink);margin-bottom:18px}
+.news-cat::before{content:"";width:5px;height:5px;border-radius:50%;background:currentColor}
+.news-date{font-size:11.5px;font-weight:700;letter-spacing:1.1px;text-transform:uppercase;color:var(--mm-gray-light)}
+.news-featured__title{font-size:clamp(18px,2vw,22px);font-weight:800;letter-spacing:-.5px;line-height:1.25;margin-bottom:10px}
+.news-featured__text{font-size:13.5px;color:var(--mm-gray);margin-bottom:14px;line-height:1.55}
+.news-loc{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:var(--mm-ink);margin-bottom:16px}
 .news-loc svg{color:var(--mm-red);flex-shrink:0}
-.news-read{font-size:13.5px;font-weight:800;color:var(--mm-red);display:inline-flex;align-items:center;gap:7px;margin-top:auto}
-.news-read span{transition:transform .2s}
+.news-read{font-size:12.5px;font-weight:800;color:var(--mm-red);display:inline-flex;align-items:center;gap:7px;margin-top:auto}
+.news-read span{transition:transform var(--transition)}
 .news-featured:hover .news-read span,.news-card:hover .news-read span{transform:translateX(5px)}
 
-.news-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
+.news-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
 .news-card{
-  background:#fff;border:1px solid #EAEAEA;border-top:4px solid var(--cat-color,#DF0000);
-  border-radius:var(--radius);padding:22px 22px 20px;
-  display:flex;flex-direction:column;transition:box-shadow .25s,transform .25s;
-  text-decoration:none;color:inherit;cursor:pointer;box-shadow:0 1px 3px rgba(0,0,0,.04);
+  background:#fff;border:1px solid var(--mm-line);border-top:3px solid var(--cat-color,#DF0000);
+  border-radius:var(--radius);padding:20px 20px 18px;
+  display:flex;flex-direction:column;transition:box-shadow var(--transition),transform var(--transition);
+  text-decoration:none;color:inherit;cursor:pointer;box-shadow:var(--shadow-sm);
 }
-.news-card:hover{box-shadow:0 14px 32px rgba(0,0,0,.11);transform:translateY(-3px)}
-.news-card__top{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:8px;margin-bottom:14px}
-.news-card__title{font-size:16.5px;font-weight:800;letter-spacing:-.35px;line-height:1.3;margin-bottom:6px}
-.news-card__loc{font-size:12px;font-weight:700;color:var(--mm-gray);display:inline-flex;align-items:center;gap:5px;margin-bottom:10px}
+.news-card:hover{box-shadow:var(--shadow-md);transform:translateY(-2px)}
+.news-card__top{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:8px;margin-bottom:12px}
+.news-card__title{font-size:15px;font-weight:800;letter-spacing:-.3px;line-height:1.3;margin-bottom:6px}
+.news-card__loc{font-size:11.5px;font-weight:700;color:var(--mm-gray);display:inline-flex;align-items:center;gap:5px;margin-bottom:9px}
 .news-card__loc svg{color:var(--mm-red);flex-shrink:0}
 .news-card__text{
-  font-size:13.5px;color:var(--mm-gray);margin-bottom:16px;
+  font-size:12.5px;color:var(--mm-gray);margin-bottom:14px;line-height:1.5;
   display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;
 }
-.news-card .news-read{font-size:13px;padding-top:14px;border-top:1px dashed var(--mm-line)}
-.news-empty{grid-column:1 / -1;background:#fff;border:1px dashed var(--mm-line);border-radius:var(--radius);padding:48px 20px;text-align:center;color:var(--mm-gray);font-size:14.5px}
-.news-empty strong{display:block;color:var(--mm-ink);font-size:16px;margin-bottom:6px}
+.news-card .news-read{font-size:12.5px;padding-top:13px;border-top:1px dashed var(--mm-line)}
+.news-empty{grid-column:1 / -1;background:#fff;border:1px dashed var(--mm-line);border-radius:var(--radius);padding:48px 20px;text-align:center;color:var(--mm-gray);font-size:14px}
+.news-empty strong{display:block;color:var(--mm-ink);font-size:15.5px;margin-bottom:6px}
 
 /* ============ DETALLE ============ */
 .detail-hero{
   position:relative;
   background:linear-gradient(135deg, var(--cat-color, #DF0000) 0%, #1A1A1A 130%);
   color:#fff;overflow:hidden;
+  border-radius:var(--radius-lg);
+  margin-bottom:22px;
 }
 .detail-hero::before{
   content:"";position:absolute;inset:0;
-  background:radial-gradient(circle at 15% 20%, rgba(255,255,255,.16) 0%, transparent 50%),
-             radial-gradient(circle at 90% 85%, rgba(0,0,0,.35) 0%, transparent 55%);
+  background:radial-gradient(circle at 15% 20%, rgba(255,255,255,.15) 0%, transparent 50%),
+             radial-gradient(circle at 90% 85%, rgba(0,0,0,.32) 0%, transparent 55%);
   pointer-events:none;
 }
-.detail-hero__inner{position:relative;z-index:1;padding:32px 0 56px}
+.detail-hero__inner{position:relative;z-index:1;padding:30px 34px 44px}
 .detail-back{
-  display:inline-flex;align-items:center;gap:8px;font-size:13.5px;font-weight:700;
+  display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:700;
   color:rgba(255,255,255,.9);text-decoration:none;
   background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.22);
-  padding:8px 16px;border-radius:999px;cursor:pointer;
-  transition:background .2s,transform .2s,color .2s;margin-bottom:28px;
+  padding:7px 15px;border-radius:999px;cursor:pointer;
+  transition:background var(--transition),transform var(--transition),color var(--transition);
+  margin-bottom:24px;
 }
 .detail-back:hover{background:rgba(255,255,255,.22);transform:translateX(-3px);color:#fff}
-.detail-back svg{transition:transform .2s}
+.detail-back svg{transition:transform var(--transition)}
 .detail-back:hover svg{transform:translateX(-3px)}
-.detail-meta{display:flex;flex-wrap:wrap;align-items:center;gap:12px;margin-bottom:16px}
+.detail-meta{display:flex;flex-wrap:wrap;align-items:center;gap:12px;margin-bottom:14px}
 .detail-cat{
   display:inline-flex;align-items:center;gap:7px;
-  font-size:11.5px;font-weight:800;letter-spacing:1.1px;text-transform:uppercase;
-  padding:6px 14px;border-radius:999px;
+  font-size:11px;font-weight:800;letter-spacing:1px;text-transform:uppercase;
+  padding:5px 13px;border-radius:999px;
   background:rgba(255,255,255,.16);color:#fff;
   border:1px solid rgba(255,255,255,.28);backdrop-filter:blur(6px);
 }
-.detail-cat::before{content:"";width:6px;height:6px;border-radius:50%;background:#fff}
-.detail-date{font-size:12.5px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:rgba(255,255,255,.82)}
+.detail-cat::before{content:"";width:5px;height:5px;border-radius:50%;background:#fff}
+.detail-date{font-size:12px;font-weight:700;letter-spacing:1.1px;text-transform:uppercase;color:rgba(255,255,255,.8)}
 .detail-hero h1{
-  font-size:clamp(28px,4.6vw,46px);font-weight:800;
-  letter-spacing:-1.3px;line-height:1.1;max-width:22ch;
-  text-shadow:0 4px 24px rgba(0,0,0,.3);margin-bottom:18px;
+  font-size:clamp(24px,4vw,38px);font-weight:800;
+  letter-spacing:-1.1px;line-height:1.15;max-width:24ch;
+  text-shadow:0 4px 24px rgba(0,0,0,.3);margin-bottom:16px;
 }
-.detail-hero__loc{display:inline-flex;align-items:center;gap:8px;font-size:13.5px;font-weight:700;color:rgba(255,255,255,.94)}
+.detail-hero__loc{display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:700;color:rgba(255,255,255,.94)}
 .detail-hero__loc svg{color:#fff;flex-shrink:0}
 .detail-body{
-  background:#fff;border:1px solid var(--mm-line);border-radius:var(--radius);
-  padding:44px 46px;margin-top:-32px;position:relative;z-index:2;
-  box-shadow:0 12px 36px rgba(0,0,0,.08);
+  background:#fff;border:1px solid var(--mm-line);border-radius:var(--radius-lg);
+  padding:36px 38px;
+  box-shadow:var(--shadow-sm);
+  max-width:900px;margin-inline:auto;
 }
-.detail-body p{font-size:16px;line-height:1.75;color:#333;margin-bottom:20px}
-.detail-body p:first-of-type{font-size:17.5px;color:var(--mm-ink);font-weight:500}
+.detail-body p{font-size:15px;line-height:1.75;color:var(--mm-ink-soft);margin-bottom:18px}
+.detail-body p:first-of-type{font-size:16px;color:var(--mm-ink);font-weight:500}
 .detail-body p:last-child{margin-bottom:0}
-.detail-subhead{font-size:18px;font-weight:800;letter-spacing:-.4px;margin:34px 0 16px;display:flex;align-items:center;gap:10px}
-.detail-subhead::before{content:"";width:6px;height:18px;background:var(--mm-red);border-radius:2px}
-.detail-list{list-style:none;display:flex;flex-direction:column;gap:8px;margin:0 0 22px}
+.detail-subhead{font-size:16.5px;font-weight:800;letter-spacing:-.3px;margin:30px 0 14px;display:flex;align-items:center;gap:10px}
+.detail-subhead::before{content:"";width:5px;height:16px;background:var(--mm-red);border-radius:2px}
+.detail-list{list-style:none;display:flex;flex-direction:column;gap:8px;margin:0 0 20px}
 .detail-list li{
-  display:flex;align-items:flex-start;gap:12px;font-size:15px;line-height:1.6;color:#333;
-  background:var(--mm-bg);padding:11px 16px;border-radius:10px;border-left:3px solid var(--mm-red);
+  display:flex;align-items:flex-start;gap:12px;font-size:14px;line-height:1.6;color:var(--mm-ink-soft);
+  background:#F7F8FA;padding:11px 15px;border-radius:9px;border-left:3px solid var(--mm-red);
 }
-.detail-list li::before{content:"";flex-shrink:0;margin-top:7px;width:6px;height:6px;border-radius:50%;background:var(--mm-red)}
-.detail-info{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin:26px 0}
-.detail-info__item{background:var(--mm-bg);border:1px solid var(--mm-line);border-radius:10px;padding:14px 16px}
-.detail-info__label{font-size:11px;font-weight:800;letter-spacing:1.1px;text-transform:uppercase;color:var(--mm-gray);margin-bottom:4px}
-.detail-info__value{font-size:14.5px;font-weight:700;color:var(--mm-ink)}
-.related{margin-top:56px}
-.related__head{display:flex;align-items:baseline;gap:12px;margin-bottom:18px}
-.related__head h2{font-size:20px;font-weight:800;letter-spacing:-.5px}
-.related__head h2::before{content:"";display:inline-block;width:6px;height:18px;background:var(--mm-red);border-radius:2px;margin-right:10px;vertical-align:-3px}
-.related .news-grid{grid-template-columns:repeat(3,1fr);gap:16px}
+.detail-list li::before{content:"";flex-shrink:0;margin-top:7px;width:5px;height:5px;border-radius:50%;background:var(--mm-red)}
+.detail-info{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin:22px 0}
+.detail-info__item{background:#F7F8FA;border:1px solid var(--mm-line);border-radius:9px;padding:13px 15px}
+.detail-info__label{font-size:10.5px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:var(--mm-gray-light);margin-bottom:4px}
+.detail-info__value{font-size:13.5px;font-weight:700;color:var(--mm-ink)}
+.related{margin-top:48px;max-width:900px;margin-inline:auto}
+.related__head{display:flex;align-items:baseline;gap:12px;margin-bottom:16px}
+.related__head h2{font-size:17px;font-weight:800;letter-spacing:-.4px}
+.related__head h2::before{content:"";display:inline-block;width:5px;height:16px;background:var(--mm-red);border-radius:2px;margin-right:10px;vertical-align:-2px}
+.related .news-grid{grid-template-columns:repeat(3,1fr);gap:14px}
 
 /* ============ INFO DE CAMPAÑAS ============ */
 .ci-intro{
-  background:linear-gradient(135deg, #FFF6F6 0%, #FFFFFF 100%);
-  border-left:4px solid var(--mm-red);border-radius:10px;
-  padding:18px 22px;margin-bottom:32px;font-size:15px;color:#333;line-height:1.7;
+  background:#FFF6F6;
+  border-left:4px solid var(--mm-red);border-radius:9px;
+  padding:16px 20px;margin-bottom:28px;font-size:14px;color:var(--mm-ink-soft);line-height:1.7;
 }
 .ci-intro strong{color:var(--mm-ink)}
-.ci-section{margin-bottom:42px}
+.ci-section{margin-bottom:36px}
 .ci-section:last-child{margin-bottom:0}
-.ci-section__head{display:flex;align-items:center;gap:12px;padding:14px 20px;border-radius:12px;margin-bottom:22px;color:#fff}
+.ci-section__head{display:flex;align-items:center;gap:12px;padding:12px 18px;border-radius:10px;margin-bottom:18px;color:#fff}
 .ci-section__head--prox{background:linear-gradient(135deg, #DF0000, #8E0000)}
 .ci-section__head--curso{background:linear-gradient(135deg, #1A1A1A, #3A3A3A)}
 .ci-section__head--esp{background:linear-gradient(135deg, #6B4EFF, #3B2599)}
 .ci-section__head--mmm{background:linear-gradient(135deg, #00A650, #006B34)}
-.ci-section__head h2{font-size:17px;font-weight:800;letter-spacing:.2px;text-transform:uppercase}
-.ci-section__emoji{font-size:22px;line-height:1;flex-shrink:0}
-.ci-campaign{background:var(--mm-bg);border:1px solid var(--mm-line);border-radius:12px;padding:22px 24px;margin-bottom:14px}
+.ci-section__head h2{font-size:15px;font-weight:800;letter-spacing:.2px;text-transform:uppercase}
+.ci-section__emoji{font-size:20px;line-height:1;flex-shrink:0}
+.ci-campaign{background:#F7F8FA;border:1px solid var(--mm-line);border-radius:10px;padding:20px 22px;margin-bottom:12px}
 .ci-campaign:last-child{margin-bottom:0}
-.ci-campaign__name{font-size:17px;font-weight:800;letter-spacing:-.3px;margin-bottom:6px;display:flex;flex-wrap:wrap;align-items:center;gap:10px}
-.ci-campaign__badge{font-size:10.5px;font-weight:800;letter-spacing:1px;text-transform:uppercase;padding:3px 9px;border-radius:999px;background:#fff;color:var(--mm-red);border:1px solid var(--mm-red)}
-.ci-campaign__meta{display:flex;flex-wrap:wrap;gap:16px;margin-bottom:12px;font-size:13px;color:var(--mm-gray);font-weight:600}
+.ci-campaign__name{font-size:15.5px;font-weight:800;letter-spacing:-.2px;margin-bottom:6px;display:flex;flex-wrap:wrap;align-items:center;gap:10px}
+.ci-campaign__badge{font-size:10px;font-weight:800;letter-spacing:1px;text-transform:uppercase;padding:3px 9px;border-radius:999px;background:#fff;color:var(--mm-red);border:1px solid var(--mm-red)}
+.ci-campaign__meta{display:flex;flex-wrap:wrap;gap:14px;margin-bottom:10px;font-size:12.5px;color:var(--mm-gray);font-weight:600}
 .ci-campaign__meta span{display:inline-flex;align-items:center;gap:6px}
 .ci-campaign__meta svg{color:var(--mm-red);flex-shrink:0}
-.ci-campaign__text{font-size:14.5px;color:#333;line-height:1.65}
-.ci-links{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px}
+.ci-campaign__text{font-size:13.5px;color:var(--mm-ink-soft);line-height:1.6}
+.ci-links{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}
 .ci-link{
-  display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:700;
-  padding:9px 16px;border-radius:10px;background:#fff;color:var(--mm-red);
+  display:inline-flex;align-items:center;gap:8px;font-size:12.5px;font-weight:700;
+  padding:8px 15px;border-radius:9px;background:#fff;color:var(--mm-red);
   border:1px solid var(--mm-red);text-decoration:none;cursor:pointer;
-  transition:background .2s,color .2s,transform .15s;
+  transition:background var(--transition),color var(--transition),transform .15s;
   word-break:break-all;max-width:100%;
 }
 .ci-link:hover{background:var(--mm-red);color:#fff;transform:translateY(-1px)}
 .ci-link svg{flex-shrink:0}
-.ci-conditions{margin-top:14px;border:1px solid var(--mm-line);border-radius:10px;background:#fff;overflow:hidden}
+.ci-conditions{margin-top:12px;border:1px solid var(--mm-line);border-radius:9px;background:#fff;overflow:hidden}
 .ci-conditions summary{
-  cursor:pointer;list-style:none;padding:12px 18px;
-  font-size:12.5px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;
+  cursor:pointer;list-style:none;padding:11px 16px;
+  font-size:11.5px;font-weight:800;letter-spacing:.7px;text-transform:uppercase;
   color:var(--mm-red);display:flex;align-items:center;justify-content:space-between;gap:10px;
-  transition:background .2s;
+  transition:background var(--transition);
 }
 .ci-conditions summary::-webkit-details-marker{display:none}
 .ci-conditions summary::after{
-  content:"";width:10px;height:10px;flex-shrink:0;
+  content:"";width:9px;height:9px;flex-shrink:0;
   border-right:2px solid var(--mm-red);border-bottom:2px solid var(--mm-red);
-  transform:rotate(45deg);transition:transform .25s;margin-top:-3px;
+  transform:rotate(45deg);transition:transform var(--transition);margin-top:-3px;
 }
 .ci-conditions[open] summary::after{transform:rotate(-135deg);margin-top:3px}
 .ci-conditions summary:hover{background:var(--mm-red-soft)}
-.ci-conditions__content{padding:0 18px 16px;font-size:13.5px;color:#444;line-height:1.7;border-top:1px dashed var(--mm-line)}
+.ci-conditions__content{padding:0 16px 14px;font-size:12.5px;color:#444;line-height:1.7;border-top:1px dashed var(--mm-line)}
 .ci-conditions__content p{margin-top:12px}
 .ci-conditions__content p:first-child{margin-top:14px}
 .ci-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
-.ci-tag{font-size:11.5px;font-weight:700;padding:4px 10px;border-radius:999px;background:#fff;color:#444;border:1px solid var(--mm-line)}
+.ci-tag{font-size:11px;font-weight:700;padding:4px 10px;border-radius:999px;background:#fff;color:#444;border:1px solid var(--mm-line)}
 .ci-tag--no{color:#B00000;border-color:#FAD4D4;background:#FFF0F0}
 .ci-tag--ok{color:#006B34;border-color:#B8E5CB;background:#E8F7EE}
 .ci-tag--info{color:#004B99;border-color:#BFDBF7;background:#E6F1FB}
 
 /* ============ TABLA DE PRODUCTOS ============ */
 .products-table{
-  width:100%;border-collapse:separate;border-spacing:0;margin:20px 0 26px;
-  font-size:13.5px;border:1px solid var(--mm-line);border-radius:10px;overflow:hidden;
+  width:100%;border-collapse:separate;border-spacing:0;margin:18px 0 22px;
+  font-size:12.5px;border:1px solid var(--mm-line);border-radius:9px;overflow:hidden;
 }
 .products-table th{
-  background:linear-gradient(135deg, #1A1A1A, #2E2E2E);
-  color:#fff;font-size:11.5px;font-weight:800;letter-spacing:.9px;text-transform:uppercase;
-  padding:12px 14px;text-align:left;white-space:nowrap;
+  background:#1A1A1A;
+  color:#fff;font-size:11px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;
+  padding:11px 13px;text-align:left;white-space:nowrap;
 }
-.products-table td{padding:12px 14px;border-top:1px solid var(--mm-line);color:#333;background:#fff;vertical-align:top}
-.products-table tr:nth-child(even) td{background:var(--mm-bg)}
+.products-table td{padding:11px 13px;border-top:1px solid var(--mm-line);color:var(--mm-ink-soft);background:#fff;vertical-align:top}
+.products-table tr:nth-child(even) td{background:#F7F8FA}
 .products-table tr:first-child td{border-top:none}
 .products-table__cat{font-weight:700;color:var(--mm-ink)}
-.products-table__model{font-weight:800;color:var(--mm-red);font-family:ui-monospace,monospace;font-size:13px}
+.products-table__model{font-weight:800;color:var(--mm-red);font-family:ui-monospace,monospace;font-size:12.5px}
 .products-table__promo{font-weight:700;color:#00A650}
-.products-table__ean{font-family:ui-monospace,monospace;font-size:12.5px;color:var(--mm-gray)}
-.products-table__code{font-family:ui-monospace,monospace;font-size:12.5px;color:var(--mm-gray)}
+.products-table__ean{font-family:ui-monospace,monospace;font-size:12px;color:var(--mm-gray)}
+.products-table__code{font-family:ui-monospace,monospace;font-size:12px;color:var(--mm-gray)}
 
 /* ============ LISTA DE TIENDAS ============ */
 .stores-list{
-  display:grid;grid-template-columns:repeat(auto-fill, minmax(220px, 1fr));
-  gap:10px;margin:20px 0 26px;list-style:none;
+  display:grid;grid-template-columns:repeat(auto-fill, minmax(200px, 1fr));
+  gap:10px;margin:18px 0 22px;list-style:none;
 }
 .stores-list li{
-  background:var(--mm-bg);border:1px solid var(--mm-line);
-  border-left:4px solid var(--mm-red);border-radius:10px;
-  padding:12px 14px;display:flex;flex-direction:column;gap:2px;
+  background:#F7F8FA;border:1px solid var(--mm-line);
+  border-left:3px solid var(--mm-red);border-radius:9px;
+  padding:11px 13px;display:flex;flex-direction:column;gap:2px;
 }
-.stores-list__name{font-size:14.5px;font-weight:800;color:var(--mm-ink)}
-.stores-list__time{font-size:12px;font-weight:700;color:var(--mm-red);letter-spacing:.3px;text-transform:uppercase}
+.stores-list__name{font-size:13.5px;font-weight:800;color:var(--mm-ink)}
+.stores-list__time{font-size:11px;font-weight:700;color:var(--mm-red);letter-spacing:.3px;text-transform:uppercase}
 
 /* ============ NOVEDADES OPERATIVA ============ */
 .op-block{
-  background:var(--mm-bg);border:1px solid var(--mm-line);
-  border-radius:12px;padding:22px 24px;margin-bottom:16px;
+  background:#F7F8FA;border:1px solid var(--mm-line);
+  border-radius:10px;padding:20px 22px;margin-bottom:14px;
 }
 .op-block:last-child{margin-bottom:0}
 .op-block__title{
-  font-size:16px;font-weight:800;letter-spacing:-.3px;
+  font-size:15px;font-weight:800;letter-spacing:-.2px;
   display:flex;align-items:center;gap:10px;margin-bottom:12px;
 }
 .op-block__num{
-  width:26px;height:26px;border-radius:8px;
+  width:24px;height:24px;border-radius:7px;
   background:var(--mm-red);color:#fff;
   display:inline-flex;align-items:center;justify-content:center;
-  font-size:13px;font-weight:800;flex-shrink:0;
+  font-size:12px;font-weight:800;flex-shrink:0;
 }
-.op-block p{font-size:14.5px;color:#333;line-height:1.65;margin-bottom:10px}
+.op-block p{font-size:13.5px;color:var(--mm-ink-soft);line-height:1.65;margin-bottom:10px}
 .op-block p:last-child{margin-bottom:0}
 .op-block__list{list-style:none;display:flex;flex-direction:column;gap:8px;margin:10px 0}
-.op-block__list li{display:flex;align-items:flex-start;gap:10px;font-size:14.5px;line-height:1.6;color:#333}
-.op-block__list li::before{content:"";flex-shrink:0;margin-top:8px;width:6px;height:6px;border-radius:50%;background:var(--mm-red)}
+.op-block__list li{display:flex;align-items:flex-start;gap:10px;font-size:13.5px;line-height:1.6;color:var(--mm-ink-soft)}
+.op-block__list li::before{content:"";flex-shrink:0;margin-top:8px;width:5px;height:5px;border-radius:50%;background:var(--mm-red)}
 
 .op-alert{
   display:flex;align-items:flex-start;gap:14px;
-  background:linear-gradient(135deg, #FFF6E5 0%, #FFFFFF 100%);
+  background:#FFF6E5;
   border:1px solid #F7D9A8;border-left:4px solid #E08700;
-  border-radius:12px;padding:16px 18px;margin:16px 0;
+  border-radius:10px;padding:15px 17px;margin:14px 0;
 }
 .op-alert__icon{
-  width:36px;height:36px;border-radius:10px;
+  width:34px;height:34px;border-radius:9px;
   background:#E08700;color:#fff;
   display:flex;align-items:center;justify-content:center;flex-shrink:0;
 }
 .op-alert__body{flex:1;min-width:0}
-.op-alert__label{font-size:11px;font-weight:800;letter-spacing:1.1px;text-transform:uppercase;color:#B36A00;margin-bottom:3px}
-.op-alert__text{font-size:14px;color:#333;line-height:1.65}
+.op-alert__label{font-size:10.5px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:#B36A00;margin-bottom:3px}
+.op-alert__text{font-size:13px;color:var(--mm-ink-soft);line-height:1.6}
 
 .op-template{
-  background:#fff;border:1px solid var(--mm-line);border-radius:12px;
-  padding:20px 22px;margin:14px 0;font-size:14px;color:#333;line-height:1.75;
+  background:#fff;border:1px solid var(--mm-line);border-radius:10px;
+  padding:18px 20px;margin:12px 0;font-size:13px;color:var(--mm-ink-soft);line-height:1.75;
 }
 .op-template:last-child{margin-bottom:0}
 .op-template__head{
   display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;
-  gap:10px;margin-bottom:14px;
+  gap:10px;margin-bottom:12px;
 }
 .op-template__label{
   display:inline-flex;align-items:center;gap:8px;
-  font-size:11px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;
+  font-size:10.5px;font-weight:800;letter-spacing:1.1px;text-transform:uppercase;
   color:var(--mm-red);background:var(--mm-red-soft);
-  padding:5px 12px;border-radius:999px;
+  padding:4px 11px;border-radius:999px;
 }
-.op-template__label::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--mm-red)}
-.op-template__body{font-size:14px;color:#333;line-height:1.75}
+.op-template__label::before{content:"";width:5px;height:5px;border-radius:50%;background:var(--mm-red)}
+.op-template__body{font-size:13px;color:var(--mm-ink-soft);line-height:1.75}
 .op-template__body p{margin-bottom:10px}
 .op-template__body p:last-child{margin-bottom:0}
 
 .op-btn{
-  font-family:inherit;font-size:13px;font-weight:800;
-  padding:9px 16px;border-radius:10px;
+  font-family:inherit;font-size:12.5px;font-weight:800;
+  padding:8px 15px;border-radius:9px;
   border:1px solid var(--mm-line);
   background:#fff;color:var(--mm-ink);
   cursor:pointer;
   display:inline-flex;align-items:center;gap:7px;
-  transition:background .2s,border-color .2s,color .2s,transform .15s;
+  transition:background var(--transition),border-color var(--transition),color var(--transition),transform .15s;
   white-space:nowrap;
 }
 .op-btn:hover{border-color:var(--mm-red);color:var(--mm-red)}
-.op-btn--small{font-size:12px;padding:7px 12px}
+.op-btn--small{font-size:11.5px;padding:6px 11px}
 .op-btn--primary{background:var(--mm-red);color:#fff;border-color:var(--mm-red)}
 .op-btn--primary:hover{background:var(--mm-red-dark);color:#fff;border-color:var(--mm-red-dark);transform:translateY(-1px)}
 .op-btn.is-copied{background:#00A650;border-color:#00A650;color:#fff}
 
 .op-form{
-  background:#fff;border:1px solid var(--mm-line);border-radius:12px;
-  padding:22px 24px;margin-top:14px;
+  background:#fff;border:1px solid var(--mm-line);border-radius:10px;
+  padding:20px 22px;margin-top:12px;
 }
-.op-form__grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-bottom:18px}
-.op-form__field{display:flex;flex-direction:column;gap:6px}
+.op-form__grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:16px}
+.op-form__field{display:flex;flex-direction:column;gap:5px}
 .op-form__field--full{grid-column:1 / -1}
 .op-form__field label{
-  font-size:11px;font-weight:800;letter-spacing:1px;
+  font-size:10.5px;font-weight:800;letter-spacing:.9px;
   text-transform:uppercase;color:var(--mm-gray);
 }
 .op-form__field input{
-  font-family:inherit;font-size:14px;padding:10px 14px;
-  border:1px solid var(--mm-line);border-radius:10px;outline:none;
-  transition:border-color .2s,box-shadow .2s;
+  font-family:inherit;font-size:13.5px;padding:9px 13px;
+  border:1px solid var(--mm-line);border-radius:9px;outline:none;
+  transition:border-color var(--transition),box-shadow var(--transition);
   background:#fff;color:var(--mm-ink);width:100%;
 }
-.op-form__field input:focus{border-color:var(--mm-red);box-shadow:0 0 0 3px rgba(223,0,0,.12)}
-.op-form__actions{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:20px}
+.op-form__field input:focus{border-color:var(--mm-red);box-shadow:0 0 0 3px rgba(223,0,0,.1)}
+.op-form__actions{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:18px}
 .op-form__preview-label{
-  font-size:11px;font-weight:800;letter-spacing:1.1px;text-transform:uppercase;
+  font-size:10.5px;font-weight:800;letter-spacing:1px;text-transform:uppercase;
   color:var(--mm-gray);margin-bottom:8px;display:flex;align-items:center;gap:8px;
 }
-.op-form__preview-label::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--mm-red)}
+.op-form__preview-label::before{content:"";width:5px;height:5px;border-radius:50%;background:var(--mm-red)}
 .op-form__preview{
   font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
-  font-size:12.5px;line-height:1.7;color:#333;
-  background:var(--mm-bg);border:1px solid var(--mm-line);border-radius:10px;
-  padding:16px 18px;white-space:pre-wrap;word-wrap:break-word;
-  margin:0;min-height:140px;
+  font-size:12px;line-height:1.7;color:var(--mm-ink-soft);
+  background:#F7F8FA;border:1px solid var(--mm-line);border-radius:9px;
+  padding:14px 16px;white-space:pre-wrap;word-wrap:break-word;
+  margin:0;min-height:130px;
 }
 
 .decision-table{
-  width:100%;border-collapse:separate;border-spacing:0;margin:12px 0 0;font-size:13.5px;
-  border:1px solid var(--mm-line);border-radius:10px;overflow:hidden;
+  width:100%;border-collapse:separate;border-spacing:0;margin:12px 0 0;font-size:12.5px;
+  border:1px solid var(--mm-line);border-radius:9px;overflow:hidden;
 }
 .decision-table th{
-  background:linear-gradient(135deg, #1A1A1A, #2E2E2E);
-  color:#fff;font-size:11.5px;font-weight:800;letter-spacing:.9px;text-transform:uppercase;
-  padding:12px 14px;text-align:left;
+  background:#1A1A1A;
+  color:#fff;font-size:11px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;
+  padding:11px 13px;text-align:left;
 }
-.decision-table td{padding:14px 14px;border-top:1px solid var(--mm-line);color:#333;background:#fff;vertical-align:top;line-height:1.55}
-.decision-table tr:nth-child(even) td{background:var(--mm-bg)}
+.decision-table td{padding:13px 13px;border-top:1px solid var(--mm-line);color:var(--mm-ink-soft);background:#fff;vertical-align:top;line-height:1.55}
+.decision-table tr:nth-child(even) td{background:#F7F8FA}
 .decision-table tr:first-child td{border-top:none}
 .decision-table__situation{font-weight:700;color:var(--mm-ink)}
 .decision-table__what{font-weight:700}
 .decision-table__what--mp{color:#DF0000}
 .decision-table__what--no{color:#006B34}
 .decision-table__what--sc{color:#E08700}
-.decision-table__action{font-size:13.5px;color:#333}
-
-/* ============ VISTAS ============ */
-.view{display:none}
-.view.is-visible{display:block;animation:fadeUp .35s ease both}
-#view-inicio.is-visible{flex:1;display:flex;flex-direction:column}
-@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.decision-table__action{font-size:12.5px;color:var(--mm-ink-soft)}
 
 /* ============ FOOTER ============ */
-.site-footer{margin-top:auto;background:#000;color:#fff;padding:22px 0}
-.site-footer__inner{display:flex;flex-wrap:wrap;gap:10px;justify-content:space-between;align-items:center;font-size:12.5px;letter-spacing:.2px}
-.site-footer__inner strong{font-weight:800;color:#fff}
-.site-footer__brand{display:inline-flex;align-items:center;gap:8px}
-.site-footer__brand::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--mm-red)}
+.site-footer{
+  padding:22px 28px;border-top:1px solid var(--mm-line);
+  background:#fff;color:var(--mm-gray);
+  display:flex;flex-wrap:wrap;gap:10px;justify-content:space-between;align-items:center;
+  font-size:12px;letter-spacing:.2px;
+}
+.site-footer strong{color:var(--mm-ink);font-weight:800}
+
+/* ============ OVERLAY MÓVIL ============ */
+.overlay{
+  display:none;
+  position:fixed;inset:0;
+  background:rgba(16,24,40,.45);
+  backdrop-filter:blur(2px);
+  z-index:150;
+  opacity:0;
+  transition:opacity var(--transition);
+}
+.overlay.is-visible{display:block;opacity:1}
 
 /* ============ RESPONSIVE ============ */
-@media (max-width:1024px){ .quick-links{grid-template-columns:repeat(2,1fr)} }
-@media (max-width:880px){
-  .site-header{position:static}
-  .site-header__inner{flex-direction:column;height:auto;padding:14px 0;gap:12px;align-items:stretch}
-  .logo{text-align:center}
-  .main-nav{justify-content:center;overflow-x:auto;padding-bottom:2px;-ms-overflow-style:none;scrollbar-width:none}
-  .main-nav::-webkit-scrollbar{display:none}
-  .hero{min-height:380px}
-  .hero__inner{padding:48px 0 110px}
-  .quick-links{margin-top:-90px}
-  .news-featured{grid-template-columns:1fr}
-  .news-featured__media{min-height:160px}
-  .news-featured__icon{width:72px;height:72px;border-radius:20px}
-  .news-featured__body{padding:26px 24px}
+@media (max-width:1024px){
+  .dash__grid{grid-template-columns:1fr}
   .related .news-grid{grid-template-columns:repeat(2,1fr)}
-  .products-table{font-size:12.5px}
-  .products-table th, .products-table td{padding:10px 10px}
-  .decision-table{font-size:12.5px}
 }
-@media (max-width:720px){
-  .hero{min-height:340px}
-  .hero__inner{padding:40px 0 100px}
-  .quick-links{grid-template-columns:1fr;gap:14px;margin-top:-80px}
-  .quick-card{padding:20px 20px 18px;gap:10px}
-  .quick-card__icon{width:50px;height:50px;border-radius:14px}
-  .quick-card h3{font-size:16.5px}
-  .news-grid{grid-template-columns:1fr}
-  .news-featured__body{padding:22px 20px}
-  .detail-hero__inner{padding:24px 0 46px}
-  .detail-body{padding:26px 22px;margin-top:-24px}
-  .detail-body p{font-size:15.5px}
-  .detail-body p:first-of-type{font-size:16.5px}
+
+@media (max-width:880px){
+  .sidebar{
+    transform:translateX(-100%);
+    width:var(--sidebar-w);
+  }
+  .app.is-mobile-open .sidebar{transform:translateX(0);box-shadow:var(--shadow-lg)}
+  .app.is-mobile-open .overlay.is-visible{display:block;opacity:1}
+  .app.is-collapsed .sidebar{width:var(--sidebar-w)}
+  .app.is-collapsed .sidebar__title,
+  .app.is-collapsed .sidebar__label,
+  .app.is-collapsed .sidebar__text,
+  .app.is-collapsed .sidebar__badge,
+  .app.is-collapsed .sidebar__footer{opacity:1;pointer-events:auto;width:auto}
+  .app.is-collapsed .sidebar__link{justify-content:flex-start;padding:11px 12px}
+  .app.is-collapsed .sidebar__link.is-active::before{left:-12px}
+  .app.is-collapsed .main{margin-left:0}
+  .main{margin-left:0}
+  .topbar__hamburger{display:flex}
+  .topbar{padding:12px 16px}
+  .content{padding:18px}
+  .sidebar__collapse{display:none}
+  .dash__hero{padding:26px 24px}
+  .dash__hero-inner{align-items:flex-start;gap:20px}
+  .dash__clock{text-align:left;align-items:flex-start}
+  .news-featured{grid-template-columns:1fr}
+  .news-featured__media{min-height:150px}
+  .news-featured__icon{width:68px;height:68px;border-radius:18px}
+  .news-featured__body{padding:22px 22px}
+  .detail-body{padding:26px 22px}
   .detail-info{grid-template-columns:1fr}
   .related .news-grid{grid-template-columns:1fr}
-  .info-card{grid-template-columns:1fr;gap:14px;padding:20px 22px;text-align:left}
-  .info-card__icon{width:52px;height:52px;border-radius:14px}
-  .ci-campaign{padding:18px 18px}
-  .ci-campaign__name{font-size:15.5px}
-  .ci-section__head{padding:12px 16px}
-  .ci-section__head h2{font-size:14.5px}
-  .site-footer__inner{justify-content:center;text-align:center}
+}
+
+@media (max-width:720px){
+  .news-grid{grid-template-columns:1fr}
+  .info-card{grid-template-columns:1fr;gap:12px;padding:18px 20px}
+  .info-card__icon{width:48px;height:48px;border-radius:12px}
+  .ci-campaign{padding:16px 16px}
+  .ci-section__head{padding:11px 14px}
+  .ci-section__head h2{font-size:13.5px}
   .products-table, .decision-table{display:block;overflow-x:auto;white-space:nowrap}
-  .op-block{padding:18px 18px}
-  .op-template{padding:16px 16px;font-size:13.5px}
+  .op-block{padding:16px 16px}
+  .op-template{padding:14px 14px;font-size:12.5px}
   .op-template__head{flex-direction:column;align-items:flex-start}
-  .op-form{padding:18px 18px}
+  .op-form{padding:16px 16px}
   .op-form__grid{grid-template-columns:1fr}
+  .site-footer{flex-direction:column;text-align:center;justify-content:center}
+  .page-head{flex-direction:column;align-items:flex-start}
+  .dash__hero{padding:22px 20px}
+  .dash__greeting{font-size:22px}
+  .dash__clock-time{font-size:26px}
+  .detail-hero__inner{padding:24px 22px 34px}
+  .detail-body{padding:22px 18px}
+  .detail-body p{font-size:14.5px}
+  .detail-body p:first-of-type{font-size:15px}
 }
 </style>
 </head>
 <body>
 
-<!-- ============ HEADER ============ -->
-<header class="site-header">
-  <div class="container site-header__inner">
-    <a class="logo" data-nav="inicio">
-      <i class="fas fa-play" style="font-size:.7em;margin-right:6px;transform:rotate(-15deg)"></i>MediaMarkt
-    </a>
-    <nav class="main-nav" id="mainNav">
-      <a data-nav="inicio" class="is-active"><i class="fas fa-home"></i> Inicio</a>
-      <a data-nav="campanas"><i class="fas fa-bullhorn"></i> Campañas</a>
-      <a data-nav="cashbacks"><i class="fas fa-hand-holding-usd"></i> Cashbacks</a>
-      <a data-nav="novedades"><i class="fas fa-newspaper"></i> Novedades en operativa</a>
-      <a data-nav="noticias"><i class="fas fa-bullhorn"></i> Noticias</a>
-      <a class="nav-external" href="https://thedarkkningt17.github.io/artemisa/datosdeaccesoweb.html" target="_blank" rel="noopener"><i class="fas fa-external-link-alt"></i> Datos de acceso web</a>
-    </nav>
-  </div>
-</header>
+<div class="app" id="app">
 
-<!-- =========================================================
-     VISTA: INICIO
-     ========================================================= -->
-<section class="view is-visible" id="view-inicio">
-  <section class="hero">
-    <div class="container hero__inner">
-      <span class="hero__eyebrow">Portal interno · MediaMarkt</span>
-      <h1>¡Bienvenido, <span class="accent">equipo!</span></h1>
-      <p>Este es tu punto de encuentro para estar al día de las campañas activas, los cashbacks vigentes y las novedades operativas. Toda la información que necesitas, en un solo lugar.</p>
+  <!-- =====================================================
+       SIDEBAR
+       ===================================================== -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar__brand">
+      <div class="sidebar__logo">MA</div>
+      <div class="sidebar__title">
+        <strong>MediaMarkt</strong>
+        <span>Panel de Operaciones</span>
+      </div>
     </div>
-  </section>
+    <button type="button" class="sidebar__collapse" id="collapseBtn" aria-label="Colapsar menú">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+    </button>
+    <nav class="sidebar__nav" id="mainNav">
+      <div class="sidebar__label">Principal</div>
+      <a class="sidebar__link is-active" data-nav="inicio">
+        <span class="sidebar__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/></svg></span>
+        <span class="sidebar__text">Panel de Operaciones</span>
+      </a>
+      <div class="sidebar__label">Módulos</div>
+      <a class="sidebar__link" data-nav="campanas">
+        <span class="sidebar__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg></span>
+        <span class="sidebar__text">Campañas</span>
+      </a>
+      <a class="sidebar__link" data-nav="cashbacks">
+        <span class="sidebar__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="2.5"/><path d="M6 12h.01M18 12h.01"/></svg></span>
+        <span class="sidebar__text">Cashbacks</span>
+      </a>
+      <a class="sidebar__link" data-nav="novedades">
+        <span class="sidebar__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-4 0V9"/><path d="M18 14h-8M15 18h-5M10 6h8v4h-8z"/></svg></span>
+        <span class="sidebar__text">Novedades en operativa</span>
+      </a>
+      <a class="sidebar__link" data-nav="noticias">
+        <span class="sidebar__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-4 0V9"/><path d="M18 14h-8M15 18h-5M10 6h8v4h-8z"/></svg></span>
+        <span class="sidebar__text">Noticias</span>
+      </a>
+      <div class="sidebar__label">Accesos</div>
+      <a class="sidebar__link" href="https://thedarkkningt17.github.io/artemisa/datosdeaccesoweb.html" target="_blank" rel="noopener">
+        <span class="sidebar__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6M10 14 21 3M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg></span>
+        <span class="sidebar__text">Datos de acceso web</span>
+        <span class="sidebar__badge">↗</span>
+      </a>
+    </nav>
+    <div class="sidebar__footer">
+      <strong>Ledezma Enterprises</strong>
+      Portal interno · 2026
+    </div>
+  </aside>
 
-  <div class="container quick-links">
-    <button type="button" class="quick-card" data-nav="campanas">
-      <div class="quick-card__icon">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg>
+  <!-- Overlay para móvil -->
+  <div class="overlay" id="overlay"></div>
+
+  <!-- =====================================================
+       MAIN
+       ===================================================== -->
+  <div class="main" id="main">
+
+    <!-- TOPBAR -->
+    <header class="topbar">
+      <div class="topbar__left">
+        <button type="button" class="topbar__hamburger" id="hamburger" aria-label="Abrir menú">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+        </button>
+        <div class="topbar__title" id="topbarTitle">Panel <span>de Operaciones</span></div>
       </div>
-      <h3>Explorar campañas</h3>
-      <p>Consulta el histórico de acciones promocionales ordenadas por fecha.</p>
-      <span class="quick-card__arrow">Entrar <span aria-hidden="true">→</span></span>
-    </button>
-    <button type="button" class="quick-card" data-nav="cashbacks">
-      <div class="quick-card__icon">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="2.5"/><path d="M6 12h.01M18 12h.01"/></svg>
+      <div class="topbar__right">
+        <span class="topbar__date" id="topbarDate"></span>
+        <div class="topbar__avatar">MM</div>
       </div>
-      <h3>Explorar cashbacks</h3>
-      <p>Revisa las promociones con devolución, importes y condiciones.</p>
-      <span class="quick-card__arrow">Entrar <span aria-hidden="true">→</span></span>
-    </button>
-    <button type="button" class="quick-card" data-nav="novedades">
-      <div class="quick-card__icon">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-4 0V9"/><path d="M18 14h-8M15 18h-5M10 6h8v4h-8z"/></svg>
-      </div>
-      <h3>Explorar novedades</h3>
-      <p>Avisos y cambios en procesos y procedimientos de la operativa diaria.</p>
-      <span class="quick-card__arrow">Entrar <span aria-hidden="true">→</span></span>
-    </button>
-    <button type="button" class="quick-card" data-nav="noticias">
-      <div class="quick-card__icon">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-4 0V9"/><path d="M18 14h-8M15 18h-5M10 6h8v4h-8z"/></svg>
-      </div>
-      <h3>Explorar noticias</h3>
-      <p>Últimas publicaciones, avisos y comunicados del portal interno.</p>
-      <span class="quick-card__arrow">Entrar <span aria-hidden="true">→</span></span>
-    </button>
+    </header>
+
+    <!-- CONTENT -->
+    <main class="content">
+
+      <!-- =====================================================
+           VISTA: INICIO (DASHBOARD)
+           ===================================================== -->
+      <section class="view is-visible" id="view-inicio">
+        <div class="dash">
+
+          <!-- HERO / BIENVENIDA -->
+          <div class="dash__hero">
+            <div class="dash__hero-inner">
+              <div>
+                <span class="dash__eyebrow">Portal interno · MediaMarkt</span>
+                <h1 class="dash__greeting" id="dashGreeting">Bienvenido, <span class="accent">equipo</span></h1>
+                <p class="dash__sub">Tu centro de control para campañas activas, cashbacks vigentes, novedades operativas y comunicados internos. Toda la información que necesitas, siempre actualizada.</p>
+              </div>
+              <div class="dash__clock">
+                <div class="dash__clock-time" id="dashClock">--:--:--</div>
+                <div class="dash__clock-date" id="dashDate">—</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- GRID PRINCIPAL -->
+          <div class="dash__grid">
+
+            <!-- ACCESOS DIRECTOS -->
+            <div class="dash__panel">
+              <div class="dash__panel-head">
+                <h2>Accesos directos</h2>
+                <span>Ir a</span>
+              </div>
+              <ul class="dash__list">
+                <li>
+                  <button type="button" class="dash__item" data-nav="campanas">
+                    <span class="dash__item-icon">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg>
+                    </span>
+                    <span class="dash__item-body">
+                      <span class="dash__item-title">Campañas</span>
+                      <span class="dash__item-desc">Histórico de acciones promocionales y comunicaciones.</span>
+                    </span>
+                    <span class="dash__item-arrow">→</span>
+                  </button>
+                </li>
+                <li>
+                  <button type="button" class="dash__item" data-nav="cashbacks">
+                    <span class="dash__item-icon">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="2.5"/><path d="M6 12h.01M18 12h.01"/></svg>
+                    </span>
+                    <span class="dash__item-body">
+                      <span class="dash__item-title">Cashbacks</span>
+                      <span class="dash__item-desc">Promociones con devolución, importes y condiciones.</span>
+                    </span>
+                    <span class="dash__item-arrow">→</span>
+                  </button>
+                </li>
+                <li>
+                  <button type="button" class="dash__item" data-nav="novedades">
+                    <span class="dash__item-icon">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-4 0V9"/><path d="M18 14h-8M15 18h-5M10 6h8v4h-8z"/></svg>
+                    </span>
+                    <span class="dash__item-body">
+                      <span class="dash__item-title">Novedades en operativa</span>
+                      <span class="dash__item-desc">Procedimientos y cambios en la operativa diaria.</span>
+                    </span>
+                    <span class="dash__item-arrow">→</span>
+                  </button>
+                </li>
+                <li>
+                  <button type="button" class="dash__item" data-nav="noticias">
+                    <span class="dash__item-icon">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-4 0V9"/><path d="M18 14h-8M15 18h-5M10 6h8v4h-8z"/></svg>
+                    </span>
+                    <span class="dash__item-body">
+                      <span class="dash__item-title">Noticias</span>
+                      <span class="dash__item-desc">Avisos, comunicados y publicaciones del portal interno.</span>
+                    </span>
+                    <span class="dash__item-arrow">→</span>
+                  </button>
+                </li>
+              </ul>
+            </div>
+
+            <!-- PANEL LATERAL RESUMEN -->
+            <div class="dash__panel">
+              <div class="dash__panel-head">
+                <h2>Resumen rápido</h2>
+                <span>Hoy</span>
+              </div>
+              <div class="dash__stats">
+                <div class="dash__stat">
+                  <span class="dash__stat-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 10h18"/></svg>
+                  </span>
+                  <div class="dash__stat-body">
+                    <div class="dash__stat-label">Fecha actual</div>
+                    <div class="dash__stat-value" id="dashStatDate">—</div>
+                  </div>
+                </div>
+                <div class="dash__stat">
+                  <span class="dash__stat-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M2 12h20"/></svg>
+                  </span>
+                  <div class="dash__stat-body">
+                    <div class="dash__stat-label">Campañas publicadas</div>
+                    <div class="dash__stat-value" id="dashStatCampanas">—</div>
+                  </div>
+                </div>
+                <div class="dash__stat">
+                  <span class="dash__stat-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="2.5"/><path d="M6 12h.01M18 12h.01"/></svg>
+                  </span>
+                  <div class="dash__stat-body">
+                    <div class="dash__stat-label">Cashbacks activos</div>
+                    <div class="dash__stat-value" id="dashStatCashbacks">—</div>
+                  </div>
+                </div>
+                <div class="dash__stat">
+                  <span class="dash__stat-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-4 0V9"/><path d="M18 14h-8M15 18h-5M10 6h8v4h-8z"/></svg>
+                  </span>
+                  <div class="dash__stat-body">
+                    <div class="dash__stat-label">Noticias publicadas</div>
+                    <div class="dash__stat-value" id="dashStatNoticias">—</div>
+                  </div>
+                </div>
+              </div>
+              <button type="button" class="dash__link" data-nav="noticias">
+                Ver últimas noticias
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+              </button>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      <!-- =====================================================
+           VISTA: CAMPAÑAS
+           ===================================================== -->
+      <section class="view" id="view-campanas">
+        <div class="page-head">
+          <div>
+            <h1 class="page-head__title">Información de campañas</h1>
+            <p class="page-head__sub">Histórico de comunicaciones de campañas ordenadas de más reciente a más antigua.</p>
+          </div>
+        </div>
+        <div class="page-body">
+          <a class="info-card" href="#campana-info-8" data-campana-info="8">
+            <div class="info-card__icon">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg>
+            </div>
+            <div class="info-card__body">
+              <div class="info-card__top">
+                <span class="info-card__tag">Nueva actualización</span>
+                <span class="info-card__date">Viernes, 13 de noviembre de 2026</span>
+              </div>
+              <h3 class="info-card__title">Información de Campañas: Semanas Black, DSI, Día de la TV &amp; Comunicación Especial</h3>
+              <p class="info-card__text">Seguimos en el mes de Black Friday con las 3 fases de OFERTAS MAXXING, el DSI del 19/11 (-21% de IVA), el DÍA DE LA TV del 21/11 (-15% adicional exclusivo APP) y la apertura de la nueva tienda de Manresa. Además, sorteo APP de noviembre y promociones miMediaMarkt.</p>
+              <span class="info-card__read">Leer información completa <span aria-hidden="true">→</span></span>
+            </div>
+          </a>
+          <a class="info-card" href="#campana-info-7" data-campana-info="7">
+            <div class="info-card__icon">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg>
+            </div>
+            <div class="info-card__body">
+              <div class="info-card__top">
+                <span class="info-card__tag">Nueva actualización</span>
+                <span class="info-card__date">Martes, 10 de noviembre de 2026</span>
+              </div>
+              <h3 class="info-card__title">Información de Campañas: SINGLES DAYS &amp; Comunicación Especial</h3>
+              <p class="info-card__text">Llega el SINGLE'S DAY con un -22% exclusivo online: del 10/11 a las 20h al 12/11 a las 9h, con acceso anticipado para usuarios de la APP desde las 15h. En Canarias la campaña empieza el 10/11 a las 15h y se amplían las promesas de entrega.</p>
+              <span class="info-card__read">Leer información completa <span aria-hidden="true">→</span></span>
+            </div>
+          </a>
+          <a class="info-card" href="#campana-info-6" data-campana-info="6">
+            <div class="info-card__icon">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg>
+            </div>
+            <div class="info-card__body">
+              <div class="info-card__top">
+                <span class="info-card__tag">Nueva actualización</span>
+                <span class="info-card__date">Viernes, 6 de noviembre de 2026</span>
+              </div>
+              <h3 class="info-card__title">Información de Campañas: SEMANAS BLACK I, SEMANAS BLACK II, SINGLES DAYS &amp; Comunicación Especial</h3>
+              <p class="info-card__text">Llega el mes de Black Friday y con él las Semanas Black. Repasamos la campaña internacional OFERTAS MAXXING (3 fases), el SINGLE'S DAY con acceso anticipado para usuarios de la APP, el sorteo de noviembre (PS5 Digital + GTA VI) y las promociones miMediaMarkt.</p>
+              <span class="info-card__read">Leer información completa <span aria-hidden="true">→</span></span>
+            </div>
+          </a>
+          <a class="info-card" href="#campana-info-5" data-campana-info="5">
+            <div class="info-card__icon">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg>
+            </div>
+            <div class="info-card__body">
+              <div class="info-card__top">
+                <span class="info-card__tag">Nueva actualización</span>
+                <span class="info-card__date">Lunes, 2 de noviembre de 2026</span>
+              </div>
+              <h3 class="info-card__title">Información de Campañas: SEMANAS BLACK I &amp; Comunicación Especial</h3>
+              <p class="info-card__text">Llega el mes de Black Friday y con él las Semanas Black. Repasamos la campaña internacional OFERTAS MAXXING (3 fases), el RENOVE, el sorteo APP Noviembre (PS5 Digital + GTA VI) y las promociones miMediaMarkt.</p>
+              <span class="info-card__read">Leer información completa <span aria-hidden="true">→</span></span>
+            </div>
+          </a>
+          <a class="info-card" href="#campana-info-4" data-campana-info="4">
+            <div class="info-card__icon">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg>
+            </div>
+            <div class="info-card__body">
+              <div class="info-card__top">
+                <span class="info-card__tag">Nueva actualización</span>
+                <span class="info-card__date">Viernes, 23 de octubre de 2026</span>
+              </div>
+              <h3 class="info-card__title">Información de Campañas: RENOVE &amp; Comunicación Especial</h3>
+              <p class="info-card__text">Seguimos con El RENOVE. Repasamos la comunicación especial de sorteos (APP Octubre y Maratón Valencia) y las promociones miMediaMarkt: cupón Samsung Galaxy S26 Series y -5% directo en Google Pixel 11.</p>
+              <span class="info-card__read">Leer información completa <span aria-hidden="true">→</span></span>
+            </div>
+          </a>
+          <a class="info-card" href="#campana-info-3" data-campana-info="3">
+            <div class="info-card__icon">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg>
+            </div>
+            <div class="info-card__body">
+              <div class="info-card__top">
+                <span class="info-card__tag">Nueva actualización</span>
+                <span class="info-card__date">Viernes, 16 de octubre de 2026</span>
+              </div>
+              <h3 class="info-card__title">Información de Campañas: RENOVE &amp; Comunicación Especial</h3>
+              <p class="info-card__text">Seguimos con El RENOVE: campaña omnicanal del 14/10 al 01/11. Repasamos la comunicación especial de sorteos, la actualización de operadores y las promociones miMediaMarkt.</p>
+              <span class="info-card__read">Leer información completa <span aria-hidden="true">→</span></span>
+            </div>
+          </a>
+          <a class="info-card" href="#campana-info-2" data-campana-info="2">
+            <div class="info-card__icon">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg>
+            </div>
+            <div class="info-card__body">
+              <div class="info-card__top">
+                <span class="info-card__tag">Nueva actualización</span>
+                <span class="info-card__date">Viernes, 9 de octubre de 2026</span>
+              </div>
+              <h3 class="info-card__title">RENOVE &amp; Comunicación Especial</h3>
+              <p class="info-card__text">Vuelve el RENOVE con campaña omnicanal del 14/10 al 01/11. Repasamos también las campañas en curso (OKTUBRE II, LG DAYS, SEMANA WEB), la comunicación especial de sorteos y la actualización de operadores.</p>
+              <span class="info-card__read">Leer información completa <span aria-hidden="true">→</span></span>
+            </div>
+          </a>
+          <a class="info-card" href="#campana-info-1" data-campana-info="1">
+            <div class="info-card__icon">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg>
+            </div>
+            <div class="info-card__body">
+              <div class="info-card__top">
+                <span class="info-card__tag">Nueva actualización</span>
+                <span class="info-card__date">Viernes, 2 de octubre de 2026</span>
+              </div>
+              <h3 class="info-card__title">Información de Campañas: DSI, OKTUBRE 2, SEMANA WEB &amp; LG DAYS</h3>
+              <p class="info-card__text">Resumen de las próximas campañas (DSI, OKTUBRE 2, SEMANA WEB, LG DAYS), las que están en curso (OKTUBRE I, APPLE DAYS, -15% APP), comunicación especial de sorteos y promociones miMediaMarkt.</p>
+              <span class="info-card__read">Leer información completa <span aria-hidden="true">→</span></span>
+            </div>
+          </a>
+        </div>
+      </section>
+
+      <!-- =====================================================
+           VISTA: CASHBACKS
+           ===================================================== -->
+      <section class="view" id="view-cashbacks">
+        <div class="page-head">
+          <div>
+            <h1 class="page-head__title">Cashbacks</h1>
+            <p class="page-head__sub">Promociones con devolución y regalos de fabricante, con importes y condiciones detalladas.</p>
+          </div>
+        </div>
+        <div class="page-body">
+          <a class="info-card" href="#cashback-5" data-cashback="5">
+            <div class="info-card__icon">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="2.5"/><path d="M6 12h.01M18 12h.01"/></svg>
+            </div>
+            <div class="info-card__body">
+              <div class="info-card__top">
+                <span class="info-card__tag">Nueva promoción</span>
+                <span class="info-card__date">Martes, 20 de octubre de 2026</span>
+              </div>
+              <h3 class="info-card__title">CASHBACK LG · PROMO LIFE'S GOOD DAYS NAVIDAD 2026 - MM</h3>
+              <p class="info-card__text">Nueva promo cashback de Navidad para TV y AV LG, vigente del 23/10/2026 al 06/01/2027. Hasta 5.000 € de regalo o 10 años de Garantía Total en OLED Serie C y superiores, y hasta 300 € de regalo en barras de sonido LG.</p>
+              <span class="info-card__read">Leer promoción completa <span aria-hidden="true">→</span></span>
+            </div>
+          </a>
+          <a class="info-card" href="#cashback-4" data-cashback="4">
+            <div class="info-card__icon">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="2.5"/><path d="M6 12h.01M18 12h.01"/></svg>
+            </div>
+            <div class="info-card__body">
+              <div class="info-card__top">
+                <span class="info-card__tag">Nueva promoción</span>
+                <span class="info-card__date">Martes, 13 de octubre de 2026</span>
+              </div>
+              <h3 class="info-card__title">Nuevas promociones Beko y Whirlpool (Octubre-Diciembre 2026)</h3>
+              <p class="info-card__text">Promociones de regalo con Beko y Whirlpool vigentes del 1 de octubre al 31 de diciembre de 2026. Compra un producto seleccionado y llévate el regalo indicado en las bases legales. Fecha límite para solicitar el regalo: 10 de enero de 2027.</p>
+              <span class="info-card__read">Leer promoción completa <span aria-hidden="true">→</span></span>
+            </div>
+          </a>
+          <a class="info-card" href="#cashback-1" data-cashback="1">
+            <div class="info-card__icon">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="2.5"/><path d="M6 12h.01M18 12h.01"/></svg>
+            </div>
+            <div class="info-card__body">
+              <div class="info-card__top">
+                <span class="info-card__tag">Nueva promoción</span>
+                <span class="info-card__date">Miércoles, 30 de septiembre de 2026</span>
+              </div>
+              <h3 class="info-card__title">HISENSE · Promoción Lavavajillas + Finish Ultimate</h3>
+              <p class="info-card__text">Compra un lavavajillas Hisense adherido y recibe 6 meses de lavado gratis con Finish Ultimate Plus. Regalo directo del fabricante, envío a domicilio tras el registro online.</p>
+              <span class="info-card__read">Leer promoción completa <span aria-hidden="true">→</span></span>
+            </div>
+          </a>
+          <a class="info-card" href="#cashback-2" data-cashback="2">
+            <div class="info-card__icon">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="2.5"/><path d="M6 12h.01M18 12h.01"/></svg>
+            </div>
+            <div class="info-card__body">
+              <div class="info-card__top">
+                <span class="info-card__tag">Nueva promoción</span>
+                <span class="info-card__date">Martes, 29 de septiembre de 2026</span>
+              </div>
+              <h3 class="info-card__title">LG · Promoción OLED evo + Barra de sonido</h3>
+              <p class="info-card__text">Compra un televisor LG OLED evo adherido y recibe una barra de sonido LG S90TR de regalo. Promoción exclusiva del fabricante, sujeta a registro online.</p>
+              <span class="info-card__read">Leer promoción completa <span aria-hidden="true">→</span></span>
+            </div>
+          </a>
+          <a class="info-card" href="#cashback-3" data-cashback="3">
+            <div class="info-card__icon">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="2.5"/><path d="M6 12h.01M18 12h.01"/></svg>
+            </div>
+            <div class="info-card__body">
+              <div class="info-card__top">
+                <span class="info-card__tag">Nueva promoción</span>
+                <span class="info-card__date">Lunes, 28 de septiembre de 2026</span>
+              </div>
+              <h3 class="info-card__title">PHILIPS · Promoción Cafetera + Pack de café</h3>
+              <p class="info-card__text">Compra una cafetera superautomática Philips adherida y recibe un pack de café en grano de 1 kg. Regalo directo del fabricante tras el registro de la compra.</p>
+              <span class="info-card__read">Leer promoción completa <span aria-hidden="true">→</span></span>
+            </div>
+          </a>
+        </div>
+      </section>
+
+      <!-- =====================================================
+           VISTA: NOVEDADES EN OPERATIVA
+           ===================================================== -->
+      <section class="view" id="view-novedades">
+        <div class="page-head">
+          <div>
+            <h1 class="page-head__title">Novedades en operativa</h1>
+            <p class="page-head__sub">Procedimientos, cambios y avisos operativos para el día a día.</p>
+          </div>
+        </div>
+        <div class="page-body">
+          <div id="opFeatured"></div>
+          <div class="news-grid" id="opGrid"></div>
+        </div>
+      </section>
+
+      <!-- =====================================================
+           VISTA: NOTICIAS
+           ===================================================== -->
+      <section class="view" id="view-noticias">
+        <div class="page-head">
+          <div>
+            <h1 class="page-head__title">Noticias</h1>
+            <p class="page-head__sub">Últimos comunicados, avisos y publicaciones del portal interno.</p>
+          </div>
+        </div>
+        <div class="page-body">
+          <div id="newsFeatured"></div>
+          <div class="news-grid" id="newsGrid"></div>
+        </div>
+      </section>
+
+      <!-- =====================================================
+           VISTAS DETALLE
+           ===================================================== -->
+      <section class="view" id="view-campana-info"><div id="campanaInfoContent"></div></section>
+      <section class="view" id="view-cashback"><div id="cashbackContent"></div></section>
+      <section class="view" id="view-noticia"><div id="noticiaContent"></div></section>
+      <section class="view" id="view-novedad"><div id="novedadContent"></div></section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="site-footer">
+      <span>Diseñado por <strong>Ledezma Enterprises</strong></span>
+      <span>Portal interno <strong>MediaMarkt</strong> · 2026</span>
+    </footer>
+
   </div>
-</section>
-
-<!-- =========================================================
-     VISTA: CAMPAÑAS
-     ========================================================= -->
-<section class="view" id="view-campanas">
-  <main class="container" style="padding-top:36px">
-    <div class="section-head"><h2>Información de campañas</h2></div>
-    <a class="info-card" href="#campana-info-7" data-campana-info="7">
-      <div class="info-card__icon">
-        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg>
-      </div>
-      <div class="info-card__body">
-        <div class="info-card__top">
-          <span class="info-card__tag">Nueva actualización</span>
-          <span class="info-card__date">Martes, 10 de noviembre de 2026</span>
-        </div>
-        <h3 class="info-card__title">Información de Campañas: SINGLES DAYS &amp; Comunicación Especial</h3>
-        <p class="info-card__text">Llega el SINGLE'S DAY con un -22% exclusivo online: del 10/11 a las 20h al 12/11 a las 9h, con acceso anticipado para usuarios de la APP desde las 15h. En Canarias la campaña empieza el 10/11 a las 15h y se amplían las promesas de entrega.</p>
-        <span class="info-card__read">Leer información completa <span aria-hidden="true">→</span></span>
-      </div>
-    </a>
-    <a class="info-card" href="#campana-info-6" data-campana-info="6">
-      <div class="info-card__icon">
-        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg>
-      </div>
-      <div class="info-card__body">
-        <div class="info-card__top">
-          <span class="info-card__tag">Nueva actualización</span>
-          <span class="info-card__date">Viernes, 6 de noviembre de 2026</span>
-        </div>
-        <h3 class="info-card__title">Información de Campañas: SEMANAS BLACK I, SEMANAS BLACK II, SINGLES DAYS &amp; Comunicación Especial</h3>
-        <p class="info-card__text">Llega el mes de Black Friday y con él las Semanas Black. Repasamos la campaña internacional OFERTAS MAXXING (3 fases), el SINGLE'S DAY con acceso anticipado para usuarios de la APP, el sorteo de noviembre (PS5 Digital + GTA VI) y las promociones miMediaMarkt.</p>
-        <span class="info-card__read">Leer información completa <span aria-hidden="true">→</span></span>
-      </div>
-    </a>
-    <a class="info-card" href="#campana-info-5" data-campana-info="5">
-      <div class="info-card__icon">
-        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg>
-      </div>
-      <div class="info-card__body">
-        <div class="info-card__top">
-          <span class="info-card__tag">Nueva actualización</span>
-          <span class="info-card__date">Lunes, 2 de noviembre de 2026</span>
-        </div>
-        <h3 class="info-card__title">Información de Campañas: SEMANAS BLACK I &amp; Comunicación Especial</h3>
-        <p class="info-card__text">Llega el mes de Black Friday y con él las Semanas Black. Repasamos la campaña internacional OFERTAS MAXXING (3 fases), el RENOVE, el sorteo APP Noviembre (PS5 Digital + GTA VI) y las promociones miMediaMarkt.</p>
-        <span class="info-card__read">Leer información completa <span aria-hidden="true">→</span></span>
-      </div>
-    </a>
-    <a class="info-card" href="#campana-info-4" data-campana-info="4">
-      <div class="info-card__icon">
-        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg>
-      </div>
-      <div class="info-card__body">
-        <div class="info-card__top">
-          <span class="info-card__tag">Nueva actualización</span>
-          <span class="info-card__date">Viernes, 23 de octubre de 2026</span>
-        </div>
-        <h3 class="info-card__title">Información de Campañas: RENOVE &amp; Comunicación Especial</h3>
-        <p class="info-card__text">Seguimos con El RENOVE. Repasamos la comunicación especial de sorteos (APP Octubre y Maratón Valencia) y las promociones miMediaMarkt: cupón Samsung Galaxy S26 Series y -5% directo en Google Pixel 11.</p>
-        <span class="info-card__read">Leer información completa <span aria-hidden="true">→</span></span>
-      </div>
-    </a>
-    <a class="info-card" href="#campana-info-3" data-campana-info="3">
-      <div class="info-card__icon">
-        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg>
-      </div>
-      <div class="info-card__body">
-        <div class="info-card__top">
-          <span class="info-card__tag">Nueva actualización</span>
-          <span class="info-card__date">Viernes, 16 de octubre de 2026</span>
-        </div>
-        <h3 class="info-card__title">Información de Campañas: RENOVE &amp; Comunicación Especial</h3>
-        <p class="info-card__text">Seguimos con El RENOVE: campaña omnicanal del 14/10 al 01/11. Repasamos la comunicación especial de sorteos, la actualización de operadores y las promociones miMediaMarkt.</p>
-        <span class="info-card__read">Leer información completa <span aria-hidden="true">→</span></span>
-      </div>
-    </a>
-    <a class="info-card" href="#campana-info-2" data-campana-info="2">
-      <div class="info-card__icon">
-        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg>
-      </div>
-      <div class="info-card__body">
-        <div class="info-card__top">
-          <span class="info-card__tag">Nueva actualización</span>
-          <span class="info-card__date">Viernes, 9 de octubre de 2026</span>
-        </div>
-        <h3 class="info-card__title">RENOVE &amp; Comunicación Especial</h3>
-        <p class="info-card__text">Vuelve el RENOVE con campaña omnicanal del 14/10 al 01/11. Repasamos también las campañas en curso (OKTUBRE II, LG DAYS, SEMANA WEB), la comunicación especial de sorteos y la actualización de operadores.</p>
-        <span class="info-card__read">Leer información completa <span aria-hidden="true">→</span></span>
-      </div>
-    </a>
-    <a class="info-card" href="#campana-info-1" data-campana-info="1">
-      <div class="info-card__icon">
-        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg>
-      </div>
-      <div class="info-card__body">
-        <div class="info-card__top">
-          <span class="info-card__tag">Nueva actualización</span>
-          <span class="info-card__date">Viernes, 2 de octubre de 2026</span>
-        </div>
-        <h3 class="info-card__title">Información de Campañas: DSI, OKTUBRE 2, SEMANA WEB &amp; LG DAYS</h3>
-        <p class="info-card__text">Resumen de las próximas campañas (DSI, OKTUBRE 2, SEMANA WEB, LG DAYS), las que están en curso (OKTUBRE I, APPLE DAYS, -15% APP), comunicación especial de sorteos y promociones miMediaMarkt.</p>
-        <span class="info-card__read">Leer información completa <span aria-hidden="true">→</span></span>
-      </div>
-    </a>
-  </main>
-</section>
-
-<!-- =========================================================
-     VISTA: CASHBACKS
-     ========================================================= -->
-<section class="view" id="view-cashbacks">
-  <main class="container" style="padding-top:36px">
-    <div class="section-head"><h2>Cashbacks</h2></div>
-    <a class="info-card" href="#cashback-5" data-cashback="5">
-      <div class="info-card__icon">
-        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="2.5"/><path d="M6 12h.01M18 12h.01"/></svg>
-      </div>
-      <div class="info-card__body">
-        <div class="info-card__top">
-          <span class="info-card__tag">Nueva promoción</span>
-          <span class="info-card__date">Martes, 20 de octubre de 2026</span>
-        </div>
-        <h3 class="info-card__title">CASHBACK LG · PROMO LIFE'S GOOD DAYS NAVIDAD 2026 - MM</h3>
-        <p class="info-card__text">Nueva promo cashback de Navidad para TV y AV LG, vigente del 23/10/2026 al 06/01/2027. Hasta 5.000 € de regalo o 10 años de Garantía Total en OLED Serie C y superiores, y hasta 300 € de regalo en barras de sonido LG.</p>
-        <span class="info-card__read">Leer promoción completa <span aria-hidden="true">→</span></span>
-      </div>
-    </a>
-    <a class="info-card" href="#cashback-4" data-cashback="4">
-      <div class="info-card__icon">
-        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="2.5"/><path d="M6 12h.01M18 12h.01"/></svg>
-      </div>
-      <div class="info-card__body">
-        <div class="info-card__top">
-          <span class="info-card__tag">Nueva promoción</span>
-          <span class="info-card__date">Martes, 13 de octubre de 2026</span>
-        </div>
-        <h3 class="info-card__title">Nuevas promociones Beko y Whirlpool (Octubre-Diciembre 2026)</h3>
-        <p class="info-card__text">Promociones de regalo con Beko y Whirlpool vigentes del 1 de octubre al 31 de diciembre de 2026. Compra un producto seleccionado y llévate el regalo indicado en las bases legales. Fecha límite para solicitar el regalo: 10 de enero de 2027.</p>
-        <span class="info-card__read">Leer promoción completa <span aria-hidden="true">→</span></span>
-      </div>
-    </a>
-    <a class="info-card" href="#cashback-1" data-cashback="1">
-      <div class="info-card__icon">
-        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="2.5"/><path d="M6 12h.01M18 12h.01"/></svg>
-      </div>
-      <div class="info-card__body">
-        <div class="info-card__top">
-          <span class="info-card__tag">Nueva promoción</span>
-          <span class="info-card__date">Miércoles, 30 de septiembre de 2026</span>
-        </div>
-        <h3 class="info-card__title">HISENSE · Promoción Lavavajillas + Finish Ultimate</h3>
-        <p class="info-card__text">Compra un lavavajillas Hisense adherido y recibe 6 meses de lavado gratis con Finish Ultimate Plus. Regalo directo del fabricante, envío a domicilio tras el registro online.</p>
-        <span class="info-card__read">Leer promoción completa <span aria-hidden="true">→</span></span>
-      </div>
-    </a>
-    <a class="info-card" href="#cashback-2" data-cashback="2">
-      <div class="info-card__icon">
-        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="2.5"/><path d="M6 12h.01M18 12h.01"/></svg>
-      </div>
-      <div class="info-card__body">
-        <div class="info-card__top">
-          <span class="info-card__tag">Nueva promoción</span>
-          <span class="info-card__date">Martes, 29 de septiembre de 2026</span>
-        </div>
-        <h3 class="info-card__title">LG · Promoción OLED evo + Barra de sonido</h3>
-        <p class="info-card__text">Compra un televisor LG OLED evo adherido y recibe una barra de sonido LG S90TR de regalo. Promoción exclusiva del fabricante, sujeta a registro online.</p>
-        <span class="info-card__read">Leer promoción completa <span aria-hidden="true">→</span></span>
-      </div>
-    </a>
-    <a class="info-card" href="#cashback-3" data-cashback="3">
-      <div class="info-card__icon">
-        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="2.5"/><path d="M6 12h.01M18 12h.01"/></svg>
-      </div>
-      <div class="info-card__body">
-        <div class="info-card__top">
-          <span class="info-card__tag">Nueva promoción</span>
-          <span class="info-card__date">Lunes, 28 de septiembre de 2026</span>
-        </div>
-        <h3 class="info-card__title">PHILIPS · Promoción Cafetera + Pack de café</h3>
-        <p class="info-card__text">Compra una cafetera superautomática Philips adherida y recibe un pack de café en grano de 1 kg. Regalo directo del fabricante tras el registro de la compra.</p>
-        <span class="info-card__read">Leer promoción completa <span aria-hidden="true">→</span></span>
-      </div>
-    </a>
-  </main>
-</section>
-
-<!-- =========================================================
-     VISTA: NOVEDADES EN OPERATIVA
-     ========================================================= -->
-<section class="view" id="view-novedades">
-  <main class="container" style="padding-top:36px">
-    <div class="section-head"><h2>Novedades en operativa</h2></div>
-    <div id="opFeatured"></div>
-    <div class="news-grid" id="opGrid"></div>
-  </main>
-</section>
-
-<!-- =========================================================
-     VISTA: NOTICIAS
-     ========================================================= -->
-<section class="view" id="view-noticias">
-  <main class="container" style="padding-top:36px">
-    <div class="section-head"><h2>Noticias</h2></div>
-    <div id="newsFeatured"></div>
-    <div class="news-grid" id="newsGrid"></div>
-  </main>
-</section>
-
-<!-- =========================================================
-     VISTAS DETALLE
-     ========================================================= -->
-<section class="view" id="view-campana-info"><div id="campanaInfoContent"></div></section>
-<section class="view" id="view-cashback"><div id="cashbackContent"></div></section>
-<section class="view" id="view-noticia"><div id="noticiaContent"></div></section>
-<section class="view" id="view-novedad"><div id="novedadContent"></div></section>
-
-<!-- ============ FOOTER ============ -->
-<footer class="site-footer">
-  <div class="container site-footer__inner">
-    <span class="site-footer__brand">Diseñado por <strong>Ledezma Enterprises</strong></span>
-    <span>Portal interno <strong>MediaMarkt</strong> · 2026</span>
-  </div>
-</footer>
+</div>
 
 <script>
 /* ==========================================================
@@ -906,48 +1370,407 @@ a{color:inherit}
    ========================================================== */
 const CAMPAÑAS_INFO = [
   {
-    id: 1, fecha: '2026-10-02',
-    titulo: 'Información de Campañas: DSI, OKTUBRE 2, SEMANA WEB & LG DAYS',
-    intro: 'A continuación compartimos la información de las próximas campañas, las que están en curso y la comunicación especial vigente para el mes de octubre.',
+    id: 8, fecha: '2026-11-13',
+    titulo: 'Información de Campañas: Semanas Black, DSI, Día de la TV & Comunicación Especial',
+    intro: 'Seguimos en el mes de Black Friday y con ello las Semanas Black. Compartimos la información de las próximas campañas (Semanas Black, DSI y Día de la TV), la comunicación especial (apertura de Manresa y sorteo APP de noviembre) y las promociones miMediaMarkt vigentes.',
     secciones: [
-      { tipo: 'prox', emoji: '📢', titulo: 'Próximas campañas',
+      {
+        tipo: 'prox', emoji: '📢', titulo: 'Próximas campañas',
         campanas: [
-          { nombre: 'DSI · Día Sin IVA', badge: 'Omnicanal',
-            metainfo: [ { icono:'web', texto:'Web/APP: del 04/10 a las 20h al 05/10 a las 23:59h' }, { icono:'store', texto:'Tienda: 05/10 según horario comercial' } ],
-            descripcion: 'Campaña omnicanal con descuento del -21% de IVA en todo excepto Apple y consolas.',
-            excepciones: 'Excepción de festividad local: las tiendas de León, Lugo y Gandía harán la campaña el 06/10.',
-            enlaces: [ { etiqueta:'Condiciones Península', url:'https://www.mediamarkt.es/es/campaign/dia-sin-iva' }, { etiqueta:'Condiciones Canarias', url:'https://canarias.mediamarkt.es/pages/dia-sin-iva' } ],
-            noValido: ['Apple','Beats','Consolas','Siemens','Gafas VR','Gafas IA','Libros','Tarjetas prepago','Lanzamientos','Servicios','Garantías','Formato digital'],
+          {
+            nombre: 'OFERTAS MAXXING · SEMANAS BLACK',
+            badge: '3 fases',
+            metainfo: [
+              { icono:'web', texto:'Fase 1: del 02/11 al 09/11 en tiendas (al 10/11 a las 9h online)' },
+              { icono:'cal', texto:'Fase 2: del 10/11 al 18/11 (hasta las 23:59h online)' },
+              { icono:'cal', texto:'Fase 3: del 20/11 al 30/11 (al 01/12 a las 9h online)' }
+            ],
+            descripcion: 'Campaña internacional OFERTAS MAXXING: llevamos al máximo la tecnología, las ofertas y nuestros servicios. La campaña consta de 3 fases y será la misma desde el inicio hasta la fecha fin. Fase 1: del 02/11 al 09/11 en tiendas (al 10/11 a las 9h online). Fase 2: del 10/11 al 18/11 (hasta las 23:59h online). Fase 3: del 20/11 al 30/11 (al 01/12 a las 9h online).',
             condiciones: [
-              { titulo: 'PEN · Península', texto: 'Descuento equivalente al importe del IVA de Península aplicable a cada producto en stock disponible.' },
-              { titulo: 'CAN · Canarias', texto: 'Descuento equivalente al importe del IVA de Península aplicable a cada producto en stock disponible.' },
-              { titulo: 'LEÓN · LUGO · GANDÍA (06/10 por festivo)', texto: 'Mismas condiciones que Península, pero la campaña se traslada al martes 06/10 por festividad local.' }
+              { titulo: 'Condiciones generales', texto: 'Campaña internacional OFERTAS MAXXING con 3 fases. Fase 1: del 02/11 al 09/11 en tiendas (al 10/11 a las 9h online). Fase 2: del 10/11 al 18/11 (hasta las 23:59h online). Fase 3: del 20/11 al 30/11 (al 01/12 a las 9h online). La campaña será la misma desde el inicio hasta la fecha fin.' }
             ]
           },
-          { nombre: 'OKTUBRE', badge: '2 fases', metainfo: [{ icono:'web', texto:'Fase 2: del 07/10 al 13/10 a las 23:59h' }], descripcion: 'Campaña de octubre dividida en dos fases. La Fase 2 se activa el 07/10 y se extiende hasta el 13/10 a las 23:59h.' },
-          { nombre: 'SEMANA WEB', badge: 'Solo online', metainfo: [{ icono:'web', texto:'Del 07/10 al 13/10 a las 23:59h' }], descripcion: 'Campaña exclusiva online con vigencia del 07/10 al 13/10 a las 23:59h.' },
-          { nombre: 'LG DAYS', badge: 'Omnicanal', metainfo: [{ icono:'store', texto:'Tienda: del 09/10 al 12/10' }, { icono:'web', texto:'Web: visibilidad hasta el 13/10 a las 9h' }], descripcion: 'Campaña omnicanal con hasta -15% en productos seleccionados.' }
+          {
+            nombre: 'DSI · Día Sin IVA',
+            badge: 'Omnicanal',
+            metainfo: [
+              { icono:'web', texto:'Web/APP: 19/11 a las 9h hasta las 23:59h' },
+              { icono:'store', texto:'Tienda: 19/11 según horario comercial' }
+            ],
+            descripcion: 'Campaña omnicanal con descuento del -21% de IVA en todo excepto Apple y consolas.',
+            noValido: ['Apple', 'Consolas'],
+            condiciones: [
+              { titulo: 'Condiciones generales', texto: 'Campaña omnicanal con descuento del -21% de IVA en todo excepto Apple y consolas. Vigencia el 19/11 a las 9h hasta las 23:59h, en tienda el 19/11 según horario comercial.' }
+            ]
+          },
+          {
+            nombre: 'DÍA DE LA TV',
+            badge: 'Solo APP',
+            metainfo: [
+              { icono:'cal', texto:'21/11 de las 9h a las 23:59h' },
+              { icono:'web', texto:'Canarias: exclusivo WEB' }
+            ],
+            descripcion: 'Celebramos el día de la TV con un -15% adicional en TVs exclusivo APP. El descuento se aplica directamente en carrito. La vigencia de la promoción es el 21/11 de las 9h a las 23:59h. En Canarias será exclusivo WEB.',
+            excepciones: 'En Canarias la promoción es exclusiva WEB (no hay APP).',
+            condiciones: [
+              { titulo: 'Condiciones generales', texto: 'Descuento del -15% adicional en TVs exclusivo APP, aplicado directamente en carrito. Vigencia el 21/11 de las 9h a las 23:59h. En Canarias será exclusivo WEB.' }
+            ]
+          }
         ]
       },
-      { tipo: 'curso', emoji: '🔄', titulo: 'Campañas en curso',
+      {
+        tipo: 'esp', emoji: '🎁', titulo: 'Comunicación especial',
         campanas: [
-          { nombre: 'OKTUBRE I', badge: 'Omnicanal', metainfo: [{ icono:'cal', texto:'Del 28/09 al 04/10 a las 9h' }], descripcion: 'Campaña omnicanal con vigencia del 28/09 al 04/10 a las 9h.' },
-          { nombre: 'APPLE DAYS', badge: 'Omnicanal', metainfo: [{ icono:'cal', texto:'Del 02/10 al 06/10 (07/10 a las 9h en web)' }], descripcion: 'Campaña omnicanal con ofertas en productos Apple.' },
-          { nombre: '-15% APP', badge: 'Solo APP', metainfo: [{ icono:'cal', texto:'Del 30/09 a las 20h al 03/10 a las 9h' }], descripcion: 'Campaña exclusiva en la APP (en Canarias exclusiva en Web) con descuento aplicado en carrito.' }
+          {
+            nombre: 'Apertura Manresa',
+            badge: 'Día Sin IVA',
+            metainfo: [
+              { icono:'store', texto:'Jueves 19/11 · Jornada de apertura de 08:00h a 21:00h' }
+            ],
+            descripcion: 'Este jueves 19/11 abrimos una nueva tienda en Manresa con un Día Sin IVA en todo, incluyendo Apple y consolas, aunque con la exclusión de lanzamientos. Será una jornada de apertura de 08:00h a 21:00h.',
+            noValido: ['Lanzamientos'],
+            condiciones: [
+              { titulo: 'Condiciones generales', texto: 'Día Sin IVA en todo, incluyendo Apple y consolas, con la exclusión de lanzamientos. Jornada de apertura de 08:00h a 21:00h el jueves 19/11.' }
+            ]
+          },
+          {
+            nombre: 'Sorteo APP Noviembre · PS5 Digital + GTA VI',
+            badge: 'Sorteo',
+            metainfo: [{ icono:'cal', texto:'Del 2 al 30 de noviembre' }],
+            descripcion: 'Para este pedazo de mes sorteamos entre nuestros clientes 10 PS5 edición digital + el nuevo Grand Theft Auto 6. El sorteo estará activo todo el mes (del 2 al 30 de noviembre). La dinámica es la habitual: solo por tener la APP el usuario entra en ella, rellena el formulario para participar y automáticamente queda inscrito.'
+          }
         ]
       },
-      { tipo: 'esp', emoji: '🎁', titulo: 'Comunicación especial',
-        campanas: [
-          { nombre: 'Sorteo APP Octubre · Tarjetas regalo 999 €', badge: 'Sorteo', metainfo: [{ icono:'cal', texto:'Del 1 al 31 de octubre' }], descripcion: 'Para el mes de octubre sorteamos entre nuestros clientes 5 tarjetas regalo valoradas en 999 € cada una.' },
-          { nombre: 'Sorteo 6 dorsales para el Maratón Valencia', badge: 'Junto a JBL', metainfo: [{ icono:'cal', texto:'Del 1 al 25 de octubre' }], descripcion: 'Junto a JBL, sorteamos 6 dorsales para el Maratón Valencia que se celebra el próximo 6 de diciembre.' }
-        ]
-      },
-      { tipo: 'mmm', emoji: '💳', titulo: 'Campañas miMediaMarkt',
+      {
+        tipo: 'mmm', emoji: '💳', titulo: 'Campañas miMediaMarkt',
         subtitulo: 'Descuentos aplicables sólo a miembros de miMediaMarkt en la web y/o App y/o Tiendas.',
         campanas: [
-          { nombre: 'Samsung Galaxy S26 | ZFlip8 | ZFold8', badge: '-5% directo', metainfo: [{ icono:'cal', texto:'Del 06/10 al 19/10 a las 9h' }], descripcion: '-5% de descuento directo en Samsung Galaxy S26, ZFlip8 y ZFold8.' },
-          { nombre: 'Xiaomi Redmi Note 17', badge: '-20% adicional', metainfo: [{ icono:'cal', texto:'Hasta el 14/10 a las 9h' }], descripcion: '-20% adicional en smartphone Xiaomi Redmi Note 17.' },
-          { nombre: 'Samsung Galaxy S26', badge: 'Cupón', metainfo: [{ icono:'cal', texto:'Hasta el 31/10 a las 23:59h' }], descripcion: 'Hasta -100 € en cupón para smartphones Samsung Galaxy S26.' }
+          {
+            nombre: 'Sony · Auriculares Gaming',
+            badge: 'Cupón',
+            metainfo: [{ icono:'cal', texto:'Hasta el 18/11 a las 23:59h' }],
+            descripcion: '-20 € en cupón en Auriculares Gaming Sony.'
+          },
+          {
+            nombre: 'Samsung Smartwatch | Auriculares | Portátiles',
+            badge: '-5% directo',
+            metainfo: [{ icono:'cal', texto:'Hasta el 30/11 a las 9h' }],
+            descripcion: '-5% de descuento en Smartphones Samsung Galaxy ZFold8 de 1TB.'
+          },
+          {
+            nombre: 'Samsung Galaxy ZFold8 1TB',
+            badge: 'Descuento directo',
+            metainfo: [{ icono:'cal', texto:'Hasta el 01/12 a las 9h' }],
+            descripcion: '-549 € de descuento en Smartphones Samsung Galaxy ZFold8 de 1TB.'
+          },
+          {
+            nombre: 'Samsung Galaxy Flip8 | Fold8 Ultra',
+            badge: 'Descuento directo',
+            metainfo: [{ icono:'cal', texto:'Hasta el 01/12 a las 9h' }],
+            descripcion: 'Hasta -349 € en Smartphone Samsung Galaxy Flip8 512 GB y Fold8 Ultra.'
+          }
+        ]
+      }
+    ]
+  },
+  {
+    id: 7, fecha: '2026-11-10',
+    titulo: 'Información de Campañas: SINGLES DAYS & Comunicación Especial',
+    intro: 'Compartimos la información actualizada del SINGLE\'S DAY: campaña exclusiva online con acceso anticipado para usuarios de la APP, condiciones legales para Península y Canarias, y ampliación de las promesas de entrega en Canarias.',
+    secciones: [
+      {
+        tipo: 'prox', emoji: '📢', titulo: 'Próximas campañas',
+        campanas: [
+          {
+            nombre: "SINGLE'S DAY",
+            badge: 'Solo online',
+            metainfo: [
+              { icono:'web', texto:'Web/APP: del 10/11 a las 20h al 12/11 a las 9h' },
+              { icono:'cal', texto:'Acceso anticipado APP: 10/11 desde las 15h' },
+              { icono:'web', texto:'Canarias: del 10/11 a las 15h al 12/11 a las 9h (solo web)' }
+            ],
+            descripcion: 'Campaña exclusiva online con vigencia del 10/11 a las 20h al 12/11 a las 9h. Los usuarios de la APP tendrán acceso anticipado el 10/11 a las 15h. En Canarias, al no haber APP, la campaña empezará el 10/11 a las 15h.',
+            excepciones: 'En Canarias la campaña comienza el 10/11 a las 15h (no hay APP). Para Canarias, debido al impacto de la campaña, se amplían las promesas de entrega: Pedidos Express de 30 min a 2h y Envíos de 2 a 4 días laborables a 4 a 6 días laborables.',
+            noValido: ['Apple','Beats','Consolas','DJI','Siemens','Gafas VR','Gafas IA','Libros','Tarjetas prepago','Lanzamientos','Servicios','Garantías','Productos en formato digital','Selección de productos en oferta de Semanas Black II'],
+            condiciones: [
+              { titulo: 'Legal PEN · Península y Baleares', texto: 'Descuento del -22% de campaña Single\'s Days válido en Península y Baleares del 10/11 a las 20h hasta el 12/11 a las 9h exclusivo en web y APP (aplicado en carrito). La promoción del -22% tiene un acceso anticipado exclusivo para usuarios de la APP desde el 10/11 a las 15h que finaliza el mismo 10/11 a las 20h. Excluidos una selección de productos en oferta de la campaña Semanas Black II. Todos los precios incluyen IVA / IPSI, RAEE y Canon compensatorio por copia privada. Promoción no válida para Apple, Beats, consolas, DJI, Siemens, Gafas VR, Gafas IA, libros, tarjetas prepago, lanzamientos, servicios, garantías y productos en formato digital. Promoción aplicable a consumidores finales, no acumulable con promociones vigentes y válida para productos vendidos y enviados por MediaMarkt. Consulta condiciones.' },
+              { titulo: 'Legal CAN · Canarias', texto: 'Descuento del -22% de campaña Single\'s Days válido en Canarias del 10/11 a las 15h hasta el 12/11 a las 9h exclusivo en web (aplicado en carrito). Excluidos una selección de productos en oferta de la campaña Semanas Black II. Todos los precios incluyen IVA / IPSI / IGIC, RAEE y Canon compensatorio por copia privada. Promoción no válida para Apple, Beats, consolas, DJI, Siemens, Gafas VR, Gafas IA, libros, tarjetas prepago, lanzamientos, servicios, garantías y productos en formato digital. Promoción aplicable a consumidores finales, no acumulable con promociones vigentes y válida para productos vendidos y enviados por MediaMarkt. Consulta condiciones.' },
+              { titulo: 'Canarias · Ampliación de promesas de entrega', texto: 'Debido al impacto de la campaña se amplían las promesas de entrega: Pedidos Express de 30 min a 2h. Envíos de 2 a 4 días laborables a 4 a 6 días laborables.' }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    id: 6, fecha: '2026-11-06',
+    titulo: 'Información de Campañas: SEMANAS BLACK I, SEMANAS BLACK II, SINGLES DAYS & Comunicación Especial',
+    intro: 'Llega el mes de Black Friday y con él las Semanas Black. Compartimos la información de las próximas campañas, la comunicación especial de sorteos y las promociones miMediaMarkt vigentes.',
+    secciones: [
+      {
+        tipo: 'prox', emoji: '📢', titulo: 'Próximas campañas',
+        campanas: [
+          {
+            nombre: 'OFERTAS MAXXING · SEMANAS BLACK',
+            badge: '3 fases',
+            metainfo: [
+              { icono:'web', texto:'Fase 1: del 02/11 al 09/11 en tiendas (al 10/11 a las 9h online)' },
+              { icono:'cal', texto:'Fase 2: del 10/11 al 18/11 · Fase 3: pendiente confirmar vigencia' }
+            ],
+            descripcion: 'Campaña internacional OFERTAS MAXXING: llevamos al máximo la tecnología, las ofertas y nuestros servicios. La campaña consta de 3 fases y será la misma desde el inicio hasta la fecha fin. Fase 1: del 02/11 al 09/11 en tiendas (al 10/11 a las 9h online). Fase 2: del 10/11 al 18/11. Fase 3: pendiente confirmar vigencia.',
+            condiciones: [
+              { titulo: 'Condiciones generales', texto: 'Campaña internacional OFERTAS MAXXING con 3 fases. Fase 1: del 02/11 al 09/11 en tiendas (al 10/11 a las 9h online). Fase 2: del 10/11 al 18/11. Fase 3: pendiente confirmar vigencia. La campaña será la misma desde el inicio hasta la fecha fin.' }
+            ]
+          },
+          {
+            nombre: "SINGLE'S DAY",
+            badge: 'Solo online',
+            metainfo: [
+              { icono:'web', texto:'Del 10/11 a las 20h al 12/11 a las 9h' }
+            ],
+            descripcion: 'Campaña exclusiva online con vigencia del 10/11 a las 20h al 12/11 a las 9h. Los usuarios de la APP tendrán acceso anticipado el 10/11 a las 15h. En Canarias, al no haber APP, la campaña empezará el 10/11 a las 15h.',
+            excepciones: 'En Canarias la campaña comienza el 10/11 a las 15h (no hay APP).',
+            noValido: ['Consultar exclusiones adjuntas']
+          }
+        ]
+      },
+      {
+        tipo: 'esp', emoji: '🎁', titulo: 'Comunicación especial',
+        campanas: [
+          {
+            nombre: 'Sorteo APP Noviembre · PS5 Digital + GTA VI',
+            badge: 'Sorteo',
+            metainfo: [{ icono:'cal', texto:'Del 2 al 30 de noviembre' }],
+            descripcion: 'Para este pedazo de mes sorteamos entre nuestros clientes 10 PS5 edición digital + el nuevo Grand Theft Auto 6. El sorteo estará activo todo el mes (del 2 al 30 de noviembre). La dinámica es la habitual: solo por tener la APP el usuario entra en ella, rellena el formulario para participar y automáticamente queda inscrito.'
+          }
+        ]
+      },
+      {
+        tipo: 'mmm', emoji: '💳', titulo: 'Campañas miMediaMarkt',
+        subtitulo: 'Descuentos aplicables sólo a miembros de miMediaMarkt en la web y/o App y/o Tiendas. OMNICHANNEL (Tiendas y web/app).',
+        campanas: [
+          {
+            nombre: 'Sony · Auriculares Gaming',
+            badge: 'Cupón',
+            metainfo: [{ icono:'cal', texto:'Hasta el 18/11 a las 23:59h' }],
+            descripcion: '-20 € en cupón en Auriculares Gaming Sony.'
+          },
+          {
+            nombre: 'Samsung Galaxy ZFold8 1TB',
+            badge: 'Descuento directo',
+            metainfo: [{ icono:'cal', texto:'Hasta el 01/12 a las 9h' }],
+            descripcion: '-549 € de descuento en smartphones Samsung Galaxy ZFold8 de 1TB.'
+          },
+          {
+            nombre: 'Samsung Smartwatch | Auriculares | Portátiles',
+            badge: '-5% directo',
+            metainfo: [{ icono:'cal', texto:'Hasta el 30/11 a las 9h' }],
+            descripcion: '-5% de descuento en Samsung Smartwatch | Auriculares | Portátiles.'
+          }
+        ]
+      }
+    ]
+  },
+  {
+    id: 5, fecha: '2026-11-02',
+    titulo: 'Información de Campañas: SEMANAS BLACK I & Comunicación Especial',
+    intro: 'Llega el mes de Black Friday y con él las Semanas Black. Compartimos la información de las próximas campañas, la comunicación especial de sorteos y las promociones miMediaMarkt vigentes.',
+    secciones: [
+      {
+        tipo: 'prox', emoji: '📢', titulo: 'Próximas campañas',
+        campanas: [
+          {
+            nombre: 'OFERTAS MAXXING · SEMANAS BLACK',
+            badge: '3 fases',
+            metainfo: [
+              { icono:'web', texto:'Fase 1: del 02/11 al 09/11 en tiendas (al 10/11 a las 9h online)' },
+              { icono:'cal', texto:'Fase 2: del 10/11 al 18/11 · Fase 3: pendiente confirmar vigencia' }
+            ],
+            descripcion: 'Campaña internacional OFERTAS MAXXING: llevamos al máximo la tecnología, las ofertas y nuestros servicios. La campaña consta de 3 fases y será la misma desde el inicio hasta la fecha fin. Fase 1: del 02/11 al 09/11 en tiendas (al 10/11 a las 9h online). Fase 2: del 10/11 al 18/11. Fase 3: pendiente confirmar vigencia.',
+            condiciones: [
+              { titulo: 'Condiciones generales', texto: 'Campaña internacional OFERTAS MAXXING con 3 fases. Fase 1: del 02/11 al 09/11 en tiendas (al 10/11 a las 9h online). Fase 2: del 10/11 al 18/11. Fase 3: pendiente confirmar vigencia. La campaña será la misma desde el inicio hasta la fecha fin.' }
+            ]
+          },
+          {
+            nombre: 'RENOVE',
+            badge: 'Omnicanal',
+            metainfo: [
+              { icono:'web', texto:'Web/APP: del 14/10 a las 9h al 01/11 a las 23:59h' },
+              { icono:'store', texto:'Tienda: del 14/10 al 01/11 según horario comercial' }
+            ],
+            descripcion: 'Campaña omnicanal con todas las categorías incluidas, con vigencia del 14/10 a las 9h hasta el 01/11 a las 23:59h.',
+            condiciones: [
+              { titulo: 'Condiciones generales', texto: 'Campaña omnicanal aplicable a todas las categorías incluidas en la promoción. Vigencia del 14/10 a las 9h hasta el 01/11 a las 23:59h. Consulta las exclusiones específicas en la información definitiva de la campaña.' }
+            ]
+          }
+        ]
+      },
+      {
+        tipo: 'esp', emoji: '🎁', titulo: 'Comunicación especial',
+        campanas: [
+          {
+            nombre: 'Sorteo APP Noviembre · PS5 Digital + GTA VI',
+            badge: 'Sorteo',
+            metainfo: [{ icono:'cal', texto:'Del 2 al 30 de noviembre' }],
+            descripcion: 'Para este pedazo de mes sorteamos entre nuestros clientes 10 PS5 edición digital + el nuevo Grand Theft Auto 6. El sorteo estará activo todo el mes (del 2 al 30 de noviembre). La dinámica es la habitual: solo por tener la APP el usuario entra en ella, rellena el formulario para participar y automáticamente queda inscrito.'
+          }
+        ]
+      },
+      {
+        tipo: 'mmm', emoji: '💳', titulo: 'Campañas miMediaMarkt',
+        subtitulo: 'Descuentos aplicables sólo a miembros de miMediaMarkt en la web y/o App y/o Tiendas. OMNICHANNEL (Tiendas y web/app).',
+        campanas: [
+          {
+            nombre: 'Dispositivos informática · Tablets | Impresoras | Monitores',
+            badge: '-15% directo',
+            metainfo: [{ icono:'cal', texto:'Hasta el 01/11 a las 9h' }],
+            descripcion: '-15% de descuento en dispositivos de informática: Tablets | Impresoras | Monitores. Excepto Apple.'
+          },
+          {
+            nombre: 'Samsung Galaxy S26 | ZFlip8 | ZFold8',
+            badge: 'Cupón',
+            metainfo: [{ icono:'cal', texto:'Hasta el 02/11 a las 9h' }],
+            descripcion: 'Hasta -150 € en cupón en smartphones Samsung Galaxy S26 | ZFlip8 | ZFold8.'
+          },
+          {
+            nombre: 'Samsung Smartwatch | Portátiles | Tablets | Auriculares',
+            badge: '-5% directo',
+            metainfo: [{ icono:'cal', texto:'Hasta el 02/11 a las 9h' }],
+            descripcion: '-5% de descuento en Samsung Smartwatch | Portátiles | Tablets | Auriculares.'
+          },
+          {
+            nombre: 'Google Pixel 11',
+            badge: '-5% directo',
+            metainfo: [{ icono:'cal', texto:'Hasta el 06/11 a las 9h' }],
+            descripcion: '-5% de descuento directo en Google Pixel 11.'
+          },
+          {
+            nombre: 'Sony · Auriculares Gaming',
+            badge: 'Cupón',
+            metainfo: [{ icono:'cal', texto:'Hasta el 18/11 a las 23:59h' }],
+            descripcion: '-20 € en cupón en Auriculares Gaming Sony.'
+          }
+        ]
+      }
+    ]
+  },
+  {
+    id: 4, fecha: '2026-10-23',
+    titulo: 'Información de Campañas: RENOVE & Comunicación Especial',
+    intro: '¡Feliz viernes! Seguimos con El RENOVE. Compartimos la información actualizada de la campaña, la comunicación especial de sorteos y las promociones miMediaMarkt vigentes.',
+    secciones: [
+      {
+        tipo: 'prox', emoji: '📢', titulo: 'Próximas campañas',
+        campanas: [
+          {
+            nombre: 'RENOVE',
+            badge: 'Omnicanal',
+            metainfo: [
+              { icono:'web', texto:'Web/APP: del 14/10 a las 9h al 01/11 a las 23:59h' },
+              { icono:'store', texto:'Tienda: del 14/10 al 01/11 según horario comercial' }
+            ],
+            descripcion: '¡Seguimos con El RENOVE! Campaña omnicanal con todas las categorías incluidas, con vigencia del 14/10 a las 9h hasta el 01/11 a las 23:59h.',
+            condiciones: [
+              { titulo: 'Condiciones generales', texto: 'Campaña omnicanal aplicable a todas las categorías incluidas en la promoción. Vigencia del 14/10 a las 9h hasta el 01/11 a las 23:59h. Consulta las exclusiones específicas en la información definitiva de la campaña.' }
+            ]
+          }
+        ]
+      },
+      {
+        tipo: 'esp', emoji: '🎁', titulo: 'Comunicación especial',
+        campanas: [
+          {
+            nombre: 'Sorteo APP Octubre · Tarjetas regalo 999 €',
+            badge: 'Sorteo',
+            metainfo: [{ icono:'cal', texto:'Del 1 al 31 de octubre' }],
+            descripcion: 'Para el mes de octubre sorteamos entre nuestros clientes 5 tarjetas regalo valoradas en 999 € cada una. El sorteo estará activo todo el mes (del 1 al 31 de octubre). La dinámica es la habitual: solo por tener la APP el usuario entra en ella, rellena el formulario para participar y automáticamente queda inscrito.'
+          },
+          {
+            nombre: 'Sorteo 6 dorsales para el Maratón Valencia',
+            badge: 'Junto a JBL',
+            metainfo: [{ icono:'cal', texto:'Del 1 al 25 de octubre' }],
+            descripcion: 'Junto a JBL, del 1 al 25 de octubre estamos sorteando entre nuestros clientes 6 dorsales para participar en el Maratón Valencia que se celebra el próximo 6 de diciembre. Para participar, el usuario debe ser miembro miMediaMarkt, realizar una compra de un producto JBL Open Sound o Endurance y subir su ticket de compra a la landing habilitada para ello.',
+            enlaces: [
+              { etiqueta:'Gana 6 tickets para el Maratón Valencia | MediaMarkt', url:'https://www.mediamarkt.es/es/campaign/gana-6-tickets-maraton-valencia' }
+            ]
+          }
+        ]
+      },
+      {
+        tipo: 'mmm', emoji: '💳', titulo: 'Campañas miMediaMarkt',
+        subtitulo: 'Descuentos aplicables sólo a miembros de miMediaMarkt en la web y/o App y/o Tiendas.',
+        campanas: [
+          {
+            nombre: 'Samsung Galaxy S26 Series',
+            badge: 'Cupón',
+            metainfo: [{ icono:'cal', texto:'Hasta el 31/10 a las 23:59h' }],
+            descripcion: 'Hasta -100 € en cupón Samsung S26 Series. Aplicable en tiendas y web/app para miembros de miMediaMarkt.'
+          },
+          {
+            nombre: 'Google Pixel 11',
+            badge: '-5% directo',
+            metainfo: [{ icono:'cal', texto:'Hasta el 06/11 a las 9h' }],
+            descripcion: '-5% de descuento directo en Google Pixel 11. Aplicable en tiendas y web/app para miembros de miMediaMarkt.'
+          }
+        ]
+      }
+    ]
+  },
+  {
+    id: 3, fecha: '2026-10-16',
+    titulo: 'Información de Campañas: RENOVE & Comunicación Especial',
+    intro: 'Seguimos con El RENOVE. Compartimos la información actualizada de la campaña, la comunicación especial de sorteos y las promociones miMediaMarkt vigentes.',
+    secciones: [
+      {
+        tipo: 'prox', emoji: '📢', titulo: 'Próximas campañas',
+        campanas: [
+          {
+            nombre: 'RENOVE',
+            badge: 'Omnicanal',
+            metainfo: [
+              { icono:'web', texto:'Web/APP: del 14/10 a las 9h al 01/11 a las 23:59h' },
+              { icono:'store', texto:'Tienda: del 14/10 al 01/11 según horario comercial' }
+            ],
+            descripcion: '¡Seguimos con El RENOVE! Campaña omnicanal con todas las categorías incluidas, con vigencia del 14/10 a las 9h hasta el 01/11 a las 23:59h.',
+            condiciones: [
+              { titulo: 'Condiciones generales', texto: 'Campaña omnicanal aplicable a todas las categorías incluidas en la promoción. Vigencia del 14/10 a las 9h hasta el 01/11 a las 23:59h. Consulta las exclusiones específicas en la información definitiva de la campaña.' }
+            ]
+          }
+        ]
+      },
+      {
+        tipo: 'esp', emoji: '🎁', titulo: 'Comunicación especial',
+        campanas: [
+          {
+            nombre: 'Sorteo APP Octubre · Tarjetas regalo 999 €',
+            badge: 'Sorteo',
+            metainfo: [{ icono:'cal', texto:'Del 1 al 31 de octubre' }],
+            descripcion: 'Para el mes de octubre sorteamos entre nuestros clientes 5 tarjetas regalo valoradas en 999 € cada una. El sorteo estará activo todo el mes (del 1 al 31 de octubre). La dinámica es la habitual: solo por tener la APP el usuario entra en ella, rellena el formulario para participar y automáticamente queda inscrito.'
+          },
+          {
+            nombre: 'Sorteo 6 dorsales para el Maratón Valencia',
+            badge: 'Junto a JBL',
+            metainfo: [{ icono:'cal', texto:'Del 1 al 25 de octubre' }],
+            descripcion: 'Junto a JBL, del 1 al 25 de octubre estamos sorteando entre nuestros clientes 6 dorsales para participar en el Maratón Valencia que se celebra el próximo 6 de diciembre. Para participar, el usuario debe ser miembro miMediaMarkt, realizar una compra de un producto JBL Open Sound o Endurance y subir su ticket de compra.'
+          },
+          {
+            nombre: 'Actualización Pos Operadores',
+            badge: 'Aviso operativo',
+            metainfo: [{ icono:'cal', texto:'A partir del 1 de octubre' }],
+            descripcion: 'A partir del 1 de octubre, se han producido cambios en las operadoras, dejando de trabajar con Pepephone y MásMóvil e incorporando Vodafone.'
+          }
+        ]
+      },
+      {
+        tipo: 'mmm', emoji: '💳', titulo: 'Campañas miMediaMarkt',
+        subtitulo: 'Descuentos aplicables sólo a miembros de miMediaMarkt en la web y/o App y/o Tiendas.',
+        campanas: [
+          {
+            nombre: 'Samsung Galaxy S26 Series',
+            badge: 'Cupón',
+            metainfo: [{ icono:'cal', texto:'Hasta el 31/10 a las 23:59h' }],
+            descripcion: 'Hasta -100 € en cupón Samsung S26 Series. Aplicable en tiendas y web/app para miembros de miMediaMarkt.'
+          }
         ]
       }
     ]
@@ -1053,303 +1876,48 @@ const CAMPAÑAS_INFO = [
     ]
   },
   {
-    id: 3, fecha: '2026-10-16',
-    titulo: 'Información de Campañas: RENOVE & Comunicación Especial',
-    intro: 'Seguimos con El RENOVE. Compartimos la información actualizada de la campaña, la comunicación especial de sorteos y las promociones miMediaMarkt vigentes.',
+    id: 1, fecha: '2026-10-02',
+    titulo: 'Información de Campañas: DSI, OKTUBRE 2, SEMANA WEB & LG DAYS',
+    intro: 'A continuación compartimos la información de las próximas campañas, las que están en curso y la comunicación especial vigente para el mes de octubre.',
     secciones: [
-      {
-        tipo: 'prox', emoji: '📢', titulo: 'Próximas campañas',
+      { tipo: 'prox', emoji: '📢', titulo: 'Próximas campañas',
         campanas: [
-          {
-            nombre: 'RENOVE',
-            badge: 'Omnicanal',
-            metainfo: [
-              { icono:'web', texto:'Web/APP: del 14/10 a las 9h al 01/11 a las 23:59h' },
-              { icono:'store', texto:'Tienda: del 14/10 al 01/11 según horario comercial' }
-            ],
-            descripcion: '¡Seguimos con El RENOVE! Campaña omnicanal con todas las categorías incluidas, con vigencia del 14/10 a las 9h hasta el 01/11 a las 23:59h.',
+          { nombre: 'DSI · Día Sin IVA', badge: 'Omnicanal',
+            metainfo: [ { icono:'web', texto:'Web/APP: del 04/10 a las 20h al 05/10 a las 23:59h' }, { icono:'store', texto:'Tienda: 05/10 según horario comercial' } ],
+            descripcion: 'Campaña omnicanal con descuento del -21% de IVA en todo excepto Apple y consolas.',
+            excepciones: 'Excepción de festividad local: las tiendas de León, Lugo y Gandía harán la campaña el 06/10.',
+            enlaces: [ { etiqueta:'Condiciones Península', url:'https://www.mediamarkt.es/es/campaign/dia-sin-iva' }, { etiqueta:'Condiciones Canarias', url:'https://canarias.mediamarkt.es/pages/dia-sin-iva' } ],
+            noValido: ['Apple','Beats','Consolas','Siemens','Gafas VR','Gafas IA','Libros','Tarjetas prepago','Lanzamientos','Servicios','Garantías','Formato digital'],
             condiciones: [
-              { titulo: 'Condiciones generales', texto: 'Campaña omnicanal aplicable a todas las categorías incluidas en la promoción. Vigencia del 14/10 a las 9h hasta el 01/11 a las 23:59h. Consulta las exclusiones específicas en la información definitiva de la campaña.' }
+              { titulo: 'PEN · Península', texto: 'Descuento equivalente al importe del IVA de Península aplicable a cada producto en stock disponible.' },
+              { titulo: 'CAN · Canarias', texto: 'Descuento equivalente al importe del IVA de Península aplicable a cada producto en stock disponible.' },
+              { titulo: 'LEÓN · LUGO · GANDÍA (06/10 por festivo)', texto: 'Mismas condiciones que Península, pero la campaña se traslada al martes 06/10 por festividad local.' }
             ]
-          }
+          },
+          { nombre: 'OKTUBRE', badge: '2 fases', metainfo: [{ icono:'web', texto:'Fase 2: del 07/10 al 13/10 a las 23:59h' }], descripcion: 'Campaña de octubre dividida en dos fases. La Fase 2 se activa el 07/10 y se extiende hasta el 13/10 a las 23:59h.' },
+          { nombre: 'SEMANA WEB', badge: 'Solo online', metainfo: [{ icono:'web', texto:'Del 07/10 al 13/10 a las 23:59h' }], descripcion: 'Campaña exclusiva online con vigencia del 07/10 al 13/10 a las 23:59h.' },
+          { nombre: 'LG DAYS', badge: 'Omnicanal', metainfo: [{ icono:'store', texto:'Tienda: del 09/10 al 12/10' }, { icono:'web', texto:'Web: visibilidad hasta el 13/10 a las 9h' }], descripcion: 'Campaña omnicanal con hasta -15% en productos seleccionados.' }
         ]
       },
-      {
-        tipo: 'esp', emoji: '🎁', titulo: 'Comunicación especial',
+      { tipo: 'curso', emoji: '🔄', titulo: 'Campañas en curso',
         campanas: [
-          {
-            nombre: 'Sorteo APP Octubre · Tarjetas regalo 999 €',
-            badge: 'Sorteo',
-            metainfo: [{ icono:'cal', texto:'Del 1 al 31 de octubre' }],
-            descripcion: 'Para el mes de octubre sorteamos entre nuestros clientes 5 tarjetas regalo valoradas en 999 € cada una. El sorteo estará activo todo el mes (del 1 al 31 de octubre). La dinámica es la habitual: solo por tener la APP el usuario entra en ella, rellena el formulario para participar y automáticamente queda inscrito.'
-          },
-          {
-            nombre: 'Sorteo 6 dorsales para el Maratón Valencia',
-            badge: 'Junto a JBL',
-            metainfo: [{ icono:'cal', texto:'Del 1 al 25 de octubre' }],
-            descripcion: 'Junto a JBL, del 1 al 25 de octubre estamos sorteando entre nuestros clientes 6 dorsales para participar en el Maratón Valencia que se celebra el próximo 6 de diciembre. Para participar, el usuario debe ser miembro miMediaMarkt, realizar una compra de un producto JBL Open Sound o Endurance y subir su ticket de compra.'
-          },
-          {
-            nombre: 'Actualización Pos Operadores',
-            badge: 'Aviso operativo',
-            metainfo: [{ icono:'cal', texto:'A partir del 1 de octubre' }],
-            descripcion: 'A partir del 1 de octubre, se han producido cambios en las operadoras, dejando de trabajar con Pepephone y MásMóvil e incorporando Vodafone.'
-          }
+          { nombre: 'OKTUBRE I', badge: 'Omnicanal', metainfo: [{ icono:'cal', texto:'Del 28/09 al 04/10 a las 9h' }], descripcion: 'Campaña omnicanal con vigencia del 28/09 al 04/10 a las 9h.' },
+          { nombre: 'APPLE DAYS', badge: 'Omnicanal', metainfo: [{ icono:'cal', texto:'Del 02/10 al 06/10 (07/10 a las 9h en web)' }], descripcion: 'Campaña omnicanal con ofertas en productos Apple.' },
+          { nombre: '-15% APP', badge: 'Solo APP', metainfo: [{ icono:'cal', texto:'Del 30/09 a las 20h al 03/10 a las 9h' }], descripcion: 'Campaña exclusiva en la APP (en Canarias exclusiva en Web) con descuento aplicado en carrito.' }
         ]
       },
-      {
-        tipo: 'mmm', emoji: '💳', titulo: 'Campañas miMediaMarkt',
+      { tipo: 'esp', emoji: '🎁', titulo: 'Comunicación especial',
+        campanas: [
+          { nombre: 'Sorteo APP Octubre · Tarjetas regalo 999 €', badge: 'Sorteo', metainfo: [{ icono:'cal', texto:'Del 1 al 31 de octubre' }], descripcion: 'Para el mes de octubre sorteamos entre nuestros clientes 5 tarjetas regalo valoradas en 999 € cada una.' },
+          { nombre: 'Sorteo 6 dorsales para el Maratón Valencia', badge: 'Junto a JBL', metainfo: [{ icono:'cal', texto:'Del 1 al 25 de octubre' }], descripcion: 'Junto a JBL, sorteamos 6 dorsales para el Maratón Valencia que se celebra el próximo 6 de diciembre.' }
+        ]
+      },
+      { tipo: 'mmm', emoji: '💳', titulo: 'Campañas miMediaMarkt',
         subtitulo: 'Descuentos aplicables sólo a miembros de miMediaMarkt en la web y/o App y/o Tiendas.',
         campanas: [
-          {
-            nombre: 'Samsung Galaxy S26 Series',
-            badge: 'Cupón',
-            metainfo: [{ icono:'cal', texto:'Hasta el 31/10 a las 23:59h' }],
-            descripcion: 'Hasta -100 € en cupón Samsung S26 Series. Aplicable en tiendas y web/app para miembros de miMediaMarkt.'
-          }
-        ]
-      }
-    ]
-  },
-  {
-    id: 4, fecha: '2026-10-23',
-    titulo: 'Información de Campañas: RENOVE & Comunicación Especial',
-    intro: '¡Feliz viernes! Seguimos con El RENOVE. Compartimos la información actualizada de la campaña, la comunicación especial de sorteos y las promociones miMediaMarkt vigentes.',
-    secciones: [
-      {
-        tipo: 'prox', emoji: '📢', titulo: 'Próximas campañas',
-        campanas: [
-          {
-            nombre: 'RENOVE',
-            badge: 'Omnicanal',
-            metainfo: [
-              { icono:'web', texto:'Web/APP: del 14/10 a las 9h al 01/11 a las 23:59h' },
-              { icono:'store', texto:'Tienda: del 14/10 al 01/11 según horario comercial' }
-            ],
-            descripcion: '¡Seguimos con El RENOVE! Campaña omnicanal con todas las categorías incluidas, con vigencia del 14/10 a las 9h hasta el 01/11 a las 23:59h.',
-            condiciones: [
-              { titulo: 'Condiciones generales', texto: 'Campaña omnicanal aplicable a todas las categorías incluidas en la promoción. Vigencia del 14/10 a las 9h hasta el 01/11 a las 23:59h. Consulta las exclusiones específicas en la información definitiva de la campaña.' }
-            ]
-          }
-        ]
-      },
-      {
-        tipo: 'esp', emoji: '🎁', titulo: 'Comunicación especial',
-        campanas: [
-          {
-            nombre: 'Sorteo APP Octubre · Tarjetas regalo 999 €',
-            badge: 'Sorteo',
-            metainfo: [{ icono:'cal', texto:'Del 1 al 31 de octubre' }],
-            descripcion: 'Para el mes de octubre sorteamos entre nuestros clientes 5 tarjetas regalo valoradas en 999 € cada una. El sorteo estará activo todo el mes (del 1 al 31 de octubre). La dinámica es la habitual: solo por tener la APP el usuario entra en ella, rellena el formulario para participar y automáticamente queda inscrito.'
-          },
-          {
-            nombre: 'Sorteo 6 dorsales para el Maratón Valencia',
-            badge: 'Junto a JBL',
-            metainfo: [{ icono:'cal', texto:'Del 1 al 25 de octubre' }],
-            descripcion: 'Junto a JBL, del 1 al 25 de octubre estamos sorteando entre nuestros clientes 6 dorsales para participar en el Maratón Valencia que se celebra el próximo 6 de diciembre. Para participar, el usuario debe ser miembro miMediaMarkt, realizar una compra de un producto JBL Open Sound o Endurance y subir su ticket de compra a la landing habilitada para ello.',
-            enlaces: [
-              { etiqueta:'Gana 6 tickets para el Maratón Valencia | MediaMarkt', url:'https://www.mediamarkt.es/es/campaign/gana-6-tickets-maraton-valencia' }
-            ]
-          }
-        ]
-      },
-      {
-        tipo: 'mmm', emoji: '💳', titulo: 'Campañas miMediaMarkt',
-        subtitulo: 'Descuentos aplicables sólo a miembros de miMediaMarkt en la web y/o App y/o Tiendas.',
-        campanas: [
-          {
-            nombre: 'Samsung Galaxy S26 Series',
-            badge: 'Cupón',
-            metainfo: [{ icono:'cal', texto:'Hasta el 31/10 a las 23:59h' }],
-            descripcion: 'Hasta -100 € en cupón Samsung S26 Series. Aplicable en tiendas y web/app para miembros de miMediaMarkt.'
-          },
-          {
-            nombre: 'Google Pixel 11',
-            badge: '-5% directo',
-            metainfo: [{ icono:'cal', texto:'Hasta el 06/11 a las 9h' }],
-            descripcion: '-5% de descuento directo en Google Pixel 11. Aplicable en tiendas y web/app para miembros de miMediaMarkt.'
-          }
-        ]
-      }
-    ]
-  },
-  {
-    id: 5, fecha: '2026-11-02',
-    titulo: 'Información de Campañas: SEMANAS BLACK I & Comunicación Especial',
-    intro: 'Llega el mes de Black Friday y con él las Semanas Black. Compartimos la información de las próximas campañas, la comunicación especial de sorteos y las promociones miMediaMarkt vigentes.',
-    secciones: [
-      {
-        tipo: 'prox', emoji: '📢', titulo: 'Próximas campañas',
-        campanas: [
-          {
-            nombre: 'OFERTAS MAXXING · SEMANAS BLACK',
-            badge: '3 fases',
-            metainfo: [
-              { icono:'web', texto:'Fase 1: del 02/11 al 09/11 en tiendas (al 10/11 a las 9h online)' },
-              { icono:'cal', texto:'Fase 2: del 10/11 al 18/11 · Fase 3: pendiente confirmar vigencia' }
-            ],
-            descripcion: 'Campaña internacional OFERTAS MAXXING: llevamos al máximo la tecnología, las ofertas y nuestros servicios. La campaña consta de 3 fases y será la misma desde el inicio hasta la fecha fin. Fase 1: del 02/11 al 09/11 en tiendas (al 10/11 a las 9h online). Fase 2: del 10/11 al 18/11. Fase 3: pendiente confirmar vigencia.',
-            condiciones: [
-              { titulo: 'Condiciones generales', texto: 'Campaña internacional OFERTAS MAXXING con 3 fases. Fase 1: del 02/11 al 09/11 en tiendas (al 10/11 a las 9h online). Fase 2: del 10/11 al 18/11. Fase 3: pendiente confirmar vigencia. La campaña será la misma desde el inicio hasta la fecha fin.' }
-            ]
-          },
-          {
-            nombre: 'RENOVE',
-            badge: 'Omnicanal',
-            metainfo: [
-              { icono:'web', texto:'Web/APP: del 14/10 a las 9h al 01/11 a las 23:59h' },
-              { icono:'store', texto:'Tienda: del 14/10 al 01/11 según horario comercial' }
-            ],
-            descripcion: 'Campaña omnicanal con todas las categorías incluidas, con vigencia del 14/10 a las 9h hasta el 01/11 a las 23:59h.',
-            condiciones: [
-              { titulo: 'Condiciones generales', texto: 'Campaña omnicanal aplicable a todas las categorías incluidas en la promoción. Vigencia del 14/10 a las 9h hasta el 01/11 a las 23:59h. Consulta las exclusiones específicas en la información definitiva de la campaña.' }
-            ]
-          }
-        ]
-      },
-      {
-        tipo: 'esp', emoji: '🎁', titulo: 'Comunicación especial',
-        campanas: [
-          {
-            nombre: 'Sorteo APP Noviembre · PS5 Digital + GTA VI',
-            badge: 'Sorteo',
-            metainfo: [{ icono:'cal', texto:'Del 2 al 30 de noviembre' }],
-            descripcion: 'Para este pedazo de mes sorteamos entre nuestros clientes 10 PS5 edición digital + el nuevo Grand Theft Auto 6. El sorteo estará activo todo el mes (del 2 al 30 de noviembre). La dinámica es la habitual: solo por tener la APP el usuario entra en ella, rellena el formulario para participar y automáticamente queda inscrito.'
-          }
-        ]
-      },
-      {
-        tipo: 'mmm', emoji: '💳', titulo: 'Campañas miMediaMarkt',
-        subtitulo: 'Descuentos aplicables sólo a miembros de miMediaMarkt en la web y/o App y/o Tiendas. OMNICHANNEL (Tiendas y web/app).',
-        campanas: [
-          {
-            nombre: 'Dispositivos informática · Tablets | Impresoras | Monitores',
-            badge: '-15% directo',
-            metainfo: [{ icono:'cal', texto:'Hasta el 01/11 a las 9h' }],
-            descripcion: '-15% de descuento en dispositivos de informática: Tablets | Impresoras | Monitores. Excepto Apple.'
-          },
-          {
-            nombre: 'Samsung Galaxy S26 | ZFlip8 | ZFold8',
-            badge: 'Cupón',
-            metainfo: [{ icono:'cal', texto:'Hasta el 02/11 a las 9h' }],
-            descripcion: 'Hasta -150 € en cupón en smartphones Samsung Galaxy S26 | ZFlip8 | ZFold8.'
-          },
-          {
-            nombre: 'Samsung Smartwatch | Portátiles | Tablets | Auriculares',
-            badge: '-5% directo',
-            metainfo: [{ icono:'cal', texto:'Hasta el 02/11 a las 9h' }],
-            descripcion: '-5% de descuento en Samsung Smartwatch | Portátiles | Tablets | Auriculares.'
-          },
-          {
-            nombre: 'Google Pixel 11',
-            badge: '-5% directo',
-            metainfo: [{ icono:'cal', texto:'Hasta el 06/11 a las 9h' }],
-            descripcion: '-5% de descuento directo en Google Pixel 11.'
-          },
-          {
-            nombre: 'Sony · Auriculares Gaming',
-            badge: 'Cupón',
-            metainfo: [{ icono:'cal', texto:'Hasta el 18/11 a las 23:59h' }],
-            descripcion: '-20 € en cupón en Auriculares Gaming Sony.'
-          }
-        ]
-      }
-    ]
-  },
-  {
-    id: 6, fecha: '2026-11-06',
-    titulo: 'Información de Campañas: SEMANAS BLACK I, SEMANAS BLACK II, SINGLES DAYS & Comunicación Especial',
-    intro: 'Llega el mes de Black Friday y con él las Semanas Black. Compartimos la información de las próximas campañas, la comunicación especial de sorteos y las promociones miMediaMarkt vigentes.',
-    secciones: [
-      {
-        tipo: 'prox', emoji: '📢', titulo: 'Próximas campañas',
-        campanas: [
-          {
-            nombre: 'OFERTAS MAXXING · SEMANAS BLACK',
-            badge: '3 fases',
-            metainfo: [
-              { icono:'web', texto:'Fase 1: del 02/11 al 09/11 en tiendas (al 10/11 a las 9h online)' },
-              { icono:'cal', texto:'Fase 2: del 10/11 al 18/11 · Fase 3: pendiente confirmar vigencia' }
-            ],
-            descripcion: 'Campaña internacional OFERTAS MAXXING: llevamos al máximo la tecnología, las ofertas y nuestros servicios. La campaña consta de 3 fases y será la misma desde el inicio hasta la fecha fin. Fase 1: del 02/11 al 09/11 en tiendas (al 10/11 a las 9h online). Fase 2: del 10/11 al 18/11. Fase 3: pendiente confirmar vigencia.',
-            condiciones: [
-              { titulo: 'Condiciones generales', texto: 'Campaña internacional OFERTAS MAXXING con 3 fases. Fase 1: del 02/11 al 09/11 en tiendas (al 10/11 a las 9h online). Fase 2: del 10/11 al 18/11. Fase 3: pendiente confirmar vigencia. La campaña será la misma desde el inicio hasta la fecha fin.' }
-            ]
-          },
-          {
-            nombre: "SINGLE'S DAY",
-            badge: 'Solo online',
-            metainfo: [
-              { icono:'web', texto:'Del 10/11 a las 20h al 12/11 a las 9h' }
-            ],
-            descripcion: 'Campaña exclusiva online con vigencia del 10/11 a las 20h al 12/11 a las 9h. Los usuarios de la APP tendrán acceso anticipado el 10/11 a las 15h. En Canarias, al no haber APP, la campaña empezará el 10/11 a las 15h.',
-            excepciones: 'En Canarias la campaña comienza el 10/11 a las 15h (no hay APP).',
-            noValido: ['Consultar exclusiones adjuntas']
-          }
-        ]
-      },
-      {
-        tipo: 'esp', emoji: '🎁', titulo: 'Comunicación especial',
-        campanas: [
-          {
-            nombre: 'Sorteo APP Noviembre · PS5 Digital + GTA VI',
-            badge: 'Sorteo',
-            metainfo: [{ icono:'cal', texto:'Del 2 al 30 de noviembre' }],
-            descripcion: 'Para este pedazo de mes sorteamos entre nuestros clientes 10 PS5 edición digital + el nuevo Grand Theft Auto 6. El sorteo estará activo todo el mes (del 2 al 30 de noviembre). La dinámica es la habitual: solo por tener la APP el usuario entra en ella, rellena el formulario para participar y automáticamente queda inscrito.'
-          }
-        ]
-      },
-      {
-        tipo: 'mmm', emoji: '💳', titulo: 'Campañas miMediaMarkt',
-        subtitulo: 'Descuentos aplicables sólo a miembros de miMediaMarkt en la web y/o App y/o Tiendas. OMNICHANNEL (Tiendas y web/app).',
-        campanas: [
-          {
-            nombre: 'Sony · Auriculares Gaming',
-            badge: 'Cupón',
-            metainfo: [{ icono:'cal', texto:'Hasta el 18/11 a las 23:59h' }],
-            descripcion: '-20 € en cupón en Auriculares Gaming Sony.'
-          },
-          {
-            nombre: 'Samsung Galaxy ZFold8 1TB',
-            badge: 'Descuento directo',
-            metainfo: [{ icono:'cal', texto:'Hasta el 01/12 a las 9h' }],
-            descripcion: '-549 € de descuento en smartphones Samsung Galaxy ZFold8 de 1TB.'
-          },
-          {
-            nombre: 'Samsung Smartwatch | Auriculares | Portátiles',
-            badge: '-5% directo',
-            metainfo: [{ icono:'cal', texto:'Hasta el 30/11 a las 9h' }],
-            descripcion: '-5% de descuento en Samsung Smartwatch | Auriculares | Portátiles.'
-          }
-        ]
-      }
-    ]
-  },
-  {
-    id: 7, fecha: '2026-11-10',
-    titulo: 'Información de Campañas: SINGLES DAYS & Comunicación Especial',
-    intro: 'Compartimos la información actualizada del SINGLE\'S DAY: campaña exclusiva online con acceso anticipado para usuarios de la APP, condiciones legales para Península y Canarias, y ampliación de las promesas de entrega en Canarias.',
-    secciones: [
-      {
-        tipo: 'prox', emoji: '📢', titulo: 'Próximas campañas',
-        campanas: [
-          {
-            nombre: "SINGLE'S DAY",
-            badge: 'Solo online',
-            metainfo: [
-              { icono:'web', texto:'Web/APP: del 10/11 a las 20h al 12/11 a las 9h' },
-              { icono:'cal', texto:'Acceso anticipado APP: 10/11 desde las 15h' },
-              { icono:'web', texto:'Canarias: del 10/11 a las 15h al 12/11 a las 9h (solo web)' }
-            ],
-            descripcion: 'Campaña exclusiva online con vigencia del 10/11 a las 20h al 12/11 a las 9h. Los usuarios de la APP tendrán acceso anticipado el 10/11 a las 15h. En Canarias, al no haber APP, la campaña empezará el 10/11 a las 15h.',
-            excepciones: 'En Canarias la campaña comienza el 10/11 a las 15h (no hay APP). Para Canarias, debido al impacto de la campaña, se amplían las promesas de entrega: Pedidos Express de 30 min a 2h y Envíos de 2 a 4 días laborables a 4 a 6 días laborables.',
-            noValido: ['Apple','Beats','Consolas','DJI','Siemens','Gafas VR','Gafas IA','Libros','Tarjetas prepago','Lanzamientos','Servicios','Garantías','Productos en formato digital','Selección de productos en oferta de Semanas Black II'],
-            condiciones: [
-              { titulo: 'Legal PEN · Península y Baleares', texto: 'Descuento del -22% de campaña Single\'s Days válido en Península y Baleares del 10/11 a las 20h hasta el 12/11 a las 9h exclusivo en web y APP (aplicado en carrito). La promoción del -22% tiene un acceso anticipado exclusivo para usuarios de la APP desde el 10/11 a las 15h que finaliza el mismo 10/11 a las 20h. Excluidos una selección de productos en oferta de la campaña Semanas Black II. Todos los precios incluyen IVA / IPSI, RAEE y Canon compensatorio por copia privada. Promoción no válida para Apple, Beats, consolas, DJI, Siemens, Gafas VR, Gafas IA, libros, tarjetas prepago, lanzamientos, servicios, garantías y productos en formato digital. Promoción aplicable a consumidores finales, no acumulable con promociones vigentes y válida para productos vendidos y enviados por MediaMarkt. Consulta condiciones.' },
-              { titulo: 'Legal CAN · Canarias', texto: 'Descuento del -22% de campaña Single\'s Days válido en Canarias del 10/11 a las 15h hasta el 12/11 a las 9h exclusivo en web (aplicado en carrito). Excluidos una selección de productos en oferta de la campaña Semanas Black II. Todos los precios incluyen IVA / IPSI / IGIC, RAEE y Canon compensatorio por copia privada. Promoción no válida para Apple, Beats, consolas, DJI, Siemens, Gafas VR, Gafas IA, libros, tarjetas prepago, lanzamientos, servicios, garantías y productos en formato digital. Promoción aplicable a consumidores finales, no acumulable con promociones vigentes y válida para productos vendidos y enviados por MediaMarkt. Consulta condiciones.' },
-              { titulo: 'Canarias · Ampliación de promesas de entrega', texto: 'Debido al impacto de la campaña se amplían las promesas de entrega: Pedidos Express de 30 min a 2h. Envíos de 2 a 4 días laborables a 4 a 6 días laborables.' }
-            ]
-          }
+          { nombre: 'Samsung Galaxy S26 | ZFlip8 | ZFold8', badge: '-5% directo', metainfo: [{ icono:'cal', texto:'Del 06/10 al 19/10 a las 9h' }], descripcion: '-5% de descuento directo en Samsung Galaxy S26, ZFlip8 y ZFold8.' },
+          { nombre: 'Xiaomi Redmi Note 17', badge: '-20% adicional', metainfo: [{ icono:'cal', texto:'Hasta el 14/10 a las 9h' }], descripcion: '-20% adicional en smartphone Xiaomi Redmi Note 17.' },
+          { nombre: 'Samsung Galaxy S26', badge: 'Cupón', metainfo: [{ icono:'cal', texto:'Hasta el 31/10 a las 23:59h' }], descripcion: 'Hasta -100 € en cupón para smartphones Samsung Galaxy S26.' }
         ]
       }
     ]
@@ -1522,10 +2090,36 @@ const CATEGORIAS_NOTICIAS = {
   'Producto':               { color:'#1A1A1A', bg:'#F1F1F1', icono:'box'   },
   'Incidencia':             { color:'#E08700', bg:'#FFF6E5', icono:'alert' },
   'Comunicado CaixaBank':   { color:'#004B99', bg:'#E6F1FB', icono:'doc'   },
-  'festivo':                { color:'#6B4EFF', bg:'#F0ECFF', icono:'bell'  }
+  'festivo':                { color:'#6B4EFF', bg:'#F0ECFF', icono:'bell'  },
+  'Tiendas Físicas':        { color:'#DF0000', bg:'#FFF0F0', icono:'store' }
 };
 
 const NOTICIAS = [
+  {
+    id: 25, fecha: '2026-11-13', categoria: 'Tiendas Físicas',
+    titulo: 'RECLAMACIONES OFICIALES COMPRAR EN TIENDA',
+    ubicacion: 'España',
+    resumen: 'Cuando un cliente quiere interponer una reclamación oficial por una compra en tienda física, debe dirigirse siempre a la tienda. Nunca se facilitarán los datos de Confianza Online, ya que solo atiende reclamaciones de compras online.',
+    cuerpo: [
+      'Buenas tardes. Cuando un cliente nos comunica que quiere interponer una reclamación oficial y exige una hoja de reclamaciones, si es una compra en tienda se le indica que debe dirigirse a tienda. Nunca proporcionaremos los datos de Confianza Online, ya que es un organismo que solo trata las reclamaciones que provengan de una compra de nuestra tienda online, no física.',
+      'Por favor, realizar refuerzo de esta información a los agentes, ya que desde el organismo de CO nos indican que están recibiendo muchas reclamaciones que no pueden atender al ser compras en tienda física, con el correspondiente malestar doble del cliente.',
+      'Gracias.'
+    ],
+    destacados: [
+      'Compra en tienda física + reclamación oficial → derivar siempre a la tienda.',
+      'Nunca facilitar los datos de Confianza Online para compras en tienda física.',
+      'Confianza Online solo atiende reclamaciones de compras realizadas en la tienda online.',
+      'Reforzar esta información a los agentes para evitar el doble malestar del cliente.'
+    ],
+    info: [
+      { label:'Fecha', value:'13/11/2026' },
+      { label:'Categoría', value:'Tiendas Físicas' },
+      { label:'Alcance', value:'España' },
+      { label:'Organismo afectado', value:'Confianza Online (CO)' },
+      { label:'Tipo de compra', value:'Tienda física' },
+      { label:'Acción', value:'Derivar a tienda · No facilitar datos de CO' }
+    ]
+  },
   {
     id: 1, fecha: '2026-10-03', categoria: 'Cierre de tiendas',
     titulo: 'Cierre especial tiendas Litoral Cataluña 03/10/2026',
@@ -2468,7 +3062,6 @@ function iconoMeta(tipo){
   return CAL_ICO;
 }
 
-/* Convierte HTML del template a texto plano listo para pegar */
 function htmlATextoPlano(html){
   return html
     .replace(/<br\s*\/?>/gi, '\n')
@@ -2484,7 +3077,6 @@ function htmlATextoPlano(html){
     .trim();
 }
 
-/* Genera el texto de la nota privada */
 function generarNotaPrivada(datos){
   const d = {
     numPedido: datos.numPedido || '[Número de pedido o factura]',
@@ -2628,27 +3220,27 @@ function plantillaCampanaInfo(c){
       </div>`;
   }).join('');
   return `
-    <div class="detail-hero" style="--cat-color:#DF0000;">
-      <div class="container detail-hero__inner">
-        <a class="detail-back" data-nav="campanas">${BACK_ICO} Volver a campañas</a>
-        <div class="detail-meta">
-          <span class="detail-cat">Información de campañas</span>
-          <time class="detail-date">${fmtLargaConDia(fecha)}</time>
+    <div class="page-body">
+      <div class="detail-hero" style="--cat-color:#DF0000;">
+        <div class="detail-hero__inner">
+          <a class="detail-back" data-nav="campanas">${BACK_ICO} Volver a campañas</a>
+          <div class="detail-meta">
+            <span class="detail-cat">Información de campañas</span>
+            <time class="detail-date">${fmtLargaConDia(fecha)}</time>
+          </div>
+          <h1>${escapar(c.titulo)}</h1>
         </div>
-        <h1>${escapar(c.titulo)}</h1>
       </div>
-    </div>
-    <main class="container--narrow" style="padding-bottom:30px">
       <div class="detail-body">
         <div class="ci-intro">${escapar(c.intro)}</div>
         ${seccionesHTML}
       </div>
-    </main>`;
+    </div>`;
 }
 function renderCampanaInfo(id){
   const c = campanaInfoPorId(id);
   if (!c){
-    campanaInfoContentEl.innerHTML = `<div class="container" style="padding:60px 0"><div class="empty"><strong>Información no encontrada</strong>El documento que buscas no existe o ha sido eliminado.</div></div>`;
+    campanaInfoContentEl.innerHTML = `<div class="page-body" style="padding:40px 0"><div class="empty"><strong>Información no encontrada</strong>El documento que buscas no existe o ha sido eliminado.</div></div>`;
     return;
   }
   campanaInfoContentEl.innerHTML = plantillaCampanaInfo(c);
@@ -2684,14 +3276,14 @@ function plantillaCashback(c){
       <div class="ci-conditions__content"><p>${escapar(cond.texto)}</p></div>
     </details>`).join('');
   return `
-    <div class="detail-hero" style="--cat-color:#00A650;">
-      <div class="container detail-hero__inner">
-        <a class="detail-back" data-nav="cashbacks">${BACK_ICO} Volver a cashbacks</a>
-        <div class="detail-meta"><span class="detail-cat">${escapar(c.marca)}</span><time class="detail-date">${fmtLargaConDia(fecha)}</time></div>
-        <h1>${escapar(c.titulo)}</h1>
+    <div class="page-body">
+      <div class="detail-hero" style="--cat-color:#00A650;">
+        <div class="detail-hero__inner">
+          <a class="detail-back" data-nav="cashbacks">${BACK_ICO} Volver a cashbacks</a>
+          <div class="detail-meta"><span class="detail-cat">${escapar(c.marca)}</span><time class="detail-date">${fmtLargaConDia(fecha)}</time></div>
+          <h1>${escapar(c.titulo)}</h1>
+        </div>
       </div>
-    </div>
-    <main class="container--narrow" style="padding-bottom:30px">
       <div class="detail-body">
         <div class="ci-intro"><strong>Vigencia:</strong> ${escapar(c.vigencia)}</div>
         <h3 class="detail-subhead">Descripción de la promoción</h3>
@@ -2699,15 +3291,15 @@ function plantillaCashback(c){
         ${productosHTML}
         <h3 class="detail-subhead">Resumen de la promoción</h3>
         ${infoHTML}${mecanicaHTML}${enlacesHTML}
-        <h3 class="detail-subhead" style="margin-top:34px;">Condiciones y detalles</h3>
+        <h3 class="detail-subhead" style="margin-top:30px;">Condiciones y detalles</h3>
         ${condicionesHTML}
       </div>
-    </main>`;
+    </div>`;
 }
 function renderCashback(id){
   const c = cashbackPorId(id);
   if (!c){
-    cashbackContentEl.innerHTML = `<div class="container" style="padding:60px 0"><div class="empty"><strong>Cashback no encontrado</strong>La promoción que buscas no existe o ha sido eliminada.</div></div>`;
+    cashbackContentEl.innerHTML = `<div class="page-body" style="padding:40px 0"><div class="empty"><strong>Cashback no encontrado</strong>La promoción que buscas no existe o ha sido eliminada.</div></div>`;
     return;
   }
   cashbackContentEl.innerHTML = plantillaCashback(c);
@@ -2782,27 +3374,27 @@ function plantillaDetalleNoticia(n){
     <h3 class="detail-subhead">Tiendas afectadas</h3>
     <ul class="stores-list">${n.stores.map(s => `<li><span class="stores-list__name">${escapar(s.nombre)}</span><span class="stores-list__time">Cierre · ${escapar(s.hora)}</span></li>`).join('')}</ul>` : '';
   const infoHTML = (n.info && n.info.length) ? `<h3 class="detail-subhead">Información</h3><div class="detail-info">${n.info.map(i => `<div class="detail-info__item"><div class="detail-info__label">${escapar(i.label)}</div><div class="detail-info__value">${escapar(i.value)}</div></div>`).join('')}</div>` : '';
-  const enlacesHTML = (n.enlaces && n.enlaces.length) ? `<div class="ci-links" style="margin:22px 0;">${n.enlaces.map(l => `<a class="ci-link" href="${escapar(l.url)}" target="_blank" rel="noopener">${LINK_ICO}${escapar(l.etiqueta)}</a>`).join('')}</div>` : '';
+  const enlacesHTML = (n.enlaces && n.enlaces.length) ? `<div class="ci-links" style="margin:20px 0;">${n.enlaces.map(l => `<a class="ci-link" href="${escapar(l.url)}" target="_blank" rel="noopener">${LINK_ICO}${escapar(l.etiqueta)}</a>`).join('')}</div>` : '';
   const relacionadosHTML = relacionados.length ? `<div class="related"><div class="related__head"><h2>Noticias relacionadas</h2></div><div class="news-grid">${relacionados.map(plantillaNoticia).join('')}</div></div>` : '';
 
   return `
-    <div class="detail-hero" style="--cat-color:${cat.color};">
-      <div class="container detail-hero__inner">
-        <a class="detail-back" data-nav="noticias">${BACK_ICO} Volver a noticias</a>
-        <div class="detail-meta"><span class="detail-cat">${escapar(n.categoria)}</span><time class="detail-date">${fmtLargaConDia(fecha)}</time></div>
-        <h1>${escapar(n.titulo)}</h1>
-        <span class="detail-hero__loc">${PIN_ICO_GRANDE}${escapar(n.ubicacion)}</span>
+    <div class="page-body">
+      <div class="detail-hero" style="--cat-color:${cat.color};">
+        <div class="detail-hero__inner">
+          <a class="detail-back" data-nav="noticias">${BACK_ICO} Volver a noticias</a>
+          <div class="detail-meta"><span class="detail-cat">${escapar(n.categoria)}</span><time class="detail-date">${fmtLargaConDia(fecha)}</time></div>
+          <h1>${escapar(n.titulo)}</h1>
+          <span class="detail-hero__loc">${PIN_ICO_GRANDE}${escapar(n.ubicacion)}</span>
+        </div>
       </div>
-    </div>
-    <main class="container--narrow" style="padding-bottom:30px">
       <div class="detail-body">${parrafos}${destacadosHTML}${storesHTML}${infoHTML}${enlacesHTML}</div>
       ${relacionadosHTML}
-    </main>`;
+    </div>`;
 }
 function renderDetalleNoticia(id){
   const n = noticiaPorId(id);
   if (!n){
-    noticiaContentEl.innerHTML = `<div class="container" style="padding:60px 0"><div class="empty"><strong>Noticia no encontrada</strong>La noticia que buscas no existe o ha sido eliminada.</div></div>`;
+    noticiaContentEl.innerHTML = `<div class="page-body" style="padding:40px 0"><div class="empty"><strong>Noticia no encontrada</strong>La noticia que buscas no existe o ha sido eliminada.</div></div>`;
     return;
   }
   noticiaContentEl.innerHTML = plantillaDetalleNoticia(n);
@@ -2888,8 +3480,8 @@ function bloqueNovedad(b, idx){
     const ramasHTML = b.ramas.map(r => {
       const tieneLabel = !!r.label;
       const labelClass = r.labelClass || '';
-      const tituloRama = tieneLabel ? `<span class="ci-tag ${labelClass}" style="font-size:11px;">${escapar(r.label)}</span>` : '';
-      const condicionExtra = r.condicion ? `<span style="font-size:14px;font-weight:700;color:#333;">${htmlSeguro(r.condicion)}</span>` : '';
+      const tituloRama = tieneLabel ? `<span class="ci-tag ${labelClass}" style="font-size:10.5px;">${escapar(r.label)}</span>` : '';
+      const condicionExtra = r.condicion ? `<span style="font-size:13px;font-weight:700;color:#333;">${htmlSeguro(r.condicion)}</span>` : '';
       return `
         <div class="op-block" style="background:#fff;border-color:var(--mm-line);">
           ${(tituloRama || condicionExtra) ? `<div style="display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-bottom:10px;">${tituloRama}${condicionExtra}</div>` : ''}
@@ -2991,25 +3583,25 @@ function plantillaDetalleNovedad(n){
   const bloquesHTML = n.bloques.map((b, i) => bloqueNovedad(b, i)).join('');
 
   return `
-    <div class="detail-hero" style="--cat-color:${cat.color};">
-      <div class="container detail-hero__inner">
-        <a class="detail-back" data-nav="novedades">${BACK_ICO} Volver a novedades</a>
-        <div class="detail-meta"><span class="detail-cat">${escapar(n.categoria)}</span><time class="detail-date">${fmtLargaConDia(fecha)}</time></div>
-        <h1>${escapar(n.titulo)}</h1>
-        <span class="detail-hero__loc">${PIN_ICO_GRANDE}${escapar(n.ubicacion)}</span>
+    <div class="page-body">
+      <div class="detail-hero" style="--cat-color:${cat.color};">
+        <div class="detail-hero__inner">
+          <a class="detail-back" data-nav="novedades">${BACK_ICO} Volver a novedades</a>
+          <div class="detail-meta"><span class="detail-cat">${escapar(n.categoria)}</span><time class="detail-date">${fmtLargaConDia(fecha)}</time></div>
+          <h1>${escapar(n.titulo)}</h1>
+          <span class="detail-hero__loc">${PIN_ICO_GRANDE}${escapar(n.ubicacion)}</span>
+        </div>
       </div>
-    </div>
-    <main class="container--narrow" style="padding-bottom:30px">
       <div class="detail-body">
         <div class="ci-intro">${htmlSeguro(n.intro)}</div>
         ${bloquesHTML}
       </div>
-    </main>`;
+    </div>`;
 }
 function renderDetalleNovedad(id){
   const n = novedadPorId(id);
   if (!n){
-    novedadContentEl.innerHTML = `<div class="container" style="padding:60px 0"><div class="empty"><strong>Novedad no encontrada</strong>La publicación que buscas no existe o ha sido eliminada.</div></div>`;
+    novedadContentEl.innerHTML = `<div class="page-body" style="padding:40px 0"><div class="empty"><strong>Novedad no encontrada</strong>La publicación que buscas no existe o ha sido eliminada.</div></div>`;
     return;
   }
   novedadContentEl.innerHTML = plantillaDetalleNovedad(n);
@@ -3017,19 +3609,86 @@ function renderDetalleNovedad(id){
 }
 
 /* ==========================================================
-   12) NAVEGACIÓN Y RUTAS
+   12) RELOJ Y DASHBOARD
+   ========================================================== */
+const MESES = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+const DIAS = ['domingo','lunes','martes','miércoles','jueves','viernes','sábado'];
+
+function pad2(n){ return String(n).padStart(2,'0'); }
+
+function actualizarReloj(){
+  const now = new Date();
+  const clockEl = document.getElementById('dashClock');
+  const dateEl = document.getElementById('dashDate');
+  const statDateEl = document.getElementById('dashStatDate');
+  const topbarDateEl = document.getElementById('topbarDate');
+  const greetEl = document.getElementById('dashGreeting');
+
+  const hh = pad2(now.getHours());
+  const mm = pad2(now.getMinutes());
+  const ss = pad2(now.getSeconds());
+  if (clockEl) clockEl.textContent = `${hh}:${mm}:${ss}`;
+
+  const dia = DIAS[now.getDay()];
+  const diaCap = dia.charAt(0).toUpperCase() + dia.slice(1);
+  const fechaTxt = `${diaCap}, ${now.getDate()} de ${MESES[now.getMonth()]} de ${now.getFullYear()}`;
+
+  if (dateEl) dateEl.textContent = fechaTxt.toUpperCase();
+  if (statDateEl) statDateEl.textContent = `${pad2(now.getDate())}/${pad2(now.getMonth()+1)}/${now.getFullYear()}`;
+  if (topbarDateEl) topbarDateEl.textContent = `${diaCap}, ${pad2(now.getDate())}/${pad2(now.getMonth()+1)}`;
+
+  if (greetEl){
+    const h = now.getHours();
+    let saludo = 'Bienvenido';
+    if (h < 12) saludo = 'Buenos días';
+    else if (h < 20) saludo = 'Buenas tardes';
+    else saludo = 'Buenas noches';
+    greetEl.innerHTML = `${saludo}, <span class="accent">equipo</span>`;
+  }
+}
+
+function actualizarStats(){
+  const campanasEl = document.getElementById('dashStatCampanas');
+  const cashEl = document.getElementById('dashStatCashbacks');
+  const notEl = document.getElementById('dashStatNoticias');
+  if (campanasEl) campanasEl.textContent = CAMPAÑAS_INFO.length;
+  if (cashEl) cashEl.textContent = CASHBACKS.length;
+  if (notEl) notEl.textContent = NOTICIAS.length;
+}
+
+/* ==========================================================
+   13) NAVEGACIÓN Y RUTAS
    ========================================================== */
 const VISTAS_BASE = ['inicio', 'campanas', 'cashbacks', 'novedades', 'noticias', 'campana-info', 'cashback', 'noticia', 'novedad'];
+const TITULOS = {
+  'inicio': 'Panel <span>de Operaciones</span>',
+  'campanas': 'Campañas',
+  'cashbacks': 'Cashbacks',
+  'novedades': 'Novedades <span>en operativa</span>',
+  'noticias': 'Noticias',
+  'campana-info': 'Campañas',
+  'cashback': 'Cashbacks',
+  'noticia': 'Noticias',
+  'novedad': 'Novedades <span>en operativa</span>'
+};
 
 function mostrarVista(nombre){
   if (!VISTAS_BASE.includes(nombre)) nombre = 'inicio';
   VISTAS_BASE.forEach(v => { document.getElementById('view-' + v).classList.toggle('is-visible', v === nombre); });
+
   let activo = nombre;
   if (nombre === 'campana-info') activo = 'campanas';
   if (nombre === 'cashback') activo = 'cashbacks';
   if (nombre === 'noticia') activo = 'noticias';
   if (nombre === 'novedad') activo = 'novedades';
-  document.querySelectorAll('#mainNav a').forEach(a => { a.classList.toggle('is-active', a.dataset.nav === activo); });
+
+  document.querySelectorAll('#mainNav .sidebar__link').forEach(a => {
+    a.classList.toggle('is-active', a.dataset.nav === activo);
+  });
+
+  const titleEl = document.getElementById('topbarTitle');
+  if (titleEl) titleEl.innerHTML = TITULOS[nombre] || 'Panel <span>de Operaciones</span>';
+
   window.scrollTo({ top:0, behavior:'smooth' });
 }
 
@@ -3039,13 +3698,14 @@ function navegarA(hash){
   const matchCashback    = limpio.match(/^cashback-(\d+)$/);
   const matchNoticia     = limpio.match(/^noticia-(\d+)$/);
   const matchNovedad     = limpio.match(/^novedad-(\d+)$/);
-  if (matchCampanaInfo){ renderCampanaInfo(matchCampanaInfo[1]); mostrarVista('campana-info'); if (location.hash !== '#' + limpio) history.replaceState(null, '', '#' + limpio); return; }
-  if (matchCashback){ renderCashback(matchCashback[1]); mostrarVista('cashback'); if (location.hash !== '#' + limpio) history.replaceState(null, '', '#' + limpio); return; }
-  if (matchNoticia){ renderDetalleNoticia(matchNoticia[1]); mostrarVista('noticia'); if (location.hash !== '#' + limpio) history.replaceState(null, '', '#' + limpio); return; }
-  if (matchNovedad){ renderDetalleNovedad(matchNovedad[1]); mostrarVista('novedad'); if (location.hash !== '#' + limpio) history.replaceState(null, '', '#' + limpio); return; }
+  if (matchCampanaInfo){ renderCampanaInfo(matchCampanaInfo[1]); mostrarVista('campana-info'); if (location.hash !== '#' + limpio) history.replaceState(null, '', '#' + limpio); cerrarMenuMovil(); return; }
+  if (matchCashback){ renderCashback(matchCashback[1]); mostrarVista('cashback'); if (location.hash !== '#' + limpio) history.replaceState(null, '', '#' + limpio); cerrarMenuMovil(); return; }
+  if (matchNoticia){ renderDetalleNoticia(matchNoticia[1]); mostrarVista('noticia'); if (location.hash !== '#' + limpio) history.replaceState(null, '', '#' + limpio); cerrarMenuMovil(); return; }
+  if (matchNovedad){ renderDetalleNovedad(matchNovedad[1]); mostrarVista('novedad'); if (location.hash !== '#' + limpio) history.replaceState(null, '', '#' + limpio); cerrarMenuMovil(); return; }
   const vista = VISTAS_BASE.includes(limpio) ? limpio : 'inicio';
   mostrarVista(vista);
   if (location.hash !== '#' + vista) history.replaceState(null, '', '#' + vista);
+  cerrarMenuMovil();
 }
 
 document.addEventListener('click', e => {
@@ -3066,10 +3726,57 @@ document.addEventListener('click', e => {
 window.addEventListener('hashchange', () => navegarA(location.hash));
 
 /* ==========================================================
-   13) ARRANQUE
+   14) SIDEBAR · COLAPSO Y MENÚ MÓVIL
+   ========================================================== */
+const app = document.getElementById('app');
+const collapseBtn = document.getElementById('collapseBtn');
+const hamburger = document.getElementById('hamburger');
+const overlay = document.getElementById('overlay');
+
+function esMovil(){ return window.matchMedia('(max-width: 880px)').matches; }
+
+function abrirMenuMovil(){
+  app.classList.add('is-mobile-open');
+  overlay.classList.add('is-visible');
+}
+function cerrarMenuMovil(){
+  if (!esMovil()) return;
+  app.classList.remove('is-mobile-open');
+  overlay.classList.remove('is-visible');
+}
+function toggleMenuMovil(){
+  if (app.classList.contains('is-mobile-open')) cerrarMenuMovil();
+  else abrirMenuMovil();
+}
+
+if (collapseBtn){
+  collapseBtn.addEventListener('click', () => {
+    app.classList.toggle('is-collapsed');
+    try { localStorage.setItem('mm-sidebar-collapsed', app.classList.contains('is-collapsed') ? '1' : '0'); } catch(e){}
+  });
+}
+if (hamburger) hamburger.addEventListener('click', toggleMenuMovil);
+if (overlay) overlay.addEventListener('click', cerrarMenuMovil);
+
+window.addEventListener('resize', () => {
+  if (!esMovil()){ app.classList.remove('is-mobile-open'); overlay.classList.remove('is-visible'); }
+});
+
+/* Restaurar estado colapsado */
+try {
+  if (localStorage.getItem('mm-sidebar-collapsed') === '1' && !esMovil()){
+    app.classList.add('is-collapsed');
+  }
+} catch(e){}
+
+/* ==========================================================
+   15) ARRANQUE
    ========================================================== */
 renderNoticias();
 renderNovedades();
+actualizarStats();
+actualizarReloj();
+setInterval(actualizarReloj, 1000);
 navegarA(location.hash || '#inicio');
 </script>
 </body>
