@@ -561,6 +561,11 @@ function toast(msg){
   setTimeout(() => t.remove(), 2500);
 }
 
+function formatearFechaCompra(fechaStr){
+  if(!fechaStr) return '__________';
+  const [y, m, d] = fechaStr.split('-');
+  return `${d}/${m}/${y}`;
+}
 /* ==========================================
    state.js
    ========================================== */
@@ -612,7 +617,12 @@ const satMarcas = {
   'lg':{telefono:'963050500', horario:'Consultar fabricante'},
   'whirlpool':{telefono:'932382355', horario:'Consultar fabricante'}
 };
+ 
+/* ============================================================================================================================================================= */
 
+/* ==========================================
+   DATA: ESTADO DE PEDIDO
+   ========================================== */
 const gruposEstadoPedido = {
   avanzar: { icono:'⏩', label:'Avanzar pedido', desc:'El pedido está estancado y el cliente quiere que continúe su curso.', color:'badge-green' },
   cancelar: { icono:'❌', label:'Cancelar pedido', desc:'Listado cruzado: estados del pedido con acción de cancelación accionable.', color:'badge-red' },
@@ -621,31 +631,124 @@ const gruposEstadoPedido = {
 };
 
 const estadosPedido = [
-  { slug:'order-created', grupo:'avanzar', icono:'🆕', estado:'Order Created', derivarA:'Abrir caso Cherwell', plazo:'—', plazoKey:'na', cancelar:'FOM (1er Nivel resuelto)', cancelable:true, notas:'Pedido recién creado. Si hay que avanzarlo, se abre caso en Cherwell.' },
-  { slug:'scheduled-financiacion', grupo:'avanzar', icono:'💳⏳', estado:'Scheduled con financiación', derivarA:'Buzón administración online', plazo:'Pasadas 24 horas', plazoKey:'24h', cancelar:'FOM (1er Nivel resuelto)', cancelable:true, notas:'Pedido programado con financiación. Esperar 24h antes de escalar.' },
-  { slug:'scheduled-otros', grupo:'avanzar', icono:'⏳', estado:'Scheduled con otros métodos de pago', derivarA:'Abrir caso Cherwell', plazo:'Pasadas 24 horas', plazoKey:'24h', cancelar:'FOM (1er Nivel resuelto)', cancelable:true, notas:'Pedido programado con pago distinto a financiación.' },
-  { slug:'awaiting-stock', grupo:'avanzar', icono:'📦⏳', estado:'Awaiting Stock', derivarA:'PM (revisar si se trata de un lanzamiento)', plazo:'Pasada fecha de promesa de entrega', plazoKey:'fuera', cancelar:'FOM (1er Nivel resuelto)', cancelable:true, notas:'Si es un lanzamiento, revisar con PM antes de avanzar.' },
-  { slug:'backordered', grupo:'avanzar', icono:'📦❌', estado:'Backordered (verificado sin stock)', derivarA:'HD y PU → Gestión de Pedidos Online · SDPU y SFS → MM Store', plazo:'—', plazoKey:'na', cancelar:'FOM (1er Nivel resuelto)', cancelable:true, notas:'Confirmar primero que realmente no hay stock.' },
-  { slug:'awaiting-fulfillment', grupo:'avanzar', icono:'📦🔄', estado:'Awaiting Fullfilment', derivarA:'PM (Gama)', plazo:'Pasada fecha de promesa de entrega', plazoKey:'fuera', cancelar:'FOM (1er Nivel resuelto)', cancelable:true, notas:'Pedido pendiente de preparación por gama.' },
-  { slug:'released-financiacion', grupo:'avanzar', icono:'💳🚀', estado:'Released con financiación', derivarA:'Buzón administración online', plazo:'Pasadas 24 horas', plazoKey:'24h', cancelar:'FOM (1er Nivel resuelto)', cancelable:true, notas:'Pedido liberado con financiación.' },
-  { slug:'released-otros', grupo:'avanzar', icono:'🚀', estado:'Released con otros métodos de pago', derivarA:'Abrir caso Cherwell', plazo:'Pasadas 24 horas', plazoKey:'24h', cancelar:'FOM (1er Nivel resuelto)', cancelable:true, notas:'Pedido liberado con pago no financiado.' },
-  { slug:'fulfillment-initiated', grupo:'avanzar', icono:'🏭⏩', estado:'Fullfilment Initiated (Pedidos HD)', derivarA:'Ver flujo completo en la ficha', plazo:'Pasada fecha de promesa de entrega', plazoKey:'fuera', cancelar:'Ver flujo completo en la ficha', cancelable:true, notas:'Requiere verificación con el cliente y con Caixa si es financiado.', flujoAvanzar:`<ol class="steps-list"><li><strong>Confirmar si está fuera de promesa de entrega.</strong> En pedidos con financiación, verificar con el cliente si ha recibido información de Caixa de aprobación:<ul style="margin-left:18px;margin-top:6px"><li><strong>a.</strong> Si ha recibido confirmación de aprobación → pasar al punto 2.</li><li><strong>b.</strong> Si aún no ha recibido información → indicarle que está pendiente de aprobación por la financiera y facilitar el contacto de Caixa.</li></ul></li><li>Si está fuera de promesa de entrega:<ul style="margin-left:18px;margin-top:6px"><li><strong>a.</strong> Enviar FW a <code>preparacion_pintomm@id-logistics.com</code> y escalar el caso en Oracle a <strong>ES MM BO Atento</strong> en estado <strong>Pendiente</strong>.</li><li><strong>b.</strong> Enviar el email al cliente (ver plantilla).</li></ul></li></ol>`, flujoCancelar:`<ul class="check-list"><li><strong>Dentro del plazo de entrega:</strong> reenviar a <code>gds_mmpinto@id-logistics.com</code>, <code>preparacion_pintomm@id-logistics.com</code>, <code>jorge.ocana@id-logistics.com</code> y <code>msola@id-logistics.com</code>. Usar la plantilla Oracle <em>Escalado Interno – Solicit Cancelación</em> y dejar el caso en <strong>1er Nivel Resuelto</strong>.</li><li><strong>Fuera del plazo de entrega:</strong> escalar a <strong>ES MM Omnicanal</strong> en estado <strong>Pendiente</strong>.</li></ul>`, plantillaAvanzar:`¡Hola!\n\nTe informamos que debido a una incidencia en nuestros sistemas tu pedido no está siendo gestionado con normalidad. Nuestros compañeros están trabajando para poder resolverlo. En un plazo máximo de 48 horas nos volveremos a poner en contacto contigo para ofrecerte la mejor solución.\n\nAnte cualquier consulta, puedes volver a ponerte en contacto con nosotros respondiendo a este mismo correo.\n\nTu equipo MediaMarkt.` },
-  { slug:'shipped', grupo:'avanzar', icono:'🚚📦', estado:'Shipped (1887)', derivarA:'1. preparacion_pintomm@id-logistics.com · 2. (Si persiste tras 24h) Omnicanal', plazo:'Pasadas 24 horas', plazoKey:'24h', cancelar:'cancelacionpedidos@id-logistics.com y preparacion_pintomm@id-logistics.com', cancelable:true, notas:'Pedido ya enviado. Escalar a Omnicanal sólo si persiste tras 24h.' },
-  { slug:'order-completed', grupo:'avanzar', icono:'✅', estado:'Order Completed', derivarA:'Estado final', plazo:'—', plazoKey:'na', cancelar:'Carrier → orden de rechazo*', cancelable:true, notas:'Estado final del pedido. No se puede avanzar.' },
-
-  { slug:'procurement-created', grupo:'tienda', icono:'🏪🆕', estado:'Procurement Transfer Order Created (recogidas en tienda)', derivarA:'Escalar a MM Store para que lo gestione', plazo:'—', plazoKey:'na', cancelar:'Escalar MM Store / Pendiente', cancelable:true, notas:'Pedido de recogida creado, pendiente de tienda.' },
-  { slug:'being-picked', grupo:'tienda', icono:'🏪🔍', estado:'Being Picked', derivarA:'Tienda debe revisar lo ocurrido y pasar pantallazo por Cherwell (si son errores técnicos)', plazo:'—', plazoKey:'na', cancelar:'Escalar MM Store / Pendiente', cancelable:true, notas:'Pedido en preparación por parte de la tienda.' },
-  { slug:'procurement-shipped', grupo:'tienda', icono:'🏪🚚', estado:'Procurement Transfer Order Shipped (recogidas en tienda)', derivarA:'Buzón Oracle ES MM Store + etiqueta de la tienda de recogida', plazo:'—', plazoKey:'na', cancelar:'Escalar MM Store / Pendiente', cancelable:true, notas:'Pedido de recogida ya enviado a tienda.' },
-  { slug:'ready-pickup', grupo:'tienda', icono:'🏪📬', estado:'Ready for Pick Up', derivarA:'Tienda debe revisar lo ocurrido y pasar pantallazo al CAU (si son errores técnicos)', plazo:'—', plazoKey:'na', cancelar:'Escalar MM Store / Pendiente', cancelable:true, notas:'Pedido listo para recoger en tienda.' },
-  { slug:'pickup', grupo:'tienda', icono:'🏪✅', estado:'Pick up', derivarA:'Estado final', plazo:'—', plazoKey:'na', cancelar:'Escalar MM Store / Pendiente', cancelable:true, notas:'Pedido recogido por el cliente.' },
-  { slug:'ready-carrier-sfs', grupo:'tienda', icono:'🏪🚚', estado:'Ready for carrier (Ship From Store)', derivarA:'Tienda debe revisar lo ocurrido y pasar pantallazo por Cherwell (si son errores técnicos)', plazo:'—', plazoKey:'na', cancelar:'Escalar MM Store / Pendiente', cancelable:true, notas:'Pedido SFS listo para transportista.' },
-  { slug:'demora-sfs-dentro', grupo:'tienda', icono:'⏱️🏪', estado:'Demoras SFS en estado Picked up (dentro de horario)', derivarA:'Transferencia: Opción 2 + escalar a MM Store / Pendiente', plazo:'Si no localizamos el pedido, escalamos a la tienda.', plazoKey:'fuera', cancelar:'Escalar MM Store / Pendiente. Si está en manos de Ader, se puede cancelar desde su web.', cancelable:true, notas:'Sólo dentro del horario de atención.' },
-  { slug:'demora-sfs-fuera', grupo:'tienda', icono:'🌙🚚', estado:'Demoras SFS (fuera de horario, chat y mail)', derivarA:'Enviar Fwd al carrier (Tipsa o Ader) + escalar MM Store / Resuelto', plazo:'—', plazoKey:'na', cancelar:'—', cancelable:false, notas:'Sólo fuera de horario, chat y mail.' },
-
-  { slug:'pedido-0-tarjeta', grupo:'incidencia', icono:'💳0️⃣', estado:'PEDIDO 0 – Pago tarjeta', derivarA:'Abrir caso Cherwell', plazo:'—', plazoKey:'na', cancelar:'CAU (Cherwell)', cancelable:true, notas:'Pedido 0 con pago por tarjeta.' },
-  { slug:'pedido-0-paypal', grupo:'incidencia', icono:'💳🅿️', estado:'PEDIDO 0 – PayPal', derivarA:'Pedidos online', plazo:'—', plazoKey:'na', cancelar:'Pedidos online', cancelable:true, notas:'Pedido 0 con pago por PayPal.' },
-  { slug:'pedido-limbo', grupo:'incidencia', icono:'🕳️', estado:'PEDIDO LIMBO', derivarA:'No se puede avanzar. Se gestiona como Limbo y se abonará al cliente.', plazo:'—', plazoKey:'na', cancelar:'Administración Online', cancelable:true, notas:'No se puede avanzar. Se abona al cliente.' },
-  { slug:'rechazo-cliente', grupo:'incidencia', icono:'🚫', estado:'Rechazo cliente', derivarA:'Reclamamos al carrier si el cliente dice que no es un rechazo.', plazo:'—', plazoKey:'na', cancelar:'Pedido se devolverá al almacén y se abonará automáticamente.', cancelable:true, notas:'Distinguir entre rechazo real y reclamación del cliente.' }
+  { 
+    slug:'order-created', grupo:'avanzar', icono:'🆕', estado:'Order Created', derivarA:'Abrir caso Cherwell', plazo:'—', plazoKey:'na', 
+    cancelar:'FOM (1er Nivel resuelto)', cancelable:true, notas:'Pedido recién creado. Si hay que avanzarlo, se abre caso en Cherwell.',
+    oracle:{ categoria:'No entrega en plazo', cola:'1er Nivel', estado:'Resuelto' } 
+  },
+  { 
+    slug:'scheduled-financiacion', grupo:'avanzar', icono:'💳⏳', estado:'Scheduled con financiación', derivarA:'Buzón administración online', plazo:'Pasadas 24 horas', plazoKey:'24h', 
+    cancelar:'FOM (1er Nivel resuelto)', cancelable:true, notas:'Pedido programado con financiación. Esperar 24h antes de escalar.',
+    oracle:{ categoria:'No entrega en plazo', cola:'1er Nivel', estado:'Resuelto' }
+  },
+  { 
+    slug:'scheduled-otros', grupo:'avanzar', icono:'⏳', estado:'Scheduled con otros métodos de pago', derivarA:'Abrir caso Cherwell', plazo:'Pasadas 24 horas', plazoKey:'24h', 
+    cancelar:'FOM (1er Nivel resuelto)', cancelable:true, notas:'Pedido programado con pago distinto a financiación.',
+    oracle:{ categoria:'No entrega en plazo', cola:'1er Nivel', estado:'Resuelto' }
+  },
+  { 
+    slug:'awaiting-stock', grupo:'avanzar', icono:'📦⏳', estado:'Awaiting Stock', derivarA:'PM (revisar si se trata de un lanzamiento)', plazo:'Pasada fecha de promesa de entrega', plazoKey:'fuera', 
+    cancelar:'FOM (1er Nivel resuelto)', cancelable:true, notas:'Si es un lanzamiento, revisar con PM antes de avanzar.',
+    oracle:{ categoria:'No entrega en plazo', cola:'1er Nivel', estado:'Resuelto' }
+  },
+  { 
+    slug:'backordered', grupo:'avanzar', icono:'📦❌', estado:'Backordered (verificado sin stock)', derivarA:'HD y PU → Gestión de Pedidos Online · SDPU y SFS → MM Store', plazo:'—', plazoKey:'na', 
+    cancelar:'FOM (1er Nivel resuelto)', cancelable:true, notas:'Confirmar primero que realmente no hay stock.',
+    oracle:{ categoria:'No entrega en plazo', cola:'1er Nivel', estado:'Resuelto' }
+  },
+  { 
+    slug:'awaiting-fulfillment', grupo:'avanzar', icono:'📦🔄', estado:'Awaiting Fulfillment', derivarA:'PM (Gama)', plazo:'Pasada fecha de promesa de entrega', plazoKey:'fuera', 
+    cancelar:'FOM (1er Nivel resuelto)', cancelable:true, notas:'Pedido pendiente de preparación por gama.',
+    oracle:{ categoria:'No entrega en plazo', cola:'1er Nivel', estado:'Resuelto' }
+  },
+  { 
+    slug:'released-financiacion', grupo:'avanzar', icono:'💳🚀', estado:'Released con financiación', derivarA:'Buzón administración online', plazo:'Pasadas 24 horas', plazoKey:'24h', 
+    cancelar:'FOM (1er Nivel resuelto)', cancelable:true, notas:'Pedido liberado con financiación.',
+    oracle:{ categoria:'No entrega en plazo', cola:'1er Nivel', estado:'Resuelto' }
+  },
+  { 
+    slug:'released-otros', grupo:'avanzar', icono:'🚀', estado:'Released con otros métodos de pago', derivarA:'Abrir caso Cherwell', plazo:'Pasadas 24 horas', plazoKey:'24h', 
+    cancelar:'FOM (1er Nivel resuelto)', cancelable:true, notas:'Pedido liberado con pago no financiado.',
+    oracle:{ categoria:'No entrega en plazo', cola:'1er Nivel', estado:'Resuelto' }
+  },
+  { 
+    slug:'fulfillment-initiated', grupo:'avanzar', icono:'🏭⏩', estado:'Fulfillment Initiated (Pedidos HD)', derivarA:'Ver flujo completo en la ficha', plazo:'Pasada fecha de promesa de entrega', plazoKey:'fuera', 
+    cancelar:'Ver flujo completo en la ficha', cancelable:true, notas:'Requiere verificación con el cliente y con Caixa si es financiado.', 
+    flujoAvanzar:`<ol class="steps-list"><li><strong>Confirmar si está fuera de promesa de entrega.</strong> En pedidos con financiación, verificar con el cliente si ha recibido información de Caixa de aprobación:<ul style="margin-left:18px;margin-top:6px"><li><strong>a.</strong> Si ha recibido confirmación de aprobación → pasar al punto 2.</li><li><strong>b.</strong> Si aún no ha recibido información → indicarle que está pendiente de aprobación por la financiera y facilitar el contacto de Caixa.</li></ul></li><li>Si está fuera de promesa de entrega:<ul style="margin-left:18px;margin-top:6px"><li><strong>a.</strong> Enviar FW a <code>preparacion_pintomm@id-logistics.com</code> y escalar el caso en Oracle a <strong>ES MM BO Atento</strong> en estado <strong>Pendiente</strong>.</li><li><strong>b.</strong> Enviar el email al cliente (ver plantilla).</li></ul></li></ol>`, 
+    flujoCancelar:`<ul class="check-list"><li><strong>Dentro del plazo de entrega:</strong> reenviar a <code>gds_mmpinto@id-logistics.com</code>, <code>preparacion_pintomm@id-logistics.com</code>, <code>jorge.ocana@id-logistics.com</code> y <code>msola@id-logistics.com</code>. Usar la plantilla Oracle <em>Escalado Interno – Solicit Cancelación</em> y dejar el caso en <strong>1er Nivel Resuelto</strong>.</li><li><strong>Fuera del plazo de entrega:</strong> escalar a <strong>ES MM Omnicanal</strong> en estado <strong>Pendiente</strong>.</li></ul>`, 
+    plantillaAvanzar:`¡Hola!\n\nTe informamos que debido a una incidencia en nuestros sistemas tu pedido no está siendo gestionado con normalidad. Nuestros compañeros están trabajando para poder resolverlo. En un plazo máximo de 48 horas nos volveremos a poner en contacto contigo para ofrecerte la mejor solución.\n\nAnte cualquier consulta, puedes volver a ponerte en contacto con nosotros respondiendo a este mismo correo.\n\nTu equipo MediaMarkt.`,
+    oracle:{ categoria:'No entrega en plazo', cola:'ES MM BO Atento', estado:'Pendiente' }
+  },
+  { 
+    slug:'shipped', grupo:'avanzar', icono:'🚚📦', estado:'Shipped (1887)', derivarA:'1. preparacion_pintomm@id-logistics.com · 2. (Si persiste tras 24h) Omnicanal', plazo:'Pasadas 24 horas', plazoKey:'24h', 
+    cancelar:'cancelacionpedidos@id-logistics.com y preparacion_pintomm@id-logistics.com', cancelable:true, notas:'Pedido ya enviado. Escalar a Omnicanal sólo si persiste tras 24h.',
+    oracle:{ categoria:'No entrega en plazo', cola:'1er Nivel', estado:'Resuelto' }
+  },
+  { 
+    slug:'order-completed', grupo:'avanzar', icono:'✅', estado:'Order Completed', derivarA:'Estado final', plazo:'—', plazoKey:'na', 
+    cancelar:'Carrier → orden de rechazo*', cancelable:true, notas:'Estado final del pedido. No se puede avanzar.',
+    oracle:{ categoria:'No entrega en plazo', cola:'1er Nivel', estado:'Resuelto' }
+  },
+  { 
+    slug:'procurement-created', grupo:'tienda', icono:'🏪🆕', estado:'Procurement Transfer Order Created (recogidas en tienda)', derivarA:'Escalar a MM Store para que lo gestione', plazo:'—', plazoKey:'na', 
+    cancelar:'Escalar MM Store / Pendiente', cancelable:true, notas:'Pedido de recogida creado, pendiente de tienda.',
+    oracle:{ categoria:'No entrega en plazo', cola:'1er Nivel', estado:'Resuelto' }
+  },
+  { 
+    slug:'being-picked', grupo:'tienda', icono:'🏪🔍', estado:'Being Picked', derivarA:'Tienda debe revisar lo ocurrido y pasar pantallazo por Cherwell (si son errores técnicos)', plazo:'—', plazoKey:'na', 
+    cancelar:'Escalar MM Store / Pendiente', cancelable:true, notas:'Pedido en preparación por parte de la tienda.',
+    oracle:{ categoria:'No entrega en plazo', cola:'1er Nivel', estado:'Resuelto' }
+  },
+  { 
+    slug:'procurement-shipped', grupo:'tienda', icono:'🏪🚚', estado:'Procurement Transfer Order Shipped (recogidas en tienda)', derivarA:'Buzón Oracle ES MM Store + etiqueta de la tienda de recogida', plazo:'—', plazoKey:'na', 
+    cancelar:'Escalar MM Store / Pendiente', cancelable:true, notas:'Pedido de recogida ya enviado a tienda.',
+    oracle:{ categoria:'No entrega en plazo', cola:'1er Nivel', estado:'Resuelto' }
+  },
+  { 
+    slug:'ready-pickup', grupo:'tienda', icono:'🏪📬', estado:'Ready for Pick Up', derivarA:'Tienda debe revisar lo ocurrido y pasar pantallazo al CAU (si son errores técnicos)', plazo:'—', plazoKey:'na', 
+    cancelar:'Escalar MM Store / Pendiente', cancelable:true, notas:'Pedido listo para recoger en tienda.',
+    oracle:{ categoria:'No entrega en plazo', cola:'1er Nivel', estado:'Resuelto' }
+  },
+  { 
+    slug:'pickup', grupo:'tienda', icono:'🏪✅', estado:'Pick up', derivarA:'Estado final', plazo:'—', plazoKey:'na', 
+    cancelar:'Escalar MM Store / Pendiente', cancelable:true, notas:'Pedido recogido por el cliente.',
+    oracle:{ categoria:'No entrega en plazo', cola:'1er Nivel', estado:'Resuelto' }
+  },
+  { 
+    slug:'ready-carrier-sfs', grupo:'tienda', icono:'🏪🚚', estado:'Ready for carrier (Ship From Store)', derivarA:'Tienda debe revisar lo ocurrido y pasar pantallazo por Cherwell (si son errores técnicos)', plazo:'—', plazoKey:'na', 
+    cancelar:'Escalar MM Store / Pendiente', cancelable:true, notas:'Pedido SFS listo para transportista.',
+    oracle:{ categoria:'No entrega en plazo', cola:'1er Nivel', estado:'Resuelto' }
+  },
+  { 
+    slug:'demora-sfs-dentro', grupo:'tienda', icono:'⏱️🏪', estado:'Demoras SFS en estado Picked up (dentro de horario)', derivarA:'Transferencia: Opción 2 + escalar a MM Store / Pendiente', plazo:'Si no localizamos el pedido, escalamos a la tienda.', plazoKey:'fuera', 
+    cancelar:'Escalar MM Store / Pendiente. Si está en manos de Ader, se puede cancelar desde su web.', cancelable:true, notas:'Sólo dentro del horario de atención.',
+    oracle:{ categoria:'No entrega en plazo', cola:'1er Nivel', estado:'Resuelto' }
+  },
+  { 
+    slug:'demora-sfs-fuera', grupo:'tienda', icono:'🌙🚚', estado:'Demoras SFS (fuera de horario, chat y mail)', derivarA:'Enviar Fwd al carrier (Tipsa o Ader) + escalar MM Store / Resuelto', plazo:'—', plazoKey:'na', 
+    cancelar:'—', cancelable:false, notas:'Sólo fuera de horario, chat y mail.',
+    oracle:{ categoria:'No entrega en plazo', cola:'1er Nivel', estado:'Resuelto' }
+  },
+  { 
+    slug:'pedido-0-tarjeta', grupo:'incidencia', icono:'💳0️⃣', estado:'PEDIDO 0 – Pago tarjeta', derivarA:'Abrir caso Cherwell', plazo:'—', plazoKey:'na', 
+    cancelar:'CAU (Cherwell)', cancelable:true, notas:'Pedido 0 con pago por tarjeta.',
+    oracle:{ categoria:'No entrega en plazo', cola:'1er Nivel', estado:'Resuelto' }
+  },
+  { 
+    slug:'pedido-0-paypal', grupo:'incidencia', icono:'💳🅿️', estado:'PEDIDO 0 – PayPal', derivarA:'Pedidos online', plazo:'—', plazoKey:'na', 
+    cancelar:'Pedidos online', cancelable:true, notas:'Pedido 0 con pago por PayPal.',
+    oracle:{ categoria:'No entrega en plazo', cola:'1er Nivel', estado:'Resuelto' }
+  },
+  { 
+    slug:'pedido-limbo', grupo:'incidencia', icono:'🕳️', estado:'PEDIDO LIMBO', derivarA:'No se puede avanzar. Se gestiona como Limbo y se abonará al cliente.', plazo:'—', plazoKey:'na', 
+    cancelar:'Administración Online', cancelable:true, notas:'No se puede avanzar. Se abona al cliente.',
+    oracle:{ categoria:'No entrega en plazo', cola:'1er Nivel', estado:'Resuelto' }
+  },
+  { 
+    slug:'rechazo-cliente', grupo:'incidencia', icono:'🚫', estado:'Rechazo cliente', derivarA:'Reclamamos al carrier si el cliente dice que no es un rechazo.', plazo:'—', plazoKey:'na', 
+    cancelar:'Pedido se devolverá al almacén y se abonará automáticamente.', cancelable:true, notas:'Distinguir entre rechazo real y reclamación del cliente.',
+    oracle:{ categoria:'No entrega en plazo', cola:'1er Nivel', estado:'Resuelto' }
+  }
 ];
 
 function getEstadosPorGrupo(grupo){ return estadosPedido.filter(e => e.grupo === grupo); }
@@ -654,6 +757,176 @@ function filtrarEstadosPorPlazo(lista, filtro){ if(filtro === 'todos') return li
 function getEstadosConCancelacion(){ return estadosPedido.filter(e => e.cancelable === true); }
 function getListaPorGrupo(grupoSlug){ if(grupoSlug === 'cancelar') return getEstadosConCancelacion(); return getEstadosPorGrupo(grupoSlug); }
 
+/* ==========================================
+   VISTAS: ESTADO DE PEDIDO
+   ========================================== */
+function viewEstadoPedidoHub(){
+  const cards = Object.entries(gruposEstadoPedido).map(([slug, g]) => {
+    const lista = getListaPorGrupo(slug); const count = lista.length;
+    return `<a class="fin-card" href="#/estado-pedido/${slug}"><span class="fin-card-icon">${g.icono}</span><span class="fin-card-title">${esc(g.label)} <span class="badge ${g.color}">${count}</span></span><span class="fin-card-desc">${esc(g.desc)}</span><span class="fin-card-arrow">→</span></a>`;
+  }).join('');
+  return `
+    <div class="card">
+      <div class="breadcrumb">Inicio &gt; Estado de Pedido</div>
+      <h2>📦 Estado de Pedido</h2>
+      <p style="color:var(--mm-gray);margin-bottom:16px">Consulta cómo actuar según el estado del pedido en FOM.</p>
+      <div class="faq-search-wrap"><input type="text" id="buscarEstado" placeholder="Buscar estado del pedido (ej: Shipped, Limbo…)" autocomplete="off" data-buscar-estado></div>
+      <div id="resultadoBuscarEstado"></div>
+      <h3 style="margin-top:24px">Categorías</h3>
+      <div class="fin-grid">${cards}</div>
+      <div style="margin-top:24px"><a class="btn btn-ghost" href="#/">⬅ Volver</a></div>
+    </div>
+  `;
+}
+
+function viewEstadoPedidoLista(grupoSlug){
+  const grupo = gruposEstadoPedido[grupoSlug]; if(!grupo) return viewNotFound();
+  const esGrupoCancelar = grupoSlug === 'cancelar';
+  const listaBase = getListaPorGrupo(grupoSlug);
+  const listaFiltrada = filtrarEstadosPorPlazo(listaBase, state.filtroPlazo || 'todos');
+  const pills = `
+    <div class="filtros-plazo">
+      <a class="filtro-pill ${state.filtroPlazo==='todos'?'active':''}" href="#/estado-pedido/${grupoSlug}" data-filtro-plazo="todos">🗂️ Todos (${listaBase.length})</a>
+      <a class="filtro-pill ${state.filtroPlazo==='24h'?'active':''}" href="#/estado-pedido/${grupoSlug}" data-filtro-plazo="24h">⏱️ Plazo 24h</a>
+      <a class="filtro-pill ${state.filtroPlazo==='fuera'?'active':''}" href="#/estado-pedido/${grupoSlug}" data-filtro-plazo="fuera">📅 Fuera de plazo</a>
+      <a class="filtro-pill ${state.filtroPlazo==='na'?'active':''}" href="#/estado-pedido/${grupoSlug}" data-filtro-plazo="na">— Sin plazo</a>
+    </div>`;
+  const avisoCancelar = esGrupoCancelar ? `<div class="alert alert-warning"><strong>Listado cruzado.</strong> Este grupo muestra <em>todos</em> los estados con acción de cancelación accionable (${getEstadosConCancelacion().length} de ${estadosPedido.length} estados).</div>` : '';
+  const tarjetas = listaFiltrada.length ? listaFiltrada.map(e => {
+    const grupoOriginal = gruposEstadoPedido[e.grupo];
+    const badgeGrupo = esGrupoCancelar ? `<span class="badge ${grupoOriginal.color} badge-grupo">${esc(grupoOriginal.label)}</span>` : '';
+    const modo = esGrupoCancelar ? 'cancelar' : 'avanzar';
+    const href = `#/estado-pedido/ficha/${e.slug}?modo=${modo}`;
+    const infoPrincipal = esGrupoCancelar
+      ? `<div class="meta cancelar"><strong>Cancelar:</strong> ${esc(e.cancelar.length>90?e.cancelar.slice(0,90)+'…':e.cancelar)}</div>`
+      : `<div class="meta"><strong>Avanzar:</strong> ${esc(e.derivarA.length>90?e.derivarA.slice(0,90)+'…':e.derivarA)}</div>`;
+    return `<a class="estado-card" href="${href}"><div class="titulo"><span style="font-size:20px">${esc(e.icono)}</span><span>${esc(e.estado)}</span>${badgeGrupo}</div>${infoPrincipal}<div class="meta"><strong>Plazo:</strong> ${esc(e.plazo)}</div><span class="accion">→</span></a>`;
+  }).join('') : '<div class="alert alert-warning">No hay estados para este filtro.</div>';
+  return `
+    <div class="card">
+      <div class="breadcrumb">Estado de Pedido &gt; ${esc(grupo.label)}</div>
+      <h2>${grupo.icono} ${esc(grupo.label)}</h2>
+      <p style="color:var(--mm-gray);margin-bottom:16px">${esc(grupo.desc)}</p>
+      ${avisoCancelar} ${pills}
+      <div class="grid-motivos">${tarjetas}</div>
+      <div style="margin-top:24px"><a class="btn btn-ghost" href="#/estado-pedido">⬅ Volver</a></div>
+    </div>
+  `;
+}
+
+function viewEstadoPedidoFicha(slug, modo = 'avanzar'){
+  const e = getEstadoPorSlug(slug); if(!e) return viewNotFound();
+  const grupo = gruposEstadoPedido[e.grupo]; const esCancelar = modo === 'cancelar';
+
+  // Formulario para avanzar
+  const formAvanzar = !esCancelar ? `
+    <h3 style="margin-top:24px">📝 Datos del cliente</h3>
+    <label for="ep_numeroPedido">Número de pedido</label>
+    <input type="text" id="ep_numeroPedido" data-campo="numeroPedido" value="${esc(state.datos.numeroPedido || '')}">
+    
+    <label for="ep_fechaCompra">Fecha de la compra</label>
+    <input type="date" id="ep_fechaCompra" data-campo="fechaCompra" value="${esc(state.datos.fechaCompra || '')}">
+    
+    <label for="ep_nombre">Nombres y apellidos</label>
+    <input type="text" id="ep_nombre" data-campo="nombre" value="${esc(state.datos.nombre || '')}">
+
+    <label for="ep_dni">DNI / NIE</label>
+    <input type="text" id="ep_dni" data-campo="dni" value="${esc(state.datos.dni || '')}">
+    
+    <label for="ep_telefono">Teléfono de contacto</label>
+    <input type="text" id="ep_telefono" data-campo="telefono" value="${esc(state.datos.telefono || '')}">
+    
+    <label for="ep_email">Email del PM</label>
+    <input type="text" id="ep_email" data-campo="email" value="${esc(state.datos.email || '')}">
+    
+    <label for="ep_detalle">Detalle de la consulta</label>
+    <textarea id="ep_detalle" data-campo="detalle">${esc(state.datos.detalle || '')}</textarea>
+
+    <h3 style="margin-top:24px">📧 Plantilla email al cliente</h3>
+    <textarea id="preview" readonly></textarea>
+    <div style="margin-top:12px"><button class="btn btn-success" data-copiar>📋 Copiar plantilla</button></div>
+  ` : '';
+
+  const bloquePlantilla = e.plantillaAvanzar && !esCancelar ? `<h3 style="margin-top:24px">📧 Plantilla email al cliente</h3><textarea id="preview" readonly>${esc(e.plantillaAvanzar)}</textarea><div style="margin-top:12px"><button class="btn btn-success" data-copiar>📋 Copiar plantilla</button></div>` : '';
+  const bloqueAvanzar = e.flujoAvanzar && !esCancelar ? `<h3 style="margin-top:24px">⏩ Pasos para avanzar</h3>${e.flujoAvanzar}` : '';
+  const bloqueCancelar = e.flujoCancelar && esCancelar ? `<h3 style="margin-top:24px">❌ Pasos para cancelar</h3>${e.flujoCancelar}` : '';
+  
+  const tarjetaAccion = esCancelar
+    ? `<div class="alert alert-danger" style="border-left-width:6px"><h3>❌ Cancelar pedido</h3><p><strong>Derivamos a:</strong><br>${esc(e.cancelar)}</p></div>`
+    : `<div class="alert alert-success" style="border-left-width:6px"><h3>⏩ Avanzar pedido</h3><p><strong>Derivamos a:</strong><br>${esc(e.derivarA)}</p>${e.plazo !== '—' ? `<p style="margin-top:8px"><strong>Plazo:</strong> ${esc(e.plazo)}</p>` : ''}</div>`;
+
+  // Mostramos el Oracle solo si NO es cancelar y si tiene datos definidos
+  const bloqueOracle = (!esCancelar && e.oracle) ? renderOracle(e.oracle) : '';
+
+  return `
+    <div class="card">
+      <div class="breadcrumb">Estado de Pedido &gt; ${esCancelar ? 'Cancelar' : esc(grupo.label)} &gt; ${esc(e.estado)}</div>
+      <h2><span style="margin-right:8px">${esc(e.icono)}</span>${esc(e.estado)}</h2>
+      <div class="alert alert-info"><p>${esc(e.notas || '')}</p></div>
+      ${tarjetaAccion} 
+      ${bloqueOracle}
+      ${bloqueAvanzar} ${bloqueCancelar} 
+      ${formAvanzar}
+      ${!formAvanzar ? bloquePlantilla : ''}
+      <div style="margin-top:24px"><a class="btn btn-ghost" href="#/estado-pedido/${esCancelar ? 'cancelar' : e.grupo}">⬅ Volver</a></div>
+    </div>
+  `;
+}
+
+/* ==========================================
+   EVENTOS PARA BUSCAR Y GENERAR PLANTILLA
+   ========================================== */
+function buscarEstadoPedido(){
+  const q = (document.getElementById('buscarEstado')?.value || '').toLowerCase().trim();
+  const out = document.getElementById('resultadoBuscarEstado');
+  if(!out) return;
+  if(!q){ out.innerHTML = ''; return; }
+  const matches = estadosPedido.filter(e => e.estado.toLowerCase().includes(q) || e.derivarA.toLowerCase().includes(q) || (e.cancelar || '').toLowerCase().includes(q));
+  if(!matches.length){ out.innerHTML = '<div class="alert alert-warning">❌ No se encontraron estados con ese texto.</div>'; return; }
+  out.innerHTML = matches.slice(0, 8).map(e => `
+    <a class="estado-card" href="#/estado-pedido/ficha/${e.slug}?modo=avanzar" style="margin-bottom:8px">
+      <div class="titulo"><span style="font-size:18px">${esc(e.icono)}</span><span>${esc(e.estado)}</span></div>
+      <div class="meta">${esc(gruposEstadoPedido[e.grupo].label)} · ${esc(e.plazo)}</div>
+    </a>
+  `).join('');
+}
+
+// Función que genera la plantilla de Estado de Pedido
+function plantillaEstadoPedido() {
+  const d = state.datos;
+  return `Hola,
+
+Nos ha contactado un cliente en relación a una compra online. El estado del pedido se encuentra en: ${estadoActual?.estado || '__________'}.
+
+Procede a realizar la gestión de acuerdo a como se plantea en el cuadro de procesos sobre el estado de este pedido.
+
+Adjuntamos los datos del cliente:
+Número de pedido: ${d.numeroPedido || '__________'}
+Fecha de la compra: ${formatearFechaCompra(d.fechaCompra)}
+Nombres y apellidos: ${d.nombre || '__________'}
+Teléfono de contacto: ${d.telefono || '__________'}
+Email del PM: ${d.email || '__________'}
+
+Por favor, realizad las gestiones oportunas según lo solicitado por el cliente.
+
+Muchas gracias`;
+}
+
+// Aseguramos que el input de búsqueda y los campos funcionen
+document.addEventListener('input', e => {
+  if(e.target.matches('[data-buscar-estado]')){ buscarEstadoPedido(); return; }
+  
+  // Si es un campo del formulario de estado de pedido
+  if (e.target.matches('[data-campo]')) {
+    const campo = e.target.getAttribute('data-campo');
+    state.datos[campo] = e.target.value;
+    if (typeof window.updatePreview === 'function') window.updatePreview();
+  }
+});
+
+
+
+/* ============================================================================================================================================================= */
 const previewRenderers = {
   'paqueteria/tienda': (s, d) => `Buenos días,\n\nUn cliente nos informa que adquirió un artículo de paquetería (${d.articulo || '__________'}) el ${s.fechaCompra || '__________'}, en ${d.origen || 'una de nuestras tiendas'}.\n\nSe informa al cliente de las opciones disponibles para tramitar una reparación en garantía. Tras recibir la información, el cliente decide acudir a una de nuestras tiendas físicas para gestionar la reparación.\n\nQuedamos a la espera de la gestión correspondiente.\n\nMuchas gracias.`,
   'paqueteria/online': (s, d) => `Buenos días,\n\nUn cliente nos informa que adquirió un artículo de paquetería (${d.articulo || '__________'}) el ${s.fechaCompra || '__________'}, en ${d.origen || 'una de nuestras tiendas'}.\n\nSe informa al cliente de las opciones disponibles para tramitar una reparación en garantía. Tras recibir la información, el cliente decide gestionarla a través del Portal ZIR.\n\nSe realiza la solicitud correspondiente con la orden de trabajo ${d.orden || 'E601-XXXXXX-R-C'} y se informa al cliente del procedimiento.\n\nQuedamos a la espera de la gestión correspondiente.\n\nMuchas gracias.`
@@ -703,20 +976,118 @@ function plantillaFGGranCarga(s, d){
 }
 
 const tiposMarketplace = {
-  pedido: { icono:'📦', label:'Consulta de pedido', desc:'El cliente consulta el estado, detalles o seguimiento de un pedido de Marketplace.', categoria:'Consulta pedido Marketplace', cola:'ES MM Marketplace', estado:'Resuelto', campos:[ { id:'numeroPedido', label:'Número de pedido' }, { id:'articulo', label:'Artículo' }, { id:'vendedor', label:'Vendedor' }, { id:'nombre', label:'Nombre y apellidos' }, { id:'telefono', label:'Teléfono' }, { id:'email', label:'Email' }, { id:'detalle', label:'Detalle de la consulta', tipo:'textarea' } ] },
-  envio: { icono:'🚚', label:'Incidencia en el envío', desc:'Retraso, pérdida, daño en el transporte o problema con la entrega.', categoria:'Incidencia envío Marketplace', cola:'ES MM Marketplace', estado:'Pendiente', campos:[ { id:'numeroPedido', label:'Número de pedido' }, { id:'transportista', label:'Transportista' }, { id:'numeroSeguimiento', label:'Nº de seguimiento' }, { id:'articulo', label:'Artículo' }, { id:'nombre', label:'Nombre y apellidos' }, { id:'telefono', label:'Teléfono' }, { id:'email', label:'Email' }, { id:'detalle', label:'Detalle de la incidencia', tipo:'textarea' } ] },
-  devolucion: { icono:'🔄', label:'Devolución Marketplace', desc:'El cliente quiere devolver un producto comprado a un vendedor Marketplace.', categoria:'Devolución Marketplace', cola:'ES MM Marketplace', estado:'Pendiente', campos:[ { id:'numeroPedido', label:'Número de pedido' }, { id:'articulo', label:'Artículo' }, { id:'vendedor', label:'Vendedor' }, { id:'motivo', label:'Motivo de la devolución', tipo:'textarea' }, { id:'nombre', label:'Nombre y apellidos' }, { id:'telefono', label:'Teléfono' }, { id:'email', label:'Email' } ] },
-  garantia: { icono:'🛠️', label:'Garantía o reparación', desc:'Producto Marketplace con defecto o avería.', categoria:'Reparación Marketplace', cola:'ES MM Marketplace', estado:'Pendiente', campos:[ { id:'numeroPedido', label:'Número de pedido' }, { id:'articulo', label:'Artículo' }, { id:'vendedor', label:'Vendedor' }, { id:'fechaCompra', label:'Fecha de compra' }, { id:'fallo', label:'Descripción del fallo', tipo:'textarea' }, { id:'nombre', label:'Nombre y apellidos' }, { id:'telefono', label:'Teléfono' }, { id:'email', label:'Email' } ] },
-  vendedor: { icono:'💬', label:'Contacto con el vendedor', desc:'El cliente quiere contactar directamente con el vendedor.', categoria:'Contacto vendedor Marketplace', cola:'ES MM Marketplace', estado:'Resuelto', campos:[ { id:'numeroPedido', label:'Número de pedido' }, { id:'vendedor', label:'Nombre del vendedor' }, { id:'articulo', label:'Artículo' }, { id:'nombre', label:'Nombre y apellidos' }, { id:'telefono', label:'Teléfono' }, { id:'email', label:'Email' }, { id:'detalle', label:'Detalle de la solicitud', tipo:'textarea' } ] },
-  reclamacion: { icono:'⚠️', label:'Reclamación', desc:'Reclamación formal sobre un pedido, vendedor o servicio.', categoria:'Reclamación Marketplace', cola:'ES MM Marketplace', estado:'Pendiente', campos:[ { id:'numeroPedido', label:'Número de pedido' }, { id:'articulo', label:'Artículo' }, { id:'vendedor', label:'Vendedor' }, { id:'motivo', label:'Motivo de la reclamación' }, { id:'detalle', label:'Detalle de la reclamación', tipo:'textarea' }, { id:'nombre', label:'Nombre y apellidos' }, { id:'telefono', label:'Teléfono' }, { id:'email', label:'Email' } ] }
+  pedido: { 
+    icono:'📦', 
+    label:'Consulta de pedido', 
+    desc:'El cliente consulta el estado, detalles o seguimiento de un pedido de Marketplace.', 
+    categoria:'Market Places Información General', 
+    cola:'Market Places no entrega', 
+    estado:'Pendiente', 
+    campos:[
+      { id:'numeroPedido', label:'Nº pedido Market Place' },
+      { id:'fechaCompra', label:'Fecha de la compra', tipo:'date' },
+      { id:'nombre', label:'Nombre y apellidos' },
+      { id:'telefono', label:'Teléfono de contacto' },
+      { id:'email', label:'Email pedido' },
+      { id:'detalle', label:'Detalle de la consulta', tipo:'textarea' }
+    ]
+  },
+  envio: { 
+    icono:'🚚', 
+    label:'Incidencia en el envío', 
+    desc:'Retraso, pérdida, daño en el transporte o problema con la entrega.', 
+    categoria:'Market Places Demora en transporte', 
+    cola:'Market no entrega', 
+    estado:'Pendiente', 
+    campos:[
+      { id:'numeroPedido', label:'Nº pedido Market Place' },
+      { id:'fechaCompra', label:'Fecha de la compra', tipo:'date' },
+      { id:'nombre', label:'Nombre y apellidos' },
+      { id:'telefono', label:'Teléfono de contacto' },
+      { id:'email', label:'Email pedido' },
+      { id:'detalle', label:'Detalle de la incidencia', tipo:'textarea' }
+    ]
+  },
+  devolucion: { 
+    icono:'🔄', 
+    label:'Devolución Marketplace', 
+    desc:'El cliente quiere devolver un producto comprado a un vendedor Marketplace.', 
+    categoria:'Market Places Devoluciones', 
+    cola:'Market places no devoluciones', 
+    estado:'Pendiente', 
+    campos:[
+      { id:'numeroPedido', label:'Nº pedido Market Place' },
+      { id:'fechaCompra', label:'Fecha de la compra', tipo:'date' },
+      { id:'nombre', label:'Nombre y apellidos' },
+      { id:'telefono', label:'Teléfono de contacto' },
+      { id:'email', label:'Email pedido' },
+      { id:'detalle', label:'Motivo de la devolución', tipo:'textarea' }
+    ]
+  },
+  garantia: { 
+    icono:'🛠️', 
+    label:'Garantía o reparación', 
+    desc:'Producto Marketplace con defecto o avería.', 
+    categoria:'Market Places Reparaciones', 
+    cola:'Market Places no reparaciones', 
+    estado:'Pendiente', 
+    campos:[
+      { id:'numeroPedido', label:'Nº pedido Market Place' },
+      { id:'fechaCompra', label:'Fecha de la compra', tipo:'date' },
+      { id:'nombre', label:'Nombre y apellidos' },
+      { id:'telefono', label:'Teléfono de contacto' },
+      { id:'email', label:'Email pedido' },
+      { id:'detalle', label:'Descripción del fallo', tipo:'textarea' }
+    ]
+  },
+  vendedor: { 
+    icono:'💬', 
+    label:'Market Places Cancelación', 
+    desc:'El cliente quiere contactar directamente con el vendedor.', 
+    categoria:'Market Places Cancelación', 
+    cola:'Market No cancelaciones', 
+    estado:'Pendiente', 
+    campos:[
+      { id:'numeroPedido', label:'Nº pedido Market Place' },
+      { id:'fechaCompra', label:'Fecha de la compra', tipo:'date' },
+      { id:'nombre', label:'Nombre y apellidos' },
+      { id:'telefono', label:'Teléfono de contacto' },
+      { id:'email', label:'Email pedido' },
+      { id:'detalle', label:'Detalle de la solicitud', tipo:'textarea' }
+    ]
+  },
+  reclamacion: { 
+    icono:'⚠️', 
+    label:'Reclamación', 
+    desc:'Reclamación formal sobre un pedido, vendedor o servicio.', 
+    categoria:'Market Places Información general', 
+    cola:'Market Places no entrega', 
+    estado:'Pendiente', 
+    campos:[
+      { id:'numeroPedido', label:'Nº pedido Market Place' },
+      { id:'fechaCompra', label:'Fecha de la compra', tipo:'date' },
+      { id:'nombre', label:'Nombre y apellidos' },
+      { id:'telefono', label:'Teléfono de contacto' },
+      { id:'email', label:'Email pedido' },
+      { id:'detalle', label:'Detalle de la reclamación', tipo:'textarea' }
+    ]
+  }
 };
-
 function plantillaMarketplace(s, d, tipo){
-  const info = tiposMarketplace[tipo]; if(!info) return '';
-  const lineas = info.campos.filter(c => c.tipo !== 'textarea' && d[c.id]).map(c => `${c.label}: ${d[c.id]}`).join('\n');
-  const detalleCampo = info.campos.find(c => c.tipo === 'textarea');
-  const detalle = detalleCampo ? (d[detalleCampo.id] || '__________') : '__________';
-  return `Buenos días,\n\nNos contacta un cliente en relación con un pedido de Marketplace.\n\nTipo de gestión:\n${info.label}\n\nDatos facilitados por el cliente:\n${lineas || '__________'}\n\nDetalle:\n${detalle}\n\nSe escala a la cola ${info.cola} con estado ${info.estado}.\n\nMuchas gracias.`;
+  if(!tiposMarketplace[tipo]) return '';
+  return `Hola,
+
+Nos ha contactado un cliente en relación a una compra Market Place realizada en nuestra web por Market Places y solicita (${d.detalle || '__________'}) Informamos que el área encargada contactara con SELLER, que este vendedor externo pueda contactar con el cliente para ayudarle con su solicitud.
+
+Adjuntamos los datos del cliente:
+Nº pedido Market Place: ${d.numeroPedido || '__________'}
+Fecha de la compra: ${formatearFechaCompra(d.fechaCompra)}
+Nombre y apellidos: ${d.nombre || '__________'}
+Teléfono de contacto: ${d.telefono || '__________'}
+Email pedido: ${d.email || '__________'}
+Por favor, realizad las gestiones oportunas según lo solicitado por el cliente.
+
+Muchas gracias`;
 }
 
 const faqsMarketplace = [
@@ -740,12 +1111,19 @@ function renderOracle({ categoria, cola, estado, extras }){
 function renderCampo(campo){
   const valor = state.datos[campo.id] ?? campo.default ?? '';
   const id = `campo-${campo.id}`;
+
   if(campo.tipo === 'select'){
     return `<label for="${id}">${esc(campo.label)}</label><select id="${id}" data-campo="${campo.id}">${campo.opciones.map(op => `<option value="${esc(op)}" ${op === valor ? 'selected' : ''}>${esc(op)}</option>`).join('')}</select>`;
   }
+
   if(campo.tipo === 'textarea'){
     return `<label for="${id}">${esc(campo.label)}</label><textarea id="${id}" data-campo="${campo.id}" placeholder="${esc(campo.placeholder || '')}">${esc(valor)}</textarea>`;
   }
+
+  if(campo.tipo === 'date'){
+    return `<label for="${id}">${esc(campo.label)}</label><input type="date" id="${id}" data-campo="${campo.id}" value="${esc(valor)}">`;
+  }
+
   return `<label for="${id}">${esc(campo.label)}</label><input type="text" id="${id}" data-campo="${campo.id}" value="${esc(valor)}" placeholder="${esc(campo.placeholder || '')}">`;
 }
 
@@ -884,11 +1262,13 @@ function viewFecha(){
 }
 
 function viewDevolucion(){
+  if(!state.garantia) return viewFecha();
   const g = state.garantia;
   return `<div class="card"><div class="alert alert-success"><h2>🟢 En plazo de devolución</h2><p>Al cliente todavía le quedan <strong>${g.restantes}</strong> días para devolver el artículo.</p></div><button class="btn btn-primary" data-nuevo-caso>Nuevo caso</button></div>`;
 }
 
 function viewFueraGarantia(){
+  if(!state.garantia) return viewFecha();
   const g = state.garantia;
   return `
     <div class="card">
@@ -1334,25 +1714,31 @@ function viewFinanciacionFaqs(){
     </div>
   `;
 }
-function viewMarketplaceHub(){
-  const totalFaqs = faqsMarketplace.length; const totalTipos = Object.keys(tiposMarketplace).length;
+function viewMarketplace(){
   return `
     <div class="card">
-      <div class="breadcrumb">Inicio &gt; Marketplaces</div>
-      <h2>🛒 Marketplaces</h2>
-      <p style="color:var(--mm-gray);margin-bottom:24px">Centro de información y gestión para pedidos de vendedores externos.</p>
-      <div class="alert alert-info"><h3>ℹ️ ¿Qué es el Marketplace?</h3><p>Los productos Marketplace se venden a través de <strong>mediamarkt.es</strong> por <strong>vendedores externos</strong>.</p></div>
+      <div class="breadcrumb">Inicio &gt; Marketplace</div>
+      <h2>🛒 Marketplace</h2>
+      <p style="color:var(--mm-gray);margin-bottom:24px">Selecciona el tipo de gestión:</p>
       <div class="fin-grid">
-        <a class="fin-card" href="#/marketplace/faqs"><span class="fin-card-icon">❓</span><span class="fin-card-title">Preguntas frecuentes <span class="badge badge-purple">${totalFaqs}</span></span><span class="fin-card-desc">Respuestas rápidas sobre pedidos, envíos, devoluciones.</span><span class="fin-card-arrow">→</span></a>
-        <a class="fin-card" href="#/marketplace/gestion"><span class="fin-card-icon">📝</span><span class="fin-card-title">Gestiones y escalados <span class="badge badge-red">${totalTipos}</span></span><span class="fin-card-desc">Registra incidencias, escalados y reclamaciones.</span><span class="fin-card-arrow">→</span></a>
+        ${Object.entries(tiposMarketplace).map(([slug, t]) => `
+          <a class="fin-card" href="#/marketplace/${slug}">
+            <span class="fin-card-icon">${t.icono}</span>
+            <span class="fin-card-title">${esc(t.label)}</span>
+            <span class="fin-card-desc">${esc(t.desc)}</span>
+            <span class="fin-card-arrow">→</span>
+          </a>`).join('')}
       </div>
-      <a class="btn btn-ghost" href="#/" style="margin-top:24px">⬅ Volver al inicio</a>
-    </div>
+      <div style="margin-top:24px"><a class="btn btn-primary" href="#/marketplace/faqs">❓ Ver FAQs</a></div>
+      <div style="margin-top:24px"><a class="btn btn-ghost" href="#/">⬅ Volver</a></div>
+</div>
   `;
 }
+
 function viewMarketplaceFaqs(categoriaSlug){
   const catActual = categoriaSlug && categoriasFaqsMarketplace[categoriaSlug] ? categoriaSlug : null;
   const faqsFiltradas = catActual ? faqsMarketplace.filter(f => f.categoria === catActual) : faqsMarketplace;
+  
   const pills = [
     `<a class="faq-cat-pill ${!catActual ? 'active' : ''}" href="#/marketplace/faqs">🗂️ Todas <span>${faqsMarketplace.length}</span></a>`,
     ...Object.entries(categoriasFaqsMarketplace).map(([slug, cat]) => {
@@ -1360,7 +1746,9 @@ function viewMarketplaceFaqs(categoriaSlug){
       return `<a class="faq-cat-pill ${catActual === slug ? 'active' : ''}" href="#/marketplace/faqs/${slug}">${esc(cat.label)} <span>${count}</span></a>`;
     })
   ].join('');
+  
   const faqsHtml = faqsFiltradas.map(f => `<details class="faq-item"><summary>${esc(f.q)}</summary><div class="faq-answer">${f.a}</div></details>`).join('');
+  
   return `
     <div class="card">
       <div class="breadcrumb">Marketplace &gt; Preguntas frecuentes</div>
@@ -1369,7 +1757,7 @@ function viewMarketplaceFaqs(categoriaSlug){
       <div class="faq-cats">${pills}</div>
       <div class="faq-counter">Mostrando <b id="faqCount">${faqsFiltradas.length}</b> de ${faqsMarketplace.length} preguntas</div>
       <div id="faqList">${faqsHtml || '<div class="alert alert-warning">No hay preguntas en esta categoría.</div>'}</div>
-      <div style="margin-top:24px"><a class="btn btn-primary" href="#/marketplace/gestion">📝 Ir a gestiones</a><a class="btn btn-ghost" href="#/marketplace">⬅ Volver</a></div>
+      <div style="margin-top:24px"><a class="btn btn-primary" href="#/marketplace">⬅ Volver</a></div>
     </div>
   `;
 }
@@ -1394,83 +1782,13 @@ function viewMarketplaceGestionHub(){
 }
 function viewMarketplaceForm(tipoSlug){
   const tipo = tiposMarketplace[tipoSlug]; if(!tipo) return viewNotFound();
-  return plantillaLayout({
+  
+return plantillaLayout({
     breadcrumb: `Marketplace &gt; Gestiones &gt; ${esc(tipo.label)}`, titulo: `${tipo.icono} ${tipo.label}`, badge: { clase:'badge-purple', texto:'Marketplace' },
     info: `<div class="alert alert-info"><p>${esc(tipo.desc)}</p></div>`,
     oracle: { categoria: tipo.categoria, cola: tipo.cola, estado: tipo.estado },
     campos: tipo.campos, volverA: '#/marketplace/gestion'
   });
-}
-function viewEstadoPedidoHub(){
-  const cards = Object.entries(gruposEstadoPedido).map(([slug, g]) => {
-    const lista = getListaPorGrupo(slug); const count = lista.length;
-    return `<a class="fin-card" href="#/estado-pedido/${slug}"><span class="fin-card-icon">${g.icono}</span><span class="fin-card-title">${esc(g.label)} <span class="badge ${g.color}">${count}</span></span><span class="fin-card-desc">${esc(g.desc)}</span><span class="fin-card-arrow">→</span></a>`;
-  }).join('');
-  return `
-    <div class="card">
-      <div class="breadcrumb">Inicio &gt; Estado de Pedido</div>
-      <h2>📦 Estado de Pedido</h2>
-      <p style="color:var(--mm-gray);margin-bottom:16px">Consulta cómo actuar según el estado del pedido en FOM.</p>
-      <div class="faq-search-wrap"><input type="text" id="buscarEstado" placeholder="Buscar estado del pedido (ej: Shipped, Limbo…)" autocomplete="off" data-buscar-estado></div>
-      <div id="resultadoBuscarEstado"></div>
-      <h3 style="margin-top:24px">Categorías</h3>
-      <div class="fin-grid">${cards}</div>
-      <div style="margin-top:24px"><a class="btn btn-ghost" href="#/">⬅ Volver</a></div>
-    </div>
-  `;
-}
-function viewEstadoPedidoLista(grupoSlug){
-  const grupo = gruposEstadoPedido[grupoSlug]; if(!grupo) return viewNotFound();
-  const esGrupoCancelar = grupoSlug === 'cancelar';
-  const listaBase = getListaPorGrupo(grupoSlug);
-  const listaFiltrada = filtrarEstadosPorPlazo(listaBase, state.filtroPlazo || 'todos');
-  const pills = `
-    <div class="filtros-plazo">
-      <a class="filtro-pill ${state.filtroPlazo==='todos'?'active':''}" href="#/estado-pedido/${grupoSlug}" data-filtro-plazo="todos">🗂️ Todos (${listaBase.length})</a>
-      <a class="filtro-pill ${state.filtroPlazo==='24h'?'active':''}" href="#/estado-pedido/${grupoSlug}" data-filtro-plazo="24h">⏱️ Plazo 24h</a>
-      <a class="filtro-pill ${state.filtroPlazo==='fuera'?'active':''}" href="#/estado-pedido/${grupoSlug}" data-filtro-plazo="fuera">📅 Fuera de plazo</a>
-      <a class="filtro-pill ${state.filtroPlazo==='na'?'active':''}" href="#/estado-pedido/${grupoSlug}" data-filtro-plazo="na">— Sin plazo</a>
-    </div>`;
-  const avisoCancelar = esGrupoCancelar ? `<div class="alert alert-warning"><strong>Listado cruzado.</strong> Este grupo muestra <em>todos</em> los estados con acción de cancelación accionable (${getEstadosConCancelacion().length} de ${estadosPedido.length} estados).</div>` : '';
-  const tarjetas = listaFiltrada.length ? listaFiltrada.map(e => {
-    const grupoOriginal = gruposEstadoPedido[e.grupo];
-    const badgeGrupo = esGrupoCancelar ? `<span class="badge ${grupoOriginal.color} badge-grupo">${esc(grupoOriginal.label)}</span>` : '';
-    const modo = esGrupoCancelar ? 'cancelar' : 'avanzar';
-    const href = `#/estado-pedido/ficha/${e.slug}?modo=${modo}`;
-    const infoPrincipal = esGrupoCancelar
-      ? `<div class="meta cancelar"><strong>Cancelar:</strong> ${esc(e.cancelar.length>90?e.cancelar.slice(0,90)+'…':e.cancelar)}</div>`
-      : `<div class="meta"><strong>Avanzar:</strong> ${esc(e.derivarA.length>90?e.derivarA.slice(0,90)+'…':e.derivarA)}</div>`;
-    return `<a class="estado-card" href="${href}"><div class="titulo"><span style="font-size:20px">${esc(e.icono)}</span><span>${esc(e.estado)}</span>${badgeGrupo}</div>${infoPrincipal}<div class="meta"><strong>Plazo:</strong> ${esc(e.plazo)}</div><span class="accion">→</span></a>`;
-  }).join('') : '<div class="alert alert-warning">No hay estados para este filtro.</div>';
-  return `
-    <div class="card">
-      <div class="breadcrumb">Estado de Pedido &gt; ${esc(grupo.label)}</div>
-      <h2>${grupo.icono} ${esc(grupo.label)}</h2>
-      <p style="color:var(--mm-gray);margin-bottom:16px">${esc(grupo.desc)}</p>
-      ${avisoCancelar} ${pills}
-      <div class="grid-motivos">${tarjetas}</div>
-      <div style="margin-top:24px"><a class="btn btn-ghost" href="#/estado-pedido">⬅ Volver</a></div>
-    </div>
-  `;
-}
-function viewEstadoPedidoFicha(slug, modo = 'avanzar'){
-  const e = getEstadoPorSlug(slug); if(!e) return viewNotFound();
-  const grupo = gruposEstadoPedido[e.grupo]; const esCancelar = modo === 'cancelar';
-  const bloquePlantilla = e.plantillaAvanzar && !esCancelar ? `<h3 style="margin-top:24px">📧 Plantilla email al cliente</h3><textarea id="preview" readonly>${esc(e.plantillaAvanzar)}</textarea><div style="margin-top:12px"><button class="btn btn-success" data-copiar>📋 Copiar plantilla</button></div>` : '';
-  const bloqueAvanzar = e.flujoAvanzar && !esCancelar ? `<h3 style="margin-top:24px">⏩ Pasos para avanzar</h3>${e.flujoAvanzar}` : '';
-  const bloqueCancelar = e.flujoCancelar && esCancelar ? `<h3 style="margin-top:24px">❌ Pasos para cancelar</h3>${e.flujoCancelar}` : '';
-  const tarjetaAccion = esCancelar
-    ? `<div class="alert alert-danger" style="border-left-width:6px"><h3>❌ Cancelar pedido</h3><p><strong>Derivamos a:</strong><br>${esc(e.cancelar)}</p></div>`
-    : `<div class="alert alert-success" style="border-left-width:6px"><h3>⏩ Avanzar pedido</h3><p><strong>Derivamos a:</strong><br>${esc(e.derivarA)}</p>${e.plazo !== '—' ? `<p style="margin-top:8px"><strong>Plazo:</strong> ${esc(e.plazo)}</p>` : ''}</div>`;
-  return `
-    <div class="card">
-      <div class="breadcrumb">Estado de Pedido &gt; ${esCancelar ? 'Cancelar' : esc(grupo.label)} &gt; ${esc(e.estado)}</div>
-      <h2><span style="margin-right:8px">${esc(e.icono)}</span>${esc(e.estado)}</h2>
-      <div class="alert alert-info"><p>${esc(e.notas || '')}</p></div>
-      ${tarjetaAccion} ${bloqueAvanzar} ${bloqueCancelar} ${bloquePlantilla}
-      <div style="margin-top:24px"><a class="btn btn-ghost" href="#/estado-pedido/${esCancelar ? 'cancelar' : e.grupo}">⬅ Volver</a></div>
-    </div>
-  `;
 }
 function viewProximamente(){ return `<div class="card"><div class="alert alert-info"><h3>🚧 En construcción</h3><p>Esta sección estará disponible próximamente.</p></div><a class="btn btn-ghost" href="#/">⬅ Volver</a></div>`; }
 
@@ -1482,7 +1800,7 @@ const routes = {
   'fecha' : viewFecha, 'devolucion' : viewDevolucion, 'fuera' : viewFueraGarantia, 'validar-danio' : viewValidarDanio,
   'tipo' : viewTipo, 'tipo/paqueteria' : viewPaqueteria, 'tipo/gran-carga' : viewGranCarga, 'tipo/tv' : viewTvPatinetes,
   'paqueteria/tienda' : viewPaqueteriaTienda, 'paqueteria/online' : viewPaqueteriaOnline,
-  'gran-carga/tienda' : viewGranCargaTienda, 'gran-carga/tienda/visita': viewGranCargaTiendaVisita, 'gran-carga/tienda/correo': viewGranCargaTiendaCorreo,
+  'gran-carga' : viewGranCarga, 'gran-carga/tienda' : viewGranCargaTienda, 'gran-carga/tienda/visita': viewGranCargaTiendaVisita, 'gran-carga/tienda/correo': viewGranCargaTiendaCorreo,
   'gran-carga/web' : viewGranCargaWeb, 'gran-carga/web/tienda': viewGranCargaWebTienda, 'gran-carga/web/sat' : viewGranCargaWebSat,
   'fuera-garantia' : viewFueraGarantia, 'fuera-garantia/seguro': viewFueraGarantiaSeguro,
   'fuera-garantia/seguro/square-trade': viewSeguroSquareTrade, 'fuera-garantia/seguro/movil' : viewSeguroMovil, 'fuera-garantia/seguro/domestic' : viewSeguroDomestic,
@@ -1490,7 +1808,7 @@ const routes = {
   'fuera-garantia/paqueteria/tienda': viewFueraGarantiaPaqueteriaTienda, 'fuera-garantia/paqueteria/hub' : viewFueraGarantiaPaqueteriaHub,
   'fuera-garantia/gran-carga' : viewFueraGarantiaGranCarga, 'fuera-garantia/gran-carga/plantilla': viewFueraGarantiaGranCargaPlantilla, 'fuera-garantia/gran-carga/buscar-sat': viewBuscarSat,
   'reclamacion' : viewReclamacionHub, 'reclamacion/paqueteria': viewReclamacionListaPaqueteria, 'reclamacion/gran-carga': viewReclamacionListaGranCarga,
-  'marketplace' : viewMarketplaceHub, 'marketplace/faqs' : viewMarketplaceFaqs, 'marketplace/gestion' : viewMarketplaceGestionHub,
+  'marketplace' : viewMarketplace, 'marketplace/faqs' : viewMarketplaceFaqs, 'marketplace/gestion' : viewMarketplaceGestionHub,
   'financiacion' : viewFinanciacionHub, 'financiacion/consulta' : viewFinanciacionConsulta, 'financiacion/requisitos' : viewFinanciacionRequisitos,
   'financiacion/solicitud' : viewFinanciacionSolicitud, 'financiacion/condiciones' : viewFinanciacionCondiciones, 'financiacion/gestiones' : viewFinanciacionGestiones,
   'financiacion/gestiones/tienda' : viewFinanciacionGestionesTienda, 'financiacion/gestiones/online' : viewFinanciacionGestionesOnline,
@@ -1500,19 +1818,24 @@ const routes = {
 
 function resolveRoute(route){
   if(routes[route]) return routes[route];
-  const mEstGrupo = route.match(/^estado-pedido\/(avanzar|cancelar|incidencia|tienda)$/);
-  if(mEstGrupo) return () => viewEstadoPedidoLista(mEstGrupo[1]);
-  const mEstFicha = route.match(/^estado-pedido\/ficha\/([\w-]+)(?:\?modo=([a-z]+))?$/);
-  if(mEstFicha && getEstadoPorSlug(mEstFicha[1])) {
-    const modo = mEstFicha[2] || 'avanzar';
-    return () => viewEstadoPedidoFicha(mEstFicha[1], modo);
-  }
+const mEstGrupo = route.match(/^estado-pedido\/(avanzar|cancelar|incidencia|tienda)$/);
+if(mEstGrupo) return () => viewEstadoPedidoLista(mEstGrupo[1]);
+
+const mEstFicha = route.match(/^estado-pedido\/ficha\/([\w-]+)(?:\?modo=([a-z]+))?$/);
+if(mEstFicha && getEstadoPorSlug(mEstFicha[1])) {
+  const modo = mEstFicha[2] || 'avanzar';
+  return () => viewEstadoPedidoFicha(mEstFicha[1], modo);
+}
   const mRec = route.match(/^reclamacion\/(paqueteria|gran-carga)\/([\w-]+)$/);
   if(mRec) return () => viewReclamacionForm(mRec[2], mRec[1]);
-  const mFaq = route.match(/^marketplace\/faqs\/([\w-]+)$/);
-  if(mFaq && categoriasFaqsMarketplace[mFaq[1]]) return () => viewMarketplaceFaqs(mFaq[1]);
-  const mMkt = route.match(/^marketplace\/gestion\/([\w-]+)$/);
-  if(mMkt && tiposMarketplace[mMkt[1]]) return () => viewMarketplaceForm(mMkt[1]);
+  const mFaq = route.match(/^marketplace\/faqs(?:\/([\w-]+))?$/);
+if(mFaq) return () => viewMarketplaceFaqs(mFaq[1]);
+  const mMktGestion = route.match(/^marketplace\/gestion\/([\w-]+)$/);
+  if(mMktGestion && tiposMarketplace[mMktGestion[1]]) return () => viewMarketplaceForm(mMktGestion[1]);
+  const mMktDirecto = route.match(/^marketplace\/([\w-]+)$/);
+// Si la ruta es solo "marketplace", mostrar el Hub de gestiones
+if(route === 'marketplace') return () => viewMarketplaceGestionHub();   
+if(mMktDirecto && tiposMarketplace[mMktDirecto[1]]) return () => viewMarketplaceForm(mMktDirecto[1]);
   return null;
 }
 function currentRoute(){ return location.hash.replace(/^#\/?/, ''); }
@@ -1527,7 +1850,11 @@ const TITULOS = {
   'marketplace': 'Marketplace',
   'financiacion': 'Financiación',
   'estado-pedido': 'Estado <span>de Pedido</span>',
-  'devoluciones': 'Devoluciones'
+  'devoluciones': 'Devoluciones',
+  'fuera-garantia': 'Fuera de garantía',
+  'tipo': 'Tipo de artículo',
+  'paqueteria': 'Paquetería',
+  'gran-carga': 'Gran carga'
 };
 
 function initSidebar(){
@@ -1568,35 +1895,35 @@ function initSidebar(){
     }
   } catch(e){}
 }
-
 /* ==========================================
-   RENDER
+   ROUTER
    ========================================== */
 function render(){
   const route = currentRoute();
-  const view = resolveRoute(route) || viewNotFound;
-  document.getElementById('contenido').innerHTML = view();
+  const routeWithoutQuery = route.split('?')[0];
+  const p0 = routeWithoutQuery.split('/')[0] || '';
+  const contenido = document.getElementById('contenido');
+  if(!contenido) return;
 
-  document.querySelectorAll('.sidebar__link[href^="#"]').forEach(el => {
-    const target = el.getAttribute('href')?.replace(/^#\/?/, '') ?? '';
-    const segmento = target.split('/')[0];
-    const routeSeg = route.split('/')[0];
-    el.classList.toggle('is-active', segmento === routeSeg && (route === '' || segmento !== ''));
-    if(target === '' && route === '') el.classList.add('is-active');
+  const renderer = resolveRoute(route);
+  contenido.innerHTML = renderer ? renderer() : viewNotFound();
+
+  // Título de la topbar
+  const titleEl = document.getElementById('topbarTitle');
+  if(titleEl) titleEl.innerHTML = TITULOS[p0] || TITULOS[''];
+
+  // Link activo en sidebar (incluye subrutas)
+  document.querySelectorAll('.sidebar__link').forEach(link => {
+    const href = (link.getAttribute('href') || '').replace(/^#\/?/, '').split('?')[0];
+    link.classList.toggle('is-active', href === p0 || (!p0 && !href));
   });
 
-  const key = route.split('/')[0] || '';
-  const titleEl = document.getElementById('topbarTitle');
-  if(titleEl) titleEl.innerHTML = TITULOS[key] || 'Panel <span>de Operaciones</span>';
-
+  // Actualizar plantillas, relojes y disponibilidad contextual
   updatePreview();
-  gestionarReloj(route);
   startDashboardClock();
   actualizarRelojTopbar();
+  gestionarReloj(routeWithoutQuery);
 }
-
-window.addEventListener('hashchange', render);
-
 /* ==========================================
    RELOJES
    ========================================== */
@@ -1666,7 +1993,7 @@ function updatePreview(){
   if(previewRenderers[route]){ preview.value = previewRenderers[route](state, state.datos); return; }
   const mRec = route.match(/^reclamacion\/(paqueteria|gran-carga)\/([\w-]+)$/);
   if(mRec && tiposReclamacion[mRec[2]]){ preview.value = plantillaReclamacion(state, state.datos, mRec[2], mRec[1]); return; }
-  const mMkt = route.match(/^marketplace\/gestion\/([\w-]+)$/);
+  const mMkt = route.match(/^marketplace\/(?:gestion\/)?([\w-]+)$/);
   if(mMkt && tiposMarketplace[mMkt[1]]){ preview.value = plantillaMarketplace(state, state.datos, mMkt[1]); return; }
   if(route === 'gran-carga/tienda/visita'){ preview.value = plantillaGranCargaTiendaVisita(state, state.datos); return; }
   if(route === 'gran-carga/tienda/correo'){ preview.value = plantillaGranCargaCorreo(state, state.datos); return; }
@@ -1681,6 +2008,32 @@ function updatePreview(){
   if(route === 'fuera-garantia/gran-carga/plantilla'){ preview.value = plantillaFGGranCarga(state, state.datos); return; }
   if(route === 'financiacion/gestiones/tienda'){ preview.value = plantillaFinanciacionGestionTienda(state, state.datos); return; }
   if(route === 'financiacion/gestiones/online'){ preview.value = plantillaFinanciacionGestionOnline(state, state.datos); return; }
+  // --- Lógica para ESTADO DE PEDIDO ---
+  const mEstadoFicha = route.match(/^estado-pedido\/ficha\/([\w-]+)(?:\?modo=([\w]+))?$/);
+  if(mEstadoFicha && !route.includes('modo=cancelar')) {
+    const e = getEstadoPorSlug(mEstadoFicha[1]);
+    if(e) {
+      const d = state.datos;
+      preview.value = `Hola,
+
+Nos ha contactado un cliente en relación a una compra online. El estado del pedido se encuentra en: ${e.estado}.
+
+Procede a realizar la gestión de acuerdo a como se plantea en el cuadro de procesos sobre el estado de este pedido.
+
+Adjuntamos los datos del cliente:
+Número de pedido: ${d.numeroPedido || '__________'}
+Fecha de la compra: ${formatearFechaCompra(d.fechaCompra)}
+DNI / NIE: ${d.dni || '__________'}
+Nombres y apellidos: ${d.nombre || '__________'}
+Teléfono de contacto: ${d.telefono || '__________'}
+Email del PM: ${d.email || '__________'}
+
+Por favor, realizad las gestiones oportunas según lo solicitado por el cliente.
+
+Muchas gracias`;
+      return;
+    }
+  }
 }
 
 /* ==========================================
@@ -1715,13 +2068,26 @@ function buscarEstadoPedido(){
 function validarFecha(){
   const input = document.getElementById('fechaCompra');
   const aviso = document.getElementById('avisoFecha');
-  if(!input.value){ aviso.textContent = '⚠️ Selecciona una fecha de compra para continuar.'; aviso.style.display = 'block'; input.focus(); return; }
-  state.fechaCompra = input.value;
-  state.garantia = calcularGarantia(input.value);
+  if(!input) return;
+  const valor = input.value;
+  if(!valor){
+    if(aviso){ aviso.textContent = '⚠️ Selecciona una fecha de compra para continuar.'; aviso.style.display = 'block'; }
+    input.focus();
+    return;
+  }
+  const fecha = parseFechaLocal(valor);
+  const hoy = new Date(); hoy.setHours(0,0,0,0);
+  if(Number.isNaN(fecha.getTime()) || fecha > hoy){
+    if(aviso){ aviso.textContent = '⚠️ La fecha de compra no puede ser posterior a hoy.'; aviso.style.display = 'block'; }
+    input.focus();
+    return;
+  }
+  state.fechaCompra = valor;
+  state.garantia = calcularGarantia(valor);
   switch(state.garantia.estado){
     case 'devolucion': location.hash = '#/devolucion'; break;
-    case 'fuera':      location.hash = '#/fuera';      break;
-    default:           location.hash = '#/validar-danio'; break;
+    case 'fuera': location.hash = '#/fuera-garantia'; break;
+    default: location.hash = '#/validar-danio'; break;
   }
 }
 async function copiarPreview(){
@@ -1753,37 +2119,48 @@ function buscarSAT(){
    EVENTOS
    ========================================== */
 document.addEventListener('input', e => {
-  if(e.target.matches('[data-faq-search]')){ filtrarFaqs(e.target.value); return; }
-  if(e.target.matches('[data-buscar-estado]')){ buscarEstadoPedido(); return; }
-  const stateEl = e.target.closest('[data-state]');
+  const target = e.target;
+  if(target.matches('[data-faq-search]')){ filtrarFaqs(target.value); return; }
+  if(target.matches('[data-buscar-estado]')){ buscarEstadoPedido(); return; }
+  const stateEl = target.closest('[data-state]');
   if(stateEl){ state[stateEl.dataset.state] = stateEl.value; return; }
-  const campoEl = e.target.closest('[data-campo]');
+  const campoEl = target.closest('[data-campo]');
   if(campoEl){ state.datos[campoEl.dataset.campo] = campoEl.value; updatePreview(); }
 });
+
 document.addEventListener('change', e => {
   const campoEl = e.target.closest('[data-campo]');
   if(campoEl){ state.datos[campoEl.dataset.campo] = campoEl.value; updatePreview(); }
 });
-document.addEventListener('click', e => {
-  if(e.target.closest('[data-validar-fecha]')){ validarFecha(); return; }
-  if(e.target.closest('[data-copiar]'))       { copiarPreview(); return; }
-  if(e.target.closest('[data-nuevo-caso]'))   { nuevoCaso(); return; }
-  const filtro = e.target.closest('[data-filtro-plazo]');
-  if(filtro){ e.preventDefault(); state.filtroPlazo = filtro.dataset.filtroPlazo; render(); return; }
-  const link = e.target.closest('a[href^="#"]');
-  if(!link) return;
-  const href = link.getAttribute('href') || '#/';
-  const currentHash = (location.hash.replace(/^#/, '') || '').replace(/^\/+/, '');
-  const targetHash  = (href.replace(/^#/, '') || '').replace(/^\/+/, '');
-  if(currentHash === targetHash && !link.dataset.filtroPlazo){
+
+document.addEventListener('click', async e => {
+  const target = e.target instanceof Element ? e.target : e.target.parentElement;
+  if(!target) return;
+
+  if(target.closest('[data-validar-fecha]')){ validarFecha(); return; }
+  if(target.closest('[data-copiar]')){ await copiarPreview(); return; }
+  if(target.closest('[data-nuevo-caso]')){ nuevoCaso(); return; }
+
+  const filtro = target.closest('[data-filtro-plazo]');
+  if(filtro){
     e.preventDefault();
+    state.filtroPlazo = filtro.dataset.filtroPlazo || 'todos';
     render();
-    document.querySelector('.content')?.scrollTo({ top:0, behavior:'smooth' });
+    return;
+  }
+
+  // Cerrar el menú móvil después de navegar.
+  const navLink = target.closest('.sidebar__link');
+  if(navLink && window.matchMedia('(max-width: 880px)').matches){
+    document.getElementById('app')?.classList.remove('is-mobile-open');
+    document.getElementById('sidebarOverlay')?.classList.remove('is-visible');
   }
 });
 
+window.addEventListener('hashchange', render);
+
 /* ==========================================
-   INIT
+   INIT ÚNICO
    ========================================== */
 (function init(){
   initSidebar();
