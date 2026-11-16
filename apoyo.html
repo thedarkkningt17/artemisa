@@ -818,8 +818,8 @@ function viewEstadoPedidoFicha(slug, modo = 'avanzar'){
   const e = getEstadoPorSlug(slug); if(!e) return viewNotFound();
   const grupo = gruposEstadoPedido[e.grupo]; const esCancelar = modo === 'cancelar';
 
-  // Formulario para avanzar
-  const formAvanzar = !esCancelar ? `
+  // Ahora el formulario se muestra SIEMPRE, sea avanzar o cancelar
+  const formCampos = `
     <h3 style="margin-top:24px">📝 Datos del cliente</h3>
     <label for="ep_numeroPedido">Número de pedido</label>
     <input type="text" id="ep_numeroPedido" data-campo="numeroPedido" value="${esc(state.datos.numeroPedido || '')}">
@@ -829,7 +829,7 @@ function viewEstadoPedidoFicha(slug, modo = 'avanzar'){
     
     <label for="ep_nombre">Nombres y apellidos</label>
     <input type="text" id="ep_nombre" data-campo="nombre" value="${esc(state.datos.nombre || '')}">
-
+    
     <label for="ep_dni">DNI / NIE</label>
     <input type="text" id="ep_dni" data-campo="dni" value="${esc(state.datos.dni || '')}">
     
@@ -845,9 +845,8 @@ function viewEstadoPedidoFicha(slug, modo = 'avanzar'){
     <h3 style="margin-top:24px">📧 Plantilla email al cliente</h3>
     <textarea id="preview" readonly></textarea>
     <div style="margin-top:12px"><button class="btn btn-success" data-copiar>📋 Copiar plantilla</button></div>
-  ` : '';
+  `;
 
-  const bloquePlantilla = e.plantillaAvanzar && !esCancelar ? `<h3 style="margin-top:24px">📧 Plantilla email al cliente</h3><textarea id="preview" readonly>${esc(e.plantillaAvanzar)}</textarea><div style="margin-top:12px"><button class="btn btn-success" data-copiar>📋 Copiar plantilla</button></div>` : '';
   const bloqueAvanzar = e.flujoAvanzar && !esCancelar ? `<h3 style="margin-top:24px">⏩ Pasos para avanzar</h3>${e.flujoAvanzar}` : '';
   const bloqueCancelar = e.flujoCancelar && esCancelar ? `<h3 style="margin-top:24px">❌ Pasos para cancelar</h3>${e.flujoCancelar}` : '';
   
@@ -855,8 +854,7 @@ function viewEstadoPedidoFicha(slug, modo = 'avanzar'){
     ? `<div class="alert alert-danger" style="border-left-width:6px"><h3>❌ Cancelar pedido</h3><p><strong>Derivamos a:</strong><br>${esc(e.cancelar)}</p></div>`
     : `<div class="alert alert-success" style="border-left-width:6px"><h3>⏩ Avanzar pedido</h3><p><strong>Derivamos a:</strong><br>${esc(e.derivarA)}</p>${e.plazo !== '—' ? `<p style="margin-top:8px"><strong>Plazo:</strong> ${esc(e.plazo)}</p>` : ''}</div>`;
 
-  // Mostramos el Oracle solo si NO es cancelar y si tiene datos definidos
-  const bloqueOracle = (!esCancelar && e.oracle) ? renderOracle(e.oracle) : '';
+  const bloqueOracle = e.oracle ? renderOracle(e.oracle) : '';
 
   return `
     <div class="card">
@@ -866,13 +864,11 @@ function viewEstadoPedidoFicha(slug, modo = 'avanzar'){
       ${tarjetaAccion} 
       ${bloqueOracle}
       ${bloqueAvanzar} ${bloqueCancelar} 
-      ${formAvanzar}
-      ${!formAvanzar ? bloquePlantilla : ''}
+      ${formCampos}
       <div style="margin-top:24px"><a class="btn btn-ghost" href="#/estado-pedido/${esCancelar ? 'cancelar' : e.grupo}">⬅ Volver</a></div>
     </div>
   `;
 }
-
 /* ==========================================
    EVENTOS PARA BUSCAR Y GENERAR PLANTILLA
    ========================================== */
@@ -2008,23 +2004,26 @@ function updatePreview(){
   if(route === 'fuera-garantia/gran-carga/plantilla'){ preview.value = plantillaFGGranCarga(state, state.datos); return; }
   if(route === 'financiacion/gestiones/tienda'){ preview.value = plantillaFinanciacionGestionTienda(state, state.datos); return; }
   if(route === 'financiacion/gestiones/online'){ preview.value = plantillaFinanciacionGestionOnline(state, state.datos); return; }
-  // --- Lógica para ESTADO DE PEDIDO ---
+   // --- Lógica para ESTADO DE PEDIDO ---
   const mEstadoFicha = route.match(/^estado-pedido\/ficha\/([\w-]+)(?:\?modo=([\w]+))?$/);
-  if(mEstadoFicha && !route.includes('modo=cancelar')) {
+  if(mEstadoFicha) {
     const e = getEstadoPorSlug(mEstadoFicha[1]);
+    const modo = mEstadoFicha[2] || 'avanzar';
     if(e) {
       const d = state.datos;
+      const accion = (modo === 'cancelar') ? 'cancelar' : 'avanzar';
+      
       preview.value = `Hola,
 
 Nos ha contactado un cliente en relación a una compra online. El estado del pedido se encuentra en: ${e.estado}.
 
-Procede a realizar la gestión de acuerdo a como se plantea en el cuadro de procesos sobre el estado de este pedido.
+${d.detalle ? `Detalle de la consulta:\n${d.detalle}\n\n` : ''}Procede a realizar la gestión para ${accion} de acuerdo a como se plantea en el cuadro de procesos sobre el estado de este pedido.
 
 Adjuntamos los datos del cliente:
 Número de pedido: ${d.numeroPedido || '__________'}
 Fecha de la compra: ${formatearFechaCompra(d.fechaCompra)}
-DNI / NIE: ${d.dni || '__________'}
 Nombres y apellidos: ${d.nombre || '__________'}
+DNI / NIE: ${d.dni || '__________'}
 Teléfono de contacto: ${d.telefono || '__________'}
 Email del PM: ${d.email || '__________'}
 
@@ -2059,7 +2058,7 @@ function buscarEstadoPedido(){
   const matches = estadosPedido.filter(e => e.estado.toLowerCase().includes(q) || e.derivarA.toLowerCase().includes(q) || (e.cancelar || '').toLowerCase().includes(q));
   if(!matches.length){ out.innerHTML = '<div class="alert alert-warning">❌ No se encontraron estados con ese texto.</div>'; return; }
   out.innerHTML = matches.slice(0, 8).map(e => `
-    <a class="estado-card" href="#/estado-pedido/ficha/${e.slug}?modo=avanzar" style="margin-bottom:8px">
+   <a class="estado-card" href="#/estado-pedido/ficha/${e.slug}?modo=${e.grupo === 'cancelar' ? 'cancelar' : 'avanzar'}" style="margin-bottom:8px">
       <div class="titulo"><span style="font-size:18px">${esc(e.icono)}</span><span>${esc(e.estado)}</span></div>
       <div class="meta">${esc(gruposEstadoPedido[e.grupo].label)} · ${esc(e.plazo)}</div>
     </a>
